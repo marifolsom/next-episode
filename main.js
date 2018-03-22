@@ -4,22 +4,29 @@ console.log('main.js is connected!');
 // Make a variable to store the user's input
 let searchQuery = '';
 
-let userInput = 'This Is Us';
+// Just hard coding a show name for now! One with lots of spaces to make sure the format is converted correctly
+let userInput = 'How I Met Your Mother';
 
 // Make a function that grabs the user's input, corrects the format, and stores it in the searchQuery variable
 const getSearchQuery = () => {
   // Select the user's search input
   // let userInput = document.querySelector('');
   // Replace spaces with %
-  searchQuery = userInput.replace(' ', '%');
+  searchQuery = userInput.split(' ').join('%');
   console.log(searchQuery);
 }
 getSearchQuery();
 
 
 // Make a function that creates an API request and returns a response in JSON
-const getJSON = (url) => {
+const getJSON = url => {
   return fetch(url).then(response => response.json());
+}
+
+
+// Make a function that converts 24 hour time to 12 hour
+const convertTime = () => {
+
 }
 
 
@@ -32,7 +39,6 @@ const getShow = (searchQuery) => {
   // Make an API request with the user's inputted keywords
   getJSON(`http://api.tvmaze.com/singlesearch/shows?q=${searchQuery}`)
   .then(json => {
-    console.log(json);
     // Asign a JSON value to each variable
     showId = json.id;
     showName = json.name;
@@ -44,33 +50,74 @@ const getShow = (searchQuery) => {
     showRating = json.rating.average;
     showImg = json.image.original;
     showDesc = json.summary;
-    console.log('id:', showId);
-    console.log('name:', showName);
-    console.log('genre:', showGenre); console.log('status:', showStatus);
-    console.log('url:', showSite);
-    console.log('day:', showDay);
-    console.log('time:', showTime);
-    console.log('rating:', showRating);
-    console.log('img:', showImg);
-    console.log('desc:', showDesc);
+    console.log('show id:', showId);
+    console.log('show name:', showName);
+    console.log('show genre:', showGenre); console.log('status:', showStatus);
+    console.log('show url:', showSite);
+    console.log('show day:', showDay);
+    console.log('show time:', showTime);
+    console.log('show rating:', showRating);
+    console.log('show img:', showImg);
+    console.log('show desc:', showDesc);
   })
 }
 getShow(searchQuery);
 
 
-// Get tv show episodes by show id
-// name, season, episode, airdate, summary, count total to get number of episodes
-const getEpisode = (showId) => {
-  // Make an API request with show's id
+// Make a variable for the episode name, season, episode number, airdate, summary, count total number of episodes
+let totalEpisodeCount, episodeId;
+
+// Get a tv show's episodes by show id
+const getEpisodes = showId => {
+  // Make an API request with show id
   getJSON(`http://api.tvmaze.com/shows/${showId}/episodes`)
   .then(json => {
-    console.log(json);
+    totalEpisodeCount = json.length;
+    console.log('episode count:', totalEpisodeCount);
   })
 }
-getEpisode(showId);
+getEpisodes(171);
 
-// Get tv show seasons by show id `http://api.tvmaze.com/shows/${showId}/seasons`
+
+// Make a variable for episodeName, episodeNumber, seasonNumber, episodeAirdate, episodeDesc
+let episodeName, episodeNumber, seasonNumber, episodeAirdate, episodeDesc;
+
+// Get a specific tv show episode by episode id
+const getEpisode = episodeId => {
+  // Make an API request with the episode id
+  getJSON(`http://api.tvmaze.com/episodes/${episodeId}`)
+  .then(json => {
+    episodeName = json.name;
+    episodeNumber = json.number;
+    seasonNumber = json.season;
+    episodeAirdate = json.airdate;
+    episodeDesc = json.summary;
+    console.log('episode name:', episodeName);
+    console.log('episode number: ', episodeNumber);
+    console.log('episode season:', seasonNumber);
+    console.log('episode airdate:', episodeAirdate);
+    console.log('episode desc:', episodeDesc);
+  })
+}
+getEpisode(12485);
+
+
+// Make a variable for the number of seasons, and number of number of episodes in a season;
+let seasonCount, seasonEpisodeCount;
+
+// Get tv show's seasons by show id
 // count total to get number of seasons or season number
+const getSeasons = showId => {
+  getJSON(`http://api.tvmaze.com/shows/${showId}/seasons`)
+  .then(json => {
+    seasonCount = json.length;
+    // For only the first season...
+    seasonEpisodeCount = json[0].episodeOrder;
+    console.log('season count:', seasonCount);
+    console.log('episodes in a season:', seasonEpisodeCount);
+  })
+}
+getSeasons(171)
 
 
 // TMDB API
