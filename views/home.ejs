@@ -1,4 +1,21 @@
 <% include ../partials/header %>
   <body>
+    <div class="top-rated">
+      <h1>Most Popular:</h1>
+    </div>
+    <div class="top-rated">
+      <h1>Top Rated:</h1>
+    </div>
+    <div class="current">
+      <h1>Aired Today:</h1>
+      <% for (let i = 0; i < homepageData.results.length; i++) { %>
+        <h2><%= homepageData.results[i].name %></h2>
+        <p><%= homepageData.results[i].overview %></p>
+        <p>Rating: <%= homepageData.results[i].vote_average %></p>
+        <p>Popularity: <%= homepageData.results[i].popularity %></p>
+        <img src="http://image.tmdb.org/t/p/w185<%= homepageData.results[i].poster_path %>">
+        <a href="https://api.themoviedb.org/3/tv/<%=homepageData.results[i].id%>?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US"> API link </a>
+      <% } %>
+    </div>
   </body>
 </html>
