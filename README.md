@@ -1,12 +1,9 @@
 # Project 2: TV Tracker App
 
-README.md should include:
+### Project Description:
 - The project's name and description
-- Your wireframes and user stories
-- The technologies, APIs, and modules you used and a description of each
-- A code snippet of a part of the app you're particularly proud of
-- Any things you plan to fix or features you plan to add
-- Instructions for downloading the code and running it on localhost
+
+### Wireframes:
 
 ### User Stories:
 - "As a bored user, I want to	have a list of TV shows currently airing, so that I can have something to watch right now."
@@ -28,3 +25,15 @@ README.md should include:
 - "As a parent, I want to look up the maturity rating for different shows, so I know whether to let my kids watch a show or not."
 - "As a user with multiple streaming accounts, I want to know what shows are available on which streaming site, so I know where to find the show I want to watch."
 - "As a snobby user, I want to see the IMDb and Rotten Tomatoes rating, so I can watch critically acclaimed shows."
+
+### Technologies, APIs, Modules Used:
+- The technologies, APIs, and modules you used and a description of each
+
+### Code Snippet:
+- A code snippet of a part of the app you're particularly proud of
+
+### Future Additions:
+- Any things you plan to fix or features you plan to add
+
+### Instructions for Downloading/Running:
+- Instructions for downloading the code and running it on localhost
