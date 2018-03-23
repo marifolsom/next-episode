@@ -6,8 +6,11 @@ const methodOverride = require('method-override');
 // Create an Express application (web server)
 const app = express();
 
-// Set view engine to ejs
+// Set template engine to ejs
 app.set('view engine', 'ejs');
+
+// Set up static files
+app.use(express.static('./assets'));
 
 // Set port
 const PORT = 3000;

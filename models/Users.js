@@ -4,8 +4,8 @@ const pgp = require('pg-promise')({});
 const connectionURL = 'postgres://localhost:5432/tv_tracker';
 const db = pgp(connectionURL);
 
-const Shows = {};
+const Users = {};
 
 
 
-module.exports = Shows;
+module.exports = Users;
