@@ -8,7 +8,7 @@ README.md should include:
 - Any things you plan to fix or features you plan to add
 - Instructions for downloading the code and running it on localhost
 
-## USER STORIES
+### User Stories:
 - As a bored user, I want to	have a list of TV shows currently airing, so that I can have something to watch right now.
 - As an avid TV-show-watcher, I want to	keep track of the many shows I watch, so I can keep up to date and not fall behind.
 - As a lover of live TV, I want to	know when my favorite shows are airing, so I know when to tune in to watch them live.
