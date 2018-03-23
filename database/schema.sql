@@ -8,16 +8,18 @@ CREATE TABLE favorites (
   id BIGSERIAL PRIMARY KEY,
   show_id INTEGER,
   title VARCHAR(255),
-  img_url VARCHAR(255),
   description VARCHAR(255),
-  next_episode_airdate DATE
+  airdate DATETIME,
+  img_url VARCHAR(255)
 );
 
 CREATE TABLE watchlist (
   id BIGSERIAL PRIMARY KEY,
-  favorites_id INTEGER REFERENCES favorites(id),
+  show_id INTEGER,
+  episode_id INTEGER,
   number_of_episodes INTEGER,
-  episodes_watched INTEGER
+  watched BOOLEAN,
+  img_url VARCHAR(255)
 );
 
 CREATE TABLE user_info (

@@ -5,11 +5,11 @@ console.log('main.js is connected!');
 let searchQuery = '';
 
 // Make a variable to store the show id and episode id
-let showId = 60839;
+let showId = 1100;
 // let episodeId = 1;
 
 // Just hard coding a show name for now! One with lots of spaces to make sure the format is converted correctly
-const userInput = 'Broad City';
+const userInput = 'How I Met Your Mother';
 
 
 // Make a function that grabs the user's input, corrects the format, and stores it in the searchQuery variable
@@ -57,7 +57,7 @@ const getShowInfo = (showId) => {
     const showPopularity = showData.popularity;
     const showStatus = showData.status;
     const showSite = showData.homepage;
-    const showImg = showData.backdrop_path;
+    const showImg = showData.poster_path;
     console.log('show title:', showTitle);
     console.log('show desc:', showDesc);
     console.log('show genre:', showGenre);
@@ -115,7 +115,7 @@ getSeason(showId, 3)
 
 
 // Get show recommendations by ID
-const getRecs = () => {
+const getRecs = (showId) => {
   // Make an API request with a show id
   getJSON(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
   .then(recsData => {
@@ -135,7 +135,7 @@ const getRecs = () => {
     }
   })
 }
-getRecs();
+getRecs(showId);
 
 
 // Get most popular shows

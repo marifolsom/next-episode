@@ -1,7 +1,7 @@
 const db = require('../database/connection');
 
-const Users = {};
+const Watchlist = {};
 
 
 
-module.exports = Users;
+module.exports = Watchlist;

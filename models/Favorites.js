@@ -1,7 +1,7 @@
 const db = require('../database/connection');
 
-const Users = {};
+const Favorites = {};
 
 
 
-module.exports = Users;
+module.exports = Favorites;
