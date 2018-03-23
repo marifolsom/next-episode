@@ -1,8 +1,8 @@
 const db = require('../database/connection');
 
-const Users = {};
+const User = {};
 
-Users.create = userData => {
+User.create = userData => {
   return db.one(`
     INSERT INTO user_info (username, email, password)
     VALUES ($1, $2, $3)`,
@@ -14,7 +14,7 @@ Users.create = userData => {
   )
 }
 
-Users.find = username => {
+User.find = username => {
   return db.one(`
     SELECT *
     FROM user_info
@@ -23,4 +23,4 @@ Users.find = username => {
   )
 }
 
-module.exports = Users;
+module.exports = User;

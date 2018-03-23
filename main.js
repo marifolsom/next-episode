@@ -16,10 +16,7 @@ const getSearchQuery = () => {
   // Select the user's search input
   // let userInput = document.querySelector('');
   // Replace spaces with % and changes to lower case
-  searchQuery = userInput
-    .split(' ')
-    .join('%20')
-    .toLowerCase();
+  searchQuery = userInput.split(' ').join('%20').toLowerCase();
   console.log(searchQuery);
 };
 getSearchQuery();
