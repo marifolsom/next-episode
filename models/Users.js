@@ -5,8 +5,7 @@ const Users = {};
 Users.create = userData => {
   return db.one(`
     INSERT INTO user_info (username, email, password)
-    VALUES ($1, $2, $3)
-    RETURNING password`,
+    VALUES ($1, $2, $3)`,
     [
       userData.username,
       userData.email,
