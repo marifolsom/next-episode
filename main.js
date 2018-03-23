@@ -5,11 +5,11 @@ console.log('main.js is connected!');
 let searchQuery = '';
 
 // Make a variable to store the show id and episode id
-let showId = 1100;
+let showId = 60839;
 // let episodeId = 1;
 
 // Just hard coding a show name for now! One with lots of spaces to make sure the format is converted correctly
-const userInput = 'How I Met Your Mother';
+const userInput = 'Broad City';
 
 
 // Make a function that grabs the user's input, corrects the format, and stores it in the searchQuery variable
@@ -32,9 +32,9 @@ const getJSON = url => fetch(url).then(response => response.json())
 const getShow = (searchQuery) => {
   // Make an API request with the user's inputted keywords
   getJSON(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${searchQuery}`)
-  .then(json => {
+  .then(showData => {
     // Assign the found show id to the showId variable
-    showId = json.results[0].id;
+    showId = showData.results[0].id;
     console.log('show id:', showId);
   })
 }
@@ -45,27 +45,43 @@ getShow(searchQuery);
 const getShowInfo = (showId) => {
   // Make an API request with the found show id
   getJSON(`https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-  .then(json => {
+  .then(showData => {
     // Make a variable for the show title, show genre, show status, official site, show image, show desc, show rating, number of episodes, number of seasons
     // Asign a JSON value to each variable
-    const showTitle = json.name;
-    const showGenre = json.genres[0].name;
-    const showStatus = json.status;
-    const showSite = json.homepage;
-    const showImg = json.backdrop_path;
-    const showDesc = json.overview;
-    const showRating = json.vote_average;
-    const numberOfEpisodes = json.number_of_episodes;
-    const numberOfSeasons = json.number_of_seasons;
-    console.log('show name:', showTitle);
+    const showTitle = showData.name;
+    const showDesc = showData.overview;
+    const showGenre = showData.genres[0].name;
+    const numberOfSeasons = showData.number_of_seasons;
+    const numberOfEpisodes = showData.number_of_episodes;
+    const showRating = showData.vote_average;
+    const showStatus = showData.status;
+    const showSite = showData.homepage;
+    const showImg = showData.backdrop_path;
+    console.log('show title:', showTitle);
+    console.log('show desc:', showDesc);
     console.log('show genre:', showGenre);
+    console.log('seasons:', numberOfSeasons);
+    console.log('episodes:', numberOfEpisodes);
+    console.log('show rating:', showRating);
     console.log('show status:', showStatus);
     console.log('show url:', showSite);
     console.log('show img:', showImg);
-    console.log('show desc:', showDesc);
-    console.log('show rating:', showRating);
-    console.log('episodes:', numberOfEpisodes);
-    console.log('seasons:', numberOfSeasons);
+    console.log('-------------------------------');
+    for (let i = 0; i < showData.seasons.length; i++) {
+      const seasonNumber = showData.seasons[i].season_number;
+      const dates = showData.seasons[i].air_date.split('-');
+      const seasonAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
+      const episodeCount = showData.seasons[i].episode_count;
+      const seasonTitle = showData.seasons[i].name;
+      const seasonImg = showData.seasons[i].poster_path;
+      const seasonLink = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+      console.log('season title:', seasonTitle);
+      console.log('season aired:', seasonAirdate);
+      console.log('episode count:', episodeCount);
+      console.log('season img:', seasonImg);
+      console.log('season link:', seasonLink);
+      console.log('-------------------------------');
+    }
   })
 }
 getShowInfo(showId);
@@ -75,49 +91,77 @@ getShowInfo(showId);
 const getSeason = (showId, seasonNumber) => {
   // Make an API request with the show id and season number
   getJSON(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-  .then(json => {
+  .then(seasonData => {
     // Make a variable for all the episodes (get access to episode airdate, episode number, episode title, episode description, season number)
-    for (let i = 0; i < json.episodes.length; i++) {
-      const dates = json.episodes[i].air_date.split('-');
+    for (let i = 0; i < seasonData.episodes.length; i++) {
+      const episodeTitle = seasonData.episodes[i].name;
+      const episodeDesc = seasonData.episodes[i].overview;
+      const dates = seasonData.episodes[i].air_date.split('-');
       const episodeAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
-      const episodeNumber = json.episodes[i].episode_number;
-      const episodeTitle = json.episodes[i].name;
-      const episodeDesc = json.episodes[i].overview;
-      const seasonNumber = json.episodes[i].season_number;
-      console.log('episode aired:', episodeAirdate);
-      console.log('episode:', episodeNumber);
+      const seasonNumber = seasonData.episodes[i].season_number;
+      const episodeNumber = seasonData.episodes[i].episode_number;
       console.log('episode title:', episodeTitle);
       console.log('episode desc:', episodeDesc);
+      console.log('episode aired:', episodeAirdate);
       console.log('season:', seasonNumber);
+      console.log('episode:', episodeNumber);
+      console.log('-------------------------------');
     }
   })
 }
-getSeason(showId, 6)
+getSeason(showId, 3)
 
 
-// Get show recommendations by ID `https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+// Get show recommendations by ID
 const getRecommendations = () => {
-
+  // Make an API request with a show id
+  getJSON(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(recommendations => {
+    for (let i = 0; i < recommendations.results.length; i++) {
+      const recId = recommendations.results[i].id
+      const recTitle = recommendations.results[i].name;
+      const recDesc = recommendations.results[i].overview;
+      const recRating = recommendations.results[i].vote_average;
+      const recLink = `https://api.themoviedb.org/3/tv/${recId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+      console.log('rec title:', recTitle);
+      console.log('rec desc:', recDesc);
+      console.log('rec rating:', recRating);
+      console.log('rec link:', recLink);
+      console.log('-------------------------------');
+    }
+  })
 }
 getRecommendations();
 
 
-// Get most popular shows `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+// Get most popular shows
 const getPopular = () => {
+  // Make API request
+  getJSON(`https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(popularData => {
 
+  })
 }
 getPopular();
 
 
-// Get top rated shows `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+// Get top rated shows
 const getTopRated = () => {
+  // Make API request
+  getJSON(`https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(topRatedData => {
 
+  })
 }
 getTopRated();
 
 
-// Get shows airing today `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+// Get shows airing today
 const getAiring = () => {
+  // Make API request
+  getJSON(`https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(airingData => {
 
+  })
 }
 getAiring();
