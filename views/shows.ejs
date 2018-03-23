@@ -1,4 +1,12 @@
-<% include ../../partials/header %>
+<% include ../partials/header %>
   <body>
+    <% for (let i = 0; i < currentData.results.length; i++) { %>
+      <h1><%= currentData.results[i].name %></h1>
+      <p><%= currentData.results[i].overview %></p>
+      <p><%= currentData.results[i].vote_average %></p>
+      <p><%= currentData.results[i].popularity %></p>
+      <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
+      <a href="https://api.themoviedb.org/3/tv/<%=currentData.results[i].id%>?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US"> API link </a>
+    <% } %>
   </body>
 </html>

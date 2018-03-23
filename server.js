@@ -22,7 +22,6 @@ app.set('view engine', 'ejs');
 // Set up static files
 app.use('/client', express.static('./client'));
 
-
 // Create application/json parser
 const jsonParser = bodyParser.json();
 
@@ -61,24 +60,103 @@ const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
 
 // '/' that displays the user's watchlist (if logged in), trending, popular, and airing today, all with show posters
-app.get('/', urlencodedParser, (response, request) => {
+app.get('/', (request, response) => {
   // Fetch most popular shows
   fetch(`https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-    .then(popularData => {
-      response.json(popularData);
-    })
-  // response.render('home', {  });
+  .then(apiResponse => {
+    return apiResponse.json();
+  })
+  .then(popularData => {
+    for (let i = 0; i < popularData.results.length; i++) {
+      const popId = popularData.results[i].id;
+      const popTitle = popularData.results[i].name;
+      const popDesc = popularData.results[i].overview;
+      const rating = popularData.results[i].vote_average;
+      const popularity = popularData.results[i].popularity;
+      const popImg = popularData.results[i].poster_path;
+      const popLink = `https://api.themoviedb.org/3/tv/${popId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+      // console.log('pop title:', popTitle);
+      // console.log('pop desc:', popDesc);
+      // console.log('rating:', rating);
+      // console.log('popularity:', popularity);
+      // console.log('pop img:', popImg);
+      // console.log('pop link:', popLink);
+      // console.log('-------------------------------');
+    }
+  })
+  // Fetch top rated shows
+  fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(apiResponse => {
+    return apiResponse.json();
+  })
+  .then(topRatedData => {
+    for (let i = 0; i < topRatedData.results.length; i++) {
+      const topId = topRatedData.results[i].id;
+      const topTitle = topRatedData.results[i].name;
+      const topDesc = topRatedData.results[i].overview;
+      const rating = topRatedData.results[i].vote_average;
+      const popularity = topRatedData.results[i].popularity;
+      const topImg = topRatedData.results[i].poster_path;
+      const topLink = `https://api.themoviedb.org/3/tv/${topId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+      // console.log('top title:', topTitle);
+      // console.log('top desc:', topDesc);
+      // console.log('rating:', rating);
+      // console.log('popularity:', popularity);
+      // console.log('top img:', topImg);
+      // console.log('top link:', topLink);
+      // console.log('-------------------------------');
+    }
+  })
+  // Fetch shows that are airing today
+  fetch(`https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(apiResponse => {
+    return apiResponse.json();
+  })
+  .then(airingData => {
+    for (let i = 0; i < airingData.results.length; i++) {
+      const airingId = airingData.results[i].id;
+      const airingTitle = airingData.results[i].name;
+      const airingDesc = airingData.results[i].overview;
+      const rating = airingData.results[i].vote_average;
+      const popularity = airingData.results[i].popularity;
+      const airingImg = airingData.results[i].poster_path;
+      const airingLink = `https://api.themoviedb.org/3/tv/${airingId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+      // console.log('airing title:', airingTitle);
+      // console.log('airing desc:', airingDesc);
+      // console.log('rating:', rating);
+      // console.log('popularity:', popularity);
+      // console.log('airing img:', airingImg);
+      // console.log('airing link:', airingLink);
+      // console.log('-------------------------------');
+    }
+    response.render('home', { airingData: airingData });
+  })
 })
 
 
-// // '/shows' that displays all shows with show posters
-// app.get('/shows', (response, request) => {
-//
-//   response.render('shows', {  });
-// })
+// '/shows' that displays all shows currently running
+app.get('/shows', (request, response) => {
+  fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  .then(apiResponse => {
+    return apiResponse.json();
+  })
+  .then(currentData => {
+    // for (let i = 0; i < currentData.results.length; i++) {
+    //   const currentId = currentData.results[i].id;
+    //   const currentTitle = currentData.results[i].name;
+    //   const currentDesc = currentData.results[i].overview;
+    //   const rating = currentData.results[i].vote_average;
+    //   const popularity = currentData.results[i].popularity;
+    //   const currentImg = currentData.results[i].poster_path;
+    //   const currentLink = `https://api.themoviedb.org/3/tv/${currentId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+    // }
+    response.render('shows', { currentData: currentData })
+  })
+})
 
 
-// // '/show/:id' that displays details of a specific show // Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched
+// // '/show/:id' that displays details of a specific show
+// Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched
 // // User can click on an episode to get the episode description
 // // User can click to add to favorites or watchlist
 // app.get('/show/:id', (response, request) => {

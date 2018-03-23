@@ -3,31 +3,26 @@ CREATE DATABASE tv_tracker;
 
 \c tv_tracker;
 
-CREATE TABLE favorites (
-  id BIGSERIAL PRIMARY KEY,
-  user_id INTEGER
-);
-
 CREATE TABLE user_info (
   id BIGSERIAL PRIMARY KEY,
   username VARCHAR(15),
-  password VARCHAR(60),
-  favorites_id INTEGER
-  -- watchlist_id INTEGER REFERENCES watchlist(id)
+  password VARCHAR(60)
 );
 
 CREATE TABLE user_favorites (
   id BIGSERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES user_info(id),
-  favorites_id INTEGER REFERENCES favorites(id)
+  show_id INTEGER
 );
+
 
 -- ALTER TABLE favorites
 -- ADD FOREIGN KEY (user_id) REFERENCES user_info(id);
 --
 -- ALTER TABLE user_info
 -- ADD FOREIGN KEY (favorites_id) REFERENCES favorites(id);
--- ADD FOREIGN KEY (watchlist_id) REFERENCES watchlist(id)
+-- ADD FOREIGN KEY (watchlist_id) REFERENCES watchlist(id);
+
 
 -- CREATE TABLE watchlist (
 --   id BIGSERIAL PRIMARY KEY,
