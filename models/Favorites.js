@@ -2,7 +2,7 @@ const db = require('../database/connection');
 
 const Favorites = {};
 
-Favorites.addToFavorites = showData => {
+Favorites.add = showData => {
   db.one(
     `
     INSERT INTO favorites (
@@ -20,7 +20,7 @@ Favorites.addToFavorites = showData => {
   );
 };
 
-Favorites.removeFromFavorites = showId => {
+Favorites.remove = showId => {
   db.result(
     `
     DELETE FROM favorites

@@ -26,7 +26,6 @@ CREATE TABLE watchlist (
 CREATE TABLE user_info (
   id BIGSERIAL PRIMARY KEY,
   username VARCHAR(15),
-  email VARCHAR(100),
   password VARCHAR(60),
   favorites_id INTEGER REFERENCES favorites(id),
   watchlist_id INTEGER REFERENCES watchlist(id)

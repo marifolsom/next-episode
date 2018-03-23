@@ -31,7 +31,9 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
 
+
 // '/signup' that renders a signup form
+
 
 // '/login' that renders a login form and logs the user in if their username and password are correct
 

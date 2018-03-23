@@ -2,7 +2,7 @@ const db = require('../database/connection');
 
 const Watchlist = {};
 
-Watchlist.addToWatchlist = showData => {
+Watchlist.add = showData => {
   db.one(
     `
     INSERT INTO watchlist (
@@ -22,7 +22,7 @@ Watchlist.addToWatchlist = showData => {
   );
 };
 
-Watchlist.removeFromWatchlist = showId => {
+Watchlist.remove = showId => {
   db.result(
     `
     DELETE FROM watchlist
