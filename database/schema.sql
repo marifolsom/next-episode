@@ -7,8 +7,7 @@ CREATE DATABASE tv_tracker;
 CREATE TABLE favorites (
   id BIGSERIAL PRIMARY KEY,
   show_id INTEGER,
-  title VARCHAR(255),
-  description VARCHAR(255),
+  show_title VARCHAR(255),
   airdate DATETIME,
   img_url VARCHAR(255)
 );
@@ -16,7 +15,9 @@ CREATE TABLE favorites (
 CREATE TABLE watchlist (
   id BIGSERIAL PRIMARY KEY,
   show_id INTEGER,
+  show_title VARCHAR(255),
   episode_id INTEGER,
+  episode_title VARCHAR(255),
   number_of_episodes INTEGER,
   watched BOOLEAN,
   img_url VARCHAR(255)

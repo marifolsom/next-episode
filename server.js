@@ -27,6 +27,7 @@ const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
+
 // '/login' that renders a login form and logs the user in if their username and password are correct
 
 
@@ -57,7 +58,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 // Clicking on an episode would take the user to '/episode/:id'
 
 
-// Post MVP? // 
+// Post MVP? //
 // '/watchlist/week' that prompts user to log in (if not logged in) and displays the shows from the user's watchlist that are currently on air in a week format
 
 
