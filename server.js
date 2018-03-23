@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 // Require models
 const Users = require('./models/Users');
@@ -26,7 +27,11 @@ const jsonParser = bodyParser.json();
 // Create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+// Declare salt as a global variable
+const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
+
+// '/signup' that renders a signup form
 
 // '/login' that renders a login form and logs the user in if their username and password are correct
 
