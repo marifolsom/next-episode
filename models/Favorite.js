@@ -11,12 +11,12 @@ Favorite.findByUser = userId => {
   )
 }
 
-Favorite.add = (showId, userId) => {
+Favorite.add = (userId, addedShowId) => {
   return db.one(`
-    INSERT INTO user_favorites (show_id)
-    VALUES ($1)
-    WHERE user_id = $2`,
-    [showId, userId]
+    INSERT INTO user_favorites (user_id, show_id)
+    VALUES ($1, $2)
+    RETURNING *`,
+    [userId, addedShowId]
   );
 };
 

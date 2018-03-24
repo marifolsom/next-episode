@@ -63,11 +63,9 @@ app.post('/signup', (request, response) => {
       const newPassword = newUser.password;
       // Salt and hash password using bcrypt
       const hashedPassword = bcrypt.hash(newPassword, salt);
-      console.log(newUsername, newPassword, hashedPassword);
-      // // Store the user's id for the session
-      // // Not sure how to do this?
-      // sessionStorage.setItems(userId);
-      message = 'You\'ve created a new account. Now you can add shows to your favorites and watchlist!';
+      // Still haven't figured out how to hash...
+      // console.log(newUsername, newPassword, hashedPassword);
+      message = 'You\'ve created a new account!';
       response.render('favorites/favorites', { message });
     })
 })
@@ -101,6 +99,8 @@ app.post('/login', (request, response) => {
         // // Store the user's id for the session
         // // Not sure how to do this?
         // sessionStorage.setItems(userInfo.id);
+        request.session.userId = Number(userInfo.id);
+        console.log('user', request.session.userId, 'is the current user stored in session');
         return;
       }
         message = 'Invalid login.';
@@ -160,15 +160,15 @@ app.get('/shows', (request, response) => {
 
 // Take added show and insert into the user's user_favorites table
 app.post('/shows', (request, response) => {
+  // Get the user's id that's stored in the session
+  const userId = request.session.userId;
+  console.log('user', userId, 'is the current user stored in session');
   // Get the clicked button's value attribute which is the show's id
-  // Not sure the best way to do this... DOM? bodyparser?
-  const addedShowId = Number(request.body);
-  console.log(addedShowId);
-  // Also need to know the user's id
-  // const userId = ;
-  // Take the addedShowId and add to favorites
-  Favorite.add(addedShowId)
-    .then(show => {
+  const addedShowId = Number(request.body.showId);
+  console.log('you just added show', addedShowId);
+  // Take the addedShowId and insert into database
+  Favorite.add(userId, addedShowId)
+    .then(() => {
       response.redirect('/shows');
     })
 })

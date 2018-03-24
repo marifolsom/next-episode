@@ -21,7 +21,8 @@
 
       <!-- Add to favorites button -->
       <form action="/shows" method="POST">
-        <button class="add-btn" value="<%= currentData.results[i].id %>">
+        <input type= "hidden" name= "showId" value= "<%= currentData.results[i].id %>">
+        <button class="add-btn">
           Add to Favorites
         </button>
       </form>
