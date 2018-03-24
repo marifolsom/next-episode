@@ -1,6 +1,6 @@
 # Project 2: TV Tracker App
 
-#### Project Description:
+### Project Description:
 Next Episode (still playing around with the name!) is an app that allows users to browse, track, and favorite TV shows all in one place. Using TMDb's (The Movie Database) API, users can stay up to date on all the latest information about the shows that they love, read up on episode summaries, and discover new shows.
 
 ## Wireframes:
@@ -39,11 +39,11 @@ Next Episode (still playing around with the name!) is an app that allows users t
 - The technologies, APIs, and modules you used and a description of each
 - TMDb (The Movie Database) API
 - Modules:
-  - body-parser
-  - method-override
-  - express-session
-  - bcrypt
-  - isomorphic-fetch
+  - body-parser -- 
+  - method-override --
+  - express-session --
+  - bcrypt --
+  - isomorphic-fetch --
 
 ## Code Snippet:
 - A code snippet of a part of the app you're particularly proud of

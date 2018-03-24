@@ -1,7 +1,7 @@
 <% include ../partials/header %>
   <body>
     <% include ../partials/nav %>
-    
+
     <% if (message) { %>
       <h3><%= message %></h3>
     <% } %>
@@ -9,6 +9,7 @@
     <form method="GET" action="/login">
       <button name="login" class="login-btn btn">Login</button>
     </form>
+    
     <div class="top-rated">
       <h1>Most Popular:</h1>
     </div>

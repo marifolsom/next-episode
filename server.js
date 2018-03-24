@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Set up static files
 app.use('/client', express.static('./client'));
+
 // Set up the session middleware which will let use `request.session`
 app.use(
   session({
@@ -31,8 +32,8 @@ app.use(
   })
 );
 
-const username = 'marisa';
-const password = 'tvtracker';
+// const username = 'marisa';
+// const password = 'tvtracker';
 
 // Declare salt as a global variable
 const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
@@ -76,18 +77,26 @@ app.get('/login', (request, response) => {
 // Log the user in if their username and password are correct
 app.post('/login', (request, response) => {
   let message = '';
-  if (
-    request.body.username === username &&
-    request.body.password === password
-  ) {
-    // Set the session data
-    message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
-    request.session.authenticated = true;
-    response.render('favorites/favorites', { message });
-    return;
-  }
-    message = 'Invalid login.';
-    response.render('home', { message });
+  // Take user's entered username and password
+  const enteredUsername = request.body.username;
+  const enteredPassword = request.body.password;
+  console.log(enteredUsername, enteredPassword);
+  User.find(enteredUsername)
+    .then(userInfo => {
+      // Username and password are a match if they are the same as the ones in the user_info table
+      const usernameMatch = enteredUsername === userInfo.username;
+      const passwordMatch = enteredPassword === userInfo.password;
+      // If both match, log the user in
+      if (usernameMatch && passwordMatch) {
+        // Set the session data
+        message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
+        request.session.authenticated = true;
+        response.render('favorites/favorites', { message });
+        return;
+      }
+        message = 'Invalid login.';
+        response.render('home', { message });
+    })
 });
 
 
@@ -144,12 +153,12 @@ app.get('/shows', (request, response) => {
 app.post('/shows', (request, response) => {
   // Get the clicked button's value attribute which is the show's id
   // Not sure the best way to do this... DOM? bodyparser?
-  const newShowId = Number(request.body);
-  console.log(newShowId);
+  const addedShowId = Number(request.body);
+  console.log(addedShowId);
   // Also need to know the user's id
   // const userId = ;
-  // Take the newShowId and add to favorites
-  Favorite.add(newShowId)
+  // Take the addedShowId and add to favorites
+  Favorite.add(addedShowId)
     .then(show => {
       response.redirect('/shows');
     })
