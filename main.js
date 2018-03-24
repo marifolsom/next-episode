@@ -3,7 +3,7 @@ console.log('main.js is connected!');
 // Make a variable to store the user's input
 let searchQuery = '';
 
-// Make a variable to store the show id and episode id
+// Make a variable to store the show id
 let showId = 1100;
 // let episodeId = 1;
 
@@ -11,34 +11,34 @@ let showId = 1100;
 const userInput = 'How I Met Your Mother';
 
 
-// Make a function that grabs the user's input, corrects the format, and stores it in the searchQuery variable
-const getSearchQuery = () => {
-  // Select the user's search input
-  // let userInput = document.querySelector('');
-  // Replace spaces with % and changes to lower case
-  searchQuery = userInput.split(' ').join('%20').toLowerCase();
-  console.log(searchQuery);
-};
-getSearchQuery();
+// // Make a function that grabs the user's input, corrects the format, and stores it in the searchQuery variable
+// const getSearchQuery = () => {
+//   // Select the user's search input
+//   // let userInput = document.querySelector('');
+//   // Replace spaces with % and changes to lower case
+//   searchQuery = userInput.split(' ').join('%20').toLowerCase();
+//   console.log(searchQuery);
+// };
+// getSearchQuery();
 
 
 // Make a function that creates an API request and returns a response in JSON
 const getJSON = url => fetch(url).then(response => response.json());
 
 
-// TMDB API
-// Get tv show's id by keyword
-const getShowId = searchQuery => {
-  // Make an API request with the user's inputted keywords
-  getJSON(
-    `https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${searchQuery}`
-  ).then(showData => {
-    // Assign the found show id to the showId variable
-    showId = showData.results[0].id;
-    console.log('show id:', showId);
-  });
-};
-getShowId(searchQuery);
+// // TMDB API
+// // Get tv show's id by keyword
+// const getShowId = searchQuery => {
+//   // Make an API request with the user's inputted keywords
+//   getJSON(
+//     `https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${searchQuery}`
+//   ).then(showData => {
+//     // Assign the found show id to the showId variable
+//     showId = showData.results[0].id;
+//     console.log('show id:', showId);
+//   });
+// };
+// getShowId(searchQuery);
 
 
 // Get tv show details by show id

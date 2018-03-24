@@ -1,4 +1,16 @@
 <% include ../partials/header %>
   <body>
+    <h1><%= showData.name %></h1>
+    <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
+    <h3><%= showData.overview %></h3>
+    <% dates = showData.first_air_date.split('-') %>
+    <p><%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
+    <p><%= showData.genres[0].name %></p>
+    <p>Seasons: <%= showData.number_of_seasons %></p>
+    <p>Episodes: <%= showData.number_of_episodes %></p>
+    <p>Rating: <%= showData.vote_average %></p>
+    <p>Popularity: <%= showData.popularity %></p>
+    <p>Status: <%= showData.status %></p>
+    <a href="<%= showData.homepage %>">Website</a>
   </body>
 </html>
