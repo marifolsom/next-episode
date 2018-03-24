@@ -3,7 +3,9 @@
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
       <!-- Display title -->
-      <h2><%= currentData.results[i].name %></h2>
+      <a href="/show/<%= currentData.results[i].id %>">
+        <h2><%= currentData.results[i].name %></h2>
+      </a>
       <!-- If there's a show poster, display poster -->
       <% if (currentData.results[i].poster_path) { %>
         <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
@@ -15,7 +17,10 @@
       <!-- Display show popularity -->
       <p>Popularity: <%= currentData.results[i].popularity %></p>
       <!-- Display link to show's API -->
-      <a href="https://api.themoviedb.org/3/tv/<%=currentData.results[i].id%>?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US"> API link </a>
+
+      <form action="/show/<%= currentData.results[i].id %>" method="POST">
+        <button>Add to Favorites</button>
+      </form>
     <% } %>
   </body>
 </html>

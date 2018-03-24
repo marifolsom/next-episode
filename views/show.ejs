@@ -36,18 +36,25 @@
       <% showId = showData.id %>
       <% seasonNumber = showData.seasons[i].season_number %>
       <!-- Display season name -->
-      <h3><%= showData.seasons[i].name %></h3>
+      <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
+        <h3><%= showData.seasons[i].name %></h3>
+      </a>
       <!-- If there's a season poster, display poster -->
       <% if (showData.seasons[i].poster_path) { %>
         <img src="http://image.tmdb.org/t/p/w185<%= seasonImg = showData.seasons[i].poster_path %>">
       <% } %>
       <!-- Fix format of date, and display show airdate -->
-      <% dates = showData.seasons[i].air_date.split('-') %>
-      <p>Premiered: <%= seasonAirdate = `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
+      <% if (showData.seasons[i].air_date) { %>
+        <% dates = showData.seasons[i].air_date.split('-') %>
+        <p>Premiered: <%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
+      <% } %>
       <!-- Display number of episodes -->
       <p>Total episodes: <%= episodeCount = showData.seasons[i].episode_count %></p>
       <!-- Display link to seasons's API -->
       <a href="<%= seasonLink = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US` %>">Season API Link</a>
     <% } %>
+
+    <!-- Display similar show recommendations -->
+    <h1>Similar shows:<h1>
   </body>
 </html>

@@ -85,6 +85,16 @@ app.get('/', (request, response) => {
     })
 })
 
+// //// FOR HOME.EJS FILE // ////
+// <% for (let i = 0; i < homepageData.results.length; i++) { %>
+//   <h2><%= homepageData.results[i].name %></h2>
+//   <p><%= homepageData.results[i].overview %></p>
+//   <p>Rating: <%= homepageData.results[i].vote_average %></p>
+//   <p>Popularity: <%= homepageData.results[i].popularity %></p>
+//   <img src="http://image.tmdb.org/t/p/w185<%= homepageData.results[i].poster_path %>">
+//   <a href="https://api.themoviedb.org/3/tv/<%=homepageData.results[i].id%>?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US"> API link </a>
+// <% } %>
+
 
 // '/shows' that displays all shows currently running
 // Display show's poster, title, airdate
@@ -98,6 +108,9 @@ app.get('/shows', (request, response) => {
       response.render('shows', { currentData: currentData })
     })
 })
+
+
+
 
 
 // Make a function that takes the user's search, converts it to the right format, and returns the show's id
@@ -124,7 +137,7 @@ const getShowId = (userInput) => {
 
 
 // '/show/:id' that displays details of a specific show
-// Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched
+// Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
 // User can click on an episode to get the episode description
 // User can click to add to favorites or watchlist
 app.get('/show/:id', urlencodedParser, (request, response) => {
@@ -151,16 +164,50 @@ app.get('/show/:id', urlencodedParser, (request, response) => {
       // response.json(showData);
       response.render('show', { showData: showData });
     })
+  // Make an API request with the showId
+  // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+  //   .then(apiResponse => {
+  //     return apiResponse.json();
+  //   })
+  //   .then(recsData => {
+  //     // response.json(recsData);
+  //     response.render('show', { recsData: recsData });
+  //   })
 })
+
+// //// FOR SHOW.EJS FILE // ////
+// <!-- For each show, display data -->
+// <% for (let i = 0; i < recsData.results.length; i++) { %>
+//   <!-- store recommendation id -->
+//   <% recId = recsData.results[i].id %>
+//   <!-- Display show title -->
+//   <h3><%= recsData.results[i].name %></h3>
+//   <!-- If there's a show poster, display poster -->
+//   <% if (recsData.results[i].poster_path) { %>
+//     <img src="http://image.tmdb.org/t/p/w185<%= recsData.results[i].poster_path %>">
+//   <% } %>
+//   <!-- Display show description -->
+//   <p><%= recsData.results[i].overview %></p>
+//   <!-- Display show rating -->
+//   <p><%= Rating: recsData.results[i].vote_average %></p>
+//   <!-- Display link to show's API -->
+//   <a href"https://api.themoviedb.org/3/tv/${recId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US">API Link</a>
+// <% } %>
 
 
 // '/episode/:id' that displays details of a specific episode
 // Display show season poster, show title, season number, episode number, airdate, episode description
-app.get('/episode/:id', (request, response) => {
-  // Make a variable to hold the episode id
-  let episodeId = 0;
-
-  response.render('episode', { });
+app.get('/show/:showId/season/:seasonNumber', (request, response) => {
+  showId = Number(request.params.showId);
+  seasonNumber = Number(request.params.seasonNumber);
+  fetch(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+    .then(apiResponse => {
+      return apiResponse.json();
+    })
+    .then(seasonData => {
+      // response.json(seasonData);
+      response.render('episode', { seasonData: seasonData });
+    })
 })
 
 
