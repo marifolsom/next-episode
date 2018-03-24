@@ -4,11 +4,7 @@
 - The project's name and description
 
 ### Wireframes:
-<img src="img/wireframes/home.png" width="200">
-<img src="img/wireframes/show.png" width="200">
-<img src="img/wireframes/favorites.png" width="200">
-<img src="img/wireframes/watchlist.png" width="200">
-<img src="img/wireframes/watchlist-show.png" width="200">
+<img src="img/wireframes/home.png" width="200"> <img src="img/wireframes/show.png" width="200"> <img src="img/wireframes/favorites.png" width="200"> <img src="img/wireframes/watchlist.png" width="200"> <img src="img/wireframes/watchlist-show.png" width="200">
 
 ### User Stories:
 - "As a bored user, I want to	have a list of TV shows currently airing, so that I can have something to watch right now."
