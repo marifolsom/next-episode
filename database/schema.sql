@@ -5,8 +5,8 @@ CREATE DATABASE tv_tracker;
 
 CREATE TABLE user_info (
   id BIGSERIAL PRIMARY KEY,
-  username VARCHAR(15),
-  password VARCHAR(60)
+  username VARCHAR(255),
+  password VARCHAR(255)
 );
 
 CREATE TABLE user_favorites (

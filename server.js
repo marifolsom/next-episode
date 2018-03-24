@@ -48,34 +48,40 @@ const requireLogin = (request, response, next) => {
 
 // '/signup' that renders a signup form
 app.get('/signup', (request, response) => {
-  const message = '';
-  response.render('signup', { message });
+  response.render('signup');
 })
 
 app.post('/signup', (request, response) => {
-  // Get username and password from database
-  const newUsername = request.body.username;
-  const newPassword = request.body.password;
-  Users.create(newUsername)
-    .then(userData => {
-      // Get password entered by user
-      const passwordEntered = newUser.password;
-      const hashedPassword = bcrypt.hashSync()
-
+  let message = '';
+  // Get user's entered info
+  const newUser = request.body;
+  // Insert new user info into database
+  User.create(newUser)
+    .then(userId => {
+      // Get user's entered username and password
+      const newUsername = newUser.username;
+      const newPassword = newUser.password;
+      // Salt and hash password using bcrypt
+      const hashedPassword = bcrypt.hash(newPassword, salt);
+      console.log(newUsername, newPassword, hashedPassword);
+      // // Store the user's id for the session
+      // // Not sure how to do this?
+      // sessionStorage.setItems(userId);
+      message = 'You\'ve created a new account. Now you can add shows to your favorites and watchlist!';
+      response.render('favorites/favorites', { message });
     })
 })
 
 
 // '/login' that renders a login form and logs the user in if their username and password are correct
 app.get('/login', (request, response) => {
-  const message = '';
-  response.render('login', { message });
+  response.render('login');
 })
 
 // Log the user in if their username and password are correct
 app.post('/login', (request, response) => {
   let message = '';
-  // Take user's entered username and password
+  // Get user's entered username and password
   const enteredUsername = request.body.username;
   const enteredPassword = request.body.password;
   // const hashedPassword = bcrypt.hashSync(enteredPassword, salt);
@@ -92,6 +98,9 @@ app.post('/login', (request, response) => {
         message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
         request.session.authenticated = true;
         response.render('favorites/favorites', { message });
+        // // Store the user's id for the session
+        // // Not sure how to do this?
+        // sessionStorage.setItems(userInfo.id);
         return;
       }
         message = 'Invalid login.';
