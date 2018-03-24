@@ -65,11 +65,11 @@ app.get('/', (request, response) => {
   // Create an array to hold all API urls for homepage
   const urls = [
     // URL to most popular shows
-    `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
+    `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=1`,
     // URL to top rated shows
-    `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
+    `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=1`,
     // URL to shows airing today
-    `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+    `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=1`
   ]
   // Create an array to hold all promises, and map over them to fetch
   const promises = urls.map(url => fetch(url));
@@ -110,9 +110,15 @@ app.get('/shows', (request, response) => {
 })
 
 // Take added show and insert into the user's user_favorites table
-app.post('/shows', urlencodedParser, (request, response) => {
-  const newShow = request.body;
-  console.log(newShow);
+app.post('/shows', (request, response) => {
+  // Get the clicked button's value attribute which is the show's id
+  // Not sure the best way to do this... DOM? bodyparser?
+  // const newShowId = request.body;
+  console.log(newShowId);
+  Favorite.add(newShowId)
+    .then(show => {
+      response.redirect('/shows');
+    })
 })
 
 

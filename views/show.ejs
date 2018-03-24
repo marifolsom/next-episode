@@ -1,8 +1,9 @@
 <% include ../partials/header %>
   <body>
+    <% include ../partials/nav %>
     <!-- Back to shows button -->
     <form action="/shows" method="GET">
-      <button>Back</button>
+      <button>Return to Shows</button>
     </form>
     <!-- Show title -->
     <h1><%= showData.name %></h1>
@@ -18,7 +19,7 @@
     <h3><%= showData.overview %></h3>
     <!-- Fix format of date, and display show airdate -->
     <% dates = showData.first_air_date.split('-') %>
-    <p>First aired: <%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
+    <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
     <!-- Show genres -->
     <% for (let i = 0; i < showData.genres.length; i++) { %>
       <p><%= showData.genres[i].name %></p>
@@ -54,7 +55,7 @@
       <!-- Fix format of date, and display show airdate -->
       <% if (showData.seasons[i].air_date) { %>
         <% dates = showData.seasons[i].air_date.split('-') %>
-        <p>Premiered: <%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
+        <p>Premiered: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
       <% } %>
       <!-- Number of episodes -->
       <p>Total episodes: <%= episodeCount = showData.seasons[i].episode_count %></p>

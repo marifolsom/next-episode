@@ -12,7 +12,7 @@ Favorite.findByUser = userId => {
 }
 
 Favorite.add = showId => {
-  db.one(`
+  return db.one(`
     INSERT INTO user_favorites (show_id)
     VALUES ($1)`,
     [showId]

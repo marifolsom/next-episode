@@ -1,5 +1,6 @@
 <% include ../partials/header %>
   <body>
+    <% include ../partials/nav %>
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
       <!-- Show title -->
@@ -17,8 +18,10 @@
       <!-- Show popularity -->
       <p>Popularity: <%= currentData.results[i].popularity %></p>
       <!-- Add to favorites button -->
-      <form action="/show/<%= currentData.results[i].id %>" method="POST">
-        <button>Add to Favorites</button>
+      <form action="/shows" method="POST">
+        <button class="add-btn" value="<%= currentData.results[i].id %>">
+          Add to Favorites
+        </button>
       </form>
     <% } %>
   </body>
