@@ -1,12 +1,12 @@
 # Project 2: TV Tracker App
 
-### Project Description:
+## Project Description:
 - The project's name and description
 
-### Wireframes:
+## Wireframes:
 <img src="img/wireframes/home.png" width="400"> <img src="img/wireframes/show.png" width="400"> <img src="img/wireframes/favorites.png" width="400"> <img src="img/wireframes/watchlist.png" width="400"> <img src="img/wireframes/watchlist-show.png" width="400">
 
-### User Stories:
+## User Stories:
 Tracking related:
 - "As an avid TV-show-watcher, I want to	keep track of the many shows I watch, so I can keep up to date and not fall behind."
 - "As a forgetful user, I want to be notified when my favorite shows air, so I can remember to watch them."
@@ -35,7 +35,7 @@ Auth related:
 - "As a serial binge-watcher, I want to keep track of what episode/season I'm on, so when I start watching I know exactly which episode to start next."
 
 
-### Technologies, APIs, Modules Used:
+## Technologies, APIs, Modules Used:
 - The technologies, APIs, and modules you used and a description of each
 - TMDb (The Movie Database) API
 - Modules:
@@ -45,11 +45,11 @@ Auth related:
   - bcrypt
   - isomorphic-fetch
 
-### Code Snippet:
+## Code Snippet:
 - A code snippet of a part of the app you're particularly proud of
 
-### Future Additions:
+## Future Additions:
 - Any things you plan to fix or features you plan to add
 
-### Instructions for Downloading/Running:
+## Instructions for Downloading/Running:
 - Instructions for downloading the code and running it on localhost
