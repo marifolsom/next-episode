@@ -30,11 +30,11 @@
 - The technologies, APIs, and modules you used and a description of each
 - TMDb (The Movie Database) API
 - Modules:
-• body-parser
-• method-override
-• express-session
-• bcrypt
-• isomorphic-fetch
+  - body-parser
+  - method-override
+  - express-session
+  - bcrypt
+  - isomorphic-fetch
 
 ### Code Snippet:
 - A code snippet of a part of the app you're particularly proud of
