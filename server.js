@@ -32,9 +32,6 @@ app.use(
   })
 );
 
-// const username = 'marisa';
-// const password = 'tvtracker';
-
 // Declare salt as a global variable
 const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
@@ -55,17 +52,18 @@ app.get('/signup', (request, response) => {
   response.render('signup', { message });
 })
 
-// app.post('/signup', urlencodedParser, (response, request) => {
-//   // // Get username and password from database
-//   // const newUsername = request.body.username;
-//   // Users.create(newUsername)
-//   //   .then(userData => {
-//   //     // Get password entered by user
-//   //     const passwordEntered = newUser.password;
-//   //     const hashedPassword = bcrypt.hashSync()
-//   //
-//   //   })
-// })
+app.post('/signup', (request, response) => {
+  // Get username and password from database
+  const newUsername = request.body.username;
+  const newPassword = request.body.password;
+  Users.create(newUsername)
+    .then(userData => {
+      // Get password entered by user
+      const passwordEntered = newUser.password;
+      const hashedPassword = bcrypt.hashSync()
+
+    })
+})
 
 
 // '/login' that renders a login form and logs the user in if their username and password are correct
@@ -80,12 +78,14 @@ app.post('/login', (request, response) => {
   // Take user's entered username and password
   const enteredUsername = request.body.username;
   const enteredPassword = request.body.password;
-  console.log(enteredUsername, enteredPassword);
+  // const hashedPassword = bcrypt.hashSync(enteredPassword, salt);
+  // console.log(enteredUsername, enteredPassword);
   User.find(enteredUsername)
     .then(userInfo => {
       // Username and password are a match if they are the same as the ones in the user_info table
       const usernameMatch = enteredUsername === userInfo.username;
       const passwordMatch = enteredPassword === userInfo.password;
+      // const passwordMatch = bcrypt.compareSync(enteredPassword, validUserInfo.password);
       // If both match, log the user in
       if (usernameMatch && passwordMatch) {
         // Set the session data
@@ -119,7 +119,7 @@ app.get('/', (request, response) => {
   Promise
     .all(promises)
     .then(responses => {
-      console.log(responses);
+      // console.log(responses);
     })
     .then(homepageData => {
       // response.json(homepageData);

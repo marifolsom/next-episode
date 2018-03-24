@@ -15,7 +15,7 @@ Favorite.add = (showId, userId) => {
   return db.one(`
     INSERT INTO user_favorites (show_id)
     VALUES ($1)
-    WEHERE user_id = $2`,
+    WHERE user_id = $2`,
     [showId, userId]
   );
 };

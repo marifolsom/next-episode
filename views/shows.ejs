@@ -1,9 +1,7 @@
 <% include ../partials/header %>
   <body>
     <% include ../partials/nav %>
-    <form method="GET" action="/login">
-      <button name="login" class="login-btn btn">Login</button>
-    </form>
+
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
       <!-- Show title -->
@@ -20,12 +18,14 @@
       <p>Rating: <%= currentData.results[i].vote_average %></p>
       <!-- Show popularity -->
       <p>Popularity: <%= currentData.results[i].popularity %></p>
+
       <!-- Add to favorites button -->
       <form action="/shows" method="POST">
         <button class="add-btn" value="<%= currentData.results[i].id %>">
           Add to Favorites
         </button>
       </form>
+
     <% } %>
   </body>
 </html>
