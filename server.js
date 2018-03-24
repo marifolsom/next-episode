@@ -157,6 +157,8 @@ app.get('/show/:id', urlencodedParser, (request, response) => {
 // '/episode/:id' that displays details of a specific episode
 // Display show season poster, show title, season number, episode number, airdate, episode description
 app.get('/episode/:id', (request, response) => {
+  // Make a variable to hold the episode id
+  let episodeId = 0;
 
   response.render('episode', { });
 })

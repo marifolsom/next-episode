@@ -41,56 +41,56 @@ const getJSON = url => fetch(url).then(response => response.json());
 // getShowId(searchQuery);
 
 
-// Get tv show details by show id
-const getShowInfo = showId => {
-  // Make an API request with the found show id
-  getJSON(
-    `https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
-  ).then(showData => {
-    // Make a variable for the show title, show genre, show status, official site, show image, show desc, show rating, number of episodes, number of seasons
-    // Asign a JSON value to each variable
-    const showTitle = showData.name;
-    const dates = showData.first_air_date.split('-');
-    const showAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
-    const showDesc = showData.overview;
-    const showGenre = showData.genres[0].name;
-    const numberOfSeasons = showData.number_of_seasons;
-    const numberOfEpisodes = showData.number_of_episodes;
-    const showRating = showData.vote_average;
-    const showPopularity = showData.popularity;
-    const showStatus = showData.status;
-    const showSite = showData.homepage;
-    const showImg = showData.poster_path;
-    console.log('show title:', showTitle);
-    console.log('airdate:', showAirdate);
-    console.log('show desc:', showDesc);
-    console.log('show genre:', showGenre);
-    console.log('seasons:', numberOfSeasons);
-    console.log('episodes:', numberOfEpisodes);
-    console.log('show rating:', showRating);
-    console.log('show popularity:', showPopularity);
-    console.log('show status:', showStatus);
-    console.log('show url:', showSite);
-    console.log('show img:', showImg);
-    console.log('-------------------------------');
-    for (let i = 0; i < showData.seasons.length; i++) {
-      const seasonNumber = showData.seasons[i].season_number;
-      const seasonTitle = showData.seasons[i].name;
-      const dates = showData.seasons[i].air_date.split('-');
-      const seasonAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
-      const episodeCount = showData.seasons[i].episode_count;
-      const seasonImg = showData.seasons[i].poster_path;
-      const seasonLink = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
-      console.log('season title:', seasonTitle);
-      console.log('season aired:', seasonAirdate);
-      console.log('episode count:', episodeCount);
-      console.log('season img:', seasonImg);
-      console.log('season link:', seasonLink);
-      console.log('-------------------------------');
-    }
-  });
-};
-getShowInfo(showId);
+// // Get tv show details by show id
+// const getShowInfo = showId => {
+//   // Make an API request with the found show id
+//   getJSON(
+//     `https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+//   ).then(showData => {
+//     // Make a variable for the show title, show genre, show status, official site, show image, show desc, show rating, number of episodes, number of seasons
+//     // Asign a JSON value to each variable
+//     const showTitle = showData.name;
+//     const dates = showData.first_air_date.split('-');
+//     const showAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
+//     const showDesc = showData.overview;
+//     const showGenre = showData.genres[0].name;
+//     const numberOfSeasons = showData.number_of_seasons;
+//     const numberOfEpisodes = showData.number_of_episodes;
+//     const showRating = showData.vote_average;
+//     const showPopularity = showData.popularity;
+//     const showStatus = showData.status;
+//     const showSite = showData.homepage;
+//     const showImg = showData.poster_path;
+//     console.log('show title:', showTitle);
+//     console.log('airdate:', showAirdate);
+//     console.log('show desc:', showDesc);
+//     console.log('show genre:', showGenre);
+//     console.log('seasons:', numberOfSeasons);
+//     console.log('episodes:', numberOfEpisodes);
+//     console.log('show rating:', showRating);
+//     console.log('show popularity:', showPopularity);
+//     console.log('show status:', showStatus);
+//     console.log('show url:', showSite);
+//     console.log('show img:', showImg);
+//     console.log('-------------------------------');
+//     for (let i = 0; i < showData.seasons.length; i++) {
+//       const seasonNumber = showData.seasons[i].season_number;
+//       const seasonTitle = showData.seasons[i].name;
+//       const dates = showData.seasons[i].air_date.split('-');
+//       const seasonAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
+//       const episodeCount = showData.seasons[i].episode_count;
+//       const seasonImg = showData.seasons[i].poster_path;
+//       const seasonLink = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`;
+//       console.log('season title:', seasonTitle);
+//       console.log('season aired:', seasonAirdate);
+//       console.log('episode count:', episodeCount);
+//       console.log('season img:', seasonImg);
+//       console.log('season link:', seasonLink);
+//       console.log('-------------------------------');
+//     }
+//   });
+// };
+// getShowInfo(showId);
 
 
 // Get all episodes from a season with show id and season number
