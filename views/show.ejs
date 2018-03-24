@@ -1,11 +1,19 @@
 <% include ../partials/header %>
   <body>
+    <!-- Back to shows button -->
+    <form action="/shows" method="GET">
+      <button>Back</button>
+    </form>
     <!-- Show title -->
     <h1><%= showData.name %></h1>
     <!-- If there's a show poster, display poster -->
     <% if (showData.poster_path) { %>
       <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
     <% } %>
+    <!-- Add to favorites button -->
+    <form action="/show/<%= showData.id %>" method="POST">
+      <button>Add to Favorites</button>
+    </form>
     <!-- Show description -->
     <h3><%= showData.overview %></h3>
     <!-- Fix format of date, and display show airdate -->

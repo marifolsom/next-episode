@@ -109,6 +109,12 @@ app.get('/shows', (request, response) => {
     })
 })
 
+// Take added show and insert into the user's user_favorites table
+app.post('/shows', urlencodedParser, (request, response) => {
+  const newShow = request.body;
+  console.log(newShow);
+})
+
 
 // Make a function that takes the user's search, converts it to the right format, and returns the show's id
 const getShowId = (userInput) => {
@@ -203,7 +209,7 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
     })
     .then(seasonData => {
       // response.json(seasonData);
-      response.render('episode', { seasonData: seasonData });
+      response.render('episode', { seasonData: seasonData, showId });
     })
 })
 
@@ -213,7 +219,7 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 // Clicking on a show in favorites would take the user to '/show/:id'
 app.get('/favorites', (request, response) => {
 
-  response.render('favorites', { });
+  response.render('favorites/favorites', { });
 })
 
 

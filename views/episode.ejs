@@ -1,5 +1,9 @@
 <% include ../partials/header %>
   <body>
+    <!-- Back to show details button -->
+    <form action="/show/<%= showId %>" method="GET">
+      <button>Back</button>
+    </form>
     <!-- Season name -->
     <h1><%= seasonData.name %><h1>
     <!-- For each episode dsiplay data -->

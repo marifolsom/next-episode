@@ -16,7 +16,7 @@
       <p>Rating: <%= currentData.results[i].vote_average %></p>
       <!-- Show popularity -->
       <p>Popularity: <%= currentData.results[i].popularity %></p>
-
+      <!-- Add to favorites button -->
       <form action="/show/<%= currentData.results[i].id %>" method="POST">
         <button>Add to Favorites</button>
       </form>
