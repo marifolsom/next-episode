@@ -1,8 +1,11 @@
 <% include ../partials/header %>
   <body>
     <% include ../partials/nav %>
-    <form method="GET" action="/login">
-      <button name="login" class="login-btn btn">Login</button>
+    <h3>Login to your account:</h3>
+    <form action="/login" method="POST">
+      <input type="text" name="username" placeholder="Username">
+      <input type="password" name="password" placeholder="Password">
+      <input type="submit" value="Submit">
     </form>
   </body>
 </html>

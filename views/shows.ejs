@@ -1,6 +1,9 @@
 <% include ../partials/header %>
   <body>
     <% include ../partials/nav %>
+    <form method="GET" action="/login">
+      <button name="login" class="login-btn btn">Login</button>
+    </form>
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
       <!-- Show title -->

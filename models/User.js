@@ -3,7 +3,7 @@ const db = require('../database/connection');
 const User = {};
 
 User.create = userData => {
-  return db.one(`
+  db.one(`
     INSERT INTO user_info (username, email, password)
     VALUES ($1, $2, $3)`,
     [
@@ -15,7 +15,7 @@ User.create = userData => {
 }
 
 User.find = username => {
-  return db.one(`
+  db.one(`
     SELECT *
     FROM user_info
     WHERE username = $1`,

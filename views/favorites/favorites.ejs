@@ -1,6 +1,12 @@
 <% include ../../partials/header %>
   <body>
+    <% include ../../partials/nav %>
+
+    <% if (message) { %>
+      <h3><%= message %></h3>
+    <% } %>
+
     <h1>Favorites</h1>
-    
+
   <body>
 </html>

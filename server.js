@@ -6,31 +6,46 @@ const bcrypt = require('bcrypt');
 // Require es6-promise and isomorphic-fetch to allow for server side fetch
 const es6 = require('es6-promise').polyfill();
 const fetch = require('isomorphic-fetch');
+
 // Require models
 const User = require('./models/User');
 const Favorite = require('./models/Favorite');
 const Watchlist = require('./models/Watchlist');
-// Set port
+
+const app = express();
 const PORT = 3000;
 
-// Create an Express application (web server)
-const app = express();
-
-// Set template engine to ejs
 app.set('view engine', 'ejs');
 
+app.use(methodOverride('_method'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 // Set up static files
 app.use('/client', express.static('./client'));
+// Set up the session middleware which will let use `request.session`
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+  })
+);
 
-// Create application/json parser
-const jsonParser = bodyParser.json();
-
-// Create application/x-www-form-urlencoded parser
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const username = 'marisa';
+const password = 'tvtracker';
 
 // Declare salt as a global variable
 const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
+
+// Middleware to check whether the user is authenticated
+const requireLogin = (request, response, next) => {
+  if (!request.session.authenticated) {
+    response.redirect('/login');
+    return;
+  }
+  next();
+};
 
 
 // '/signup' that renders a signup form
@@ -58,6 +73,24 @@ app.get('/login', (request, response) => {
   response.render('login', { message });
 })
 
+// Log the user in if their username and password are correct
+app.post('/login', (request, response) => {
+  let message = '';
+  if (
+    request.body.username === username &&
+    request.body.password === password
+  ) {
+    // Set the session data
+    message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
+    request.session.authenticated = true;
+    response.render('favorites/favorites', { message });
+    return;
+  }
+    message = 'Invalid login.';
+    response.render('home', { message });
+});
+
+
 
 // '/' that displays the user's watchlist (if logged in), trending, popular, and airing today
 // Display show's poster, title, airdate
@@ -65,11 +98,11 @@ app.get('/', (request, response) => {
   // Create an array to hold all API urls for homepage
   const urls = [
     // URL to most popular shows
-    `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=1`,
+    `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
     // URL to top rated shows
-    `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=1`,
+    `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
     // URL to shows airing today
-    `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=1`
+    `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
   ]
   // Create an array to hold all promises, and map over them to fetch
   const promises = urls.map(url => fetch(url));
@@ -77,11 +110,11 @@ app.get('/', (request, response) => {
   Promise
     .all(promises)
     .then(responses => {
-      // console.log(responses);
+      console.log(responses);
     })
     .then(homepageData => {
       // response.json(homepageData);
-      response.render('home', { homepageData: homepageData });
+      response.render('home', { homepageData, message: '' });
     })
 })
 
@@ -100,12 +133,10 @@ app.get('/', (request, response) => {
 // Display show's poster, title, airdate
 app.get('/shows', (request, response) => {
   fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-    .then(apiResponse => {
-      return apiResponse.json();
-    })
+    .then(apiResponse => apiResponse.json())
     .then(currentData => {
       // response.json(currentData);
-      response.render('shows', { currentData: currentData })
+      response.render('shows', { currentData })
     })
 })
 
@@ -113,8 +144,11 @@ app.get('/shows', (request, response) => {
 app.post('/shows', (request, response) => {
   // Get the clicked button's value attribute which is the show's id
   // Not sure the best way to do this... DOM? bodyparser?
-  // const newShowId = request.body;
+  const newShowId = Number(request.body);
   console.log(newShowId);
+  // Also need to know the user's id
+  // const userId = ;
+  // Take the newShowId and add to favorites
   Favorite.add(newShowId)
     .then(show => {
       response.redirect('/shows');
@@ -134,9 +168,7 @@ const getShowId = (userInput) => {
   console.log(searchQuery);
   // Make an API request with the searchQuery
   fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${searchQuery}`)
-    .then(apiResponse => {
-      return apiResponse.json();
-    })
+    .then(apiResponse => apiResponse.json())
     .then(showData => {
       // Assign the found show id to the showId variable
       showId = showData.results[0].id;
@@ -149,7 +181,7 @@ const getShowId = (userInput) => {
 // Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
 // User can click on an episode to get the episode description
 // User can click to add to favorites or watchlist
-app.get('/show/:id', urlencodedParser, (request, response) => {
+app.get('/show/:id', (request, response) => {
   // Make a variable to hold the show id
   let showId = 0;
   if (!request.params.id) {
@@ -166,12 +198,10 @@ app.get('/show/:id', urlencodedParser, (request, response) => {
   }
   // Make an API request with the showId
   fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-    .then(apiResponse => {
-      return apiResponse.json();
-    })
+    .then(apiResponse => apiResponse.json())
     .then(showData => {
       // response.json(showData);
-      response.render('show', { showData: showData });
+      response.render('show', { showData });
     })
   // Make an API request with the showId
   // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
@@ -207,15 +237,13 @@ app.get('/show/:id', urlencodedParser, (request, response) => {
 // '/episode/:id' that displays details of a specific episode
 // Display show season poster, show title, season number, episode number, airdate, episode description
 app.get('/show/:showId/season/:seasonNumber', (request, response) => {
-  showId = Number(request.params.showId);
-  seasonNumber = Number(request.params.seasonNumber);
+  const showId = Number(request.params.showId);
+  const seasonNumber = Number(request.params.seasonNumber);
   fetch(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-    .then(apiResponse => {
-      return apiResponse.json();
-    })
+    .then(apiResponse => apiResponse.json())
     .then(seasonData => {
       // response.json(seasonData);
-      response.render('episode', { seasonData: seasonData, showId });
+      response.render('episode', { seasonData, showId });
     })
 })
 
@@ -223,9 +251,9 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 // '/favorites' that prompts user to log in (if not logged in) and displays the user's favorited shows
 // Display show's poster and title, sorted by start date
 // Clicking on a show in favorites would take the user to '/show/:id'
-app.get('/favorites', (request, response) => {
+app.get('/favorites', requireLogin, (request, response) => {
 
-  response.render('favorites/favorites', { });
+  response.render('favorites/favorites', { message: '' });
 })
 
 

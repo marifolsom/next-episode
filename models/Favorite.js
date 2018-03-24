@@ -3,7 +3,7 @@ const db = require('../database/connection');
 const Favorite = {};
 
 Favorite.findByUser = userId => {
-  return db.any(`
+  db.any(`
     SELECT *
     FROM user_favorites
     WHERE user_id = $1`,
@@ -11,19 +11,20 @@ Favorite.findByUser = userId => {
   )
 }
 
-Favorite.add = showId => {
-  return db.one(`
+Favorite.add = (showId, userId) => {
+  db.one(`
     INSERT INTO user_favorites (show_id)
-    VALUES ($1)`,
-    [showId]
+    VALUES ($1)
+    WEHERE user_id = $2`,
+    [showId, userId]
   );
 };
 
-Favorite.remove = showId => {
+Favorite.remove = (showId, userId) => {
   db.result(`
     DELETE FROM user_favorites
-    WHERE id = $1`,
-    [showId]
+    WHERE show_id = $1 && user_id = $2`,
+    [showId, userId]
   );
 };
 
