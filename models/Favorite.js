@@ -2,28 +2,26 @@ const db = require('../database/connection');
 
 const Favorite = {};
 
-Favorite.add = showData => {
-  db.one(
-    `
-    INSERT INTO favorites (
-      show_id, show_title, airdate, img_url
-    )
-    VALUES (
-      $1, $2, $3, $4, $5
-    )`,
-    [
-      showData.showId,
-      showData.showTitle,
-      showData.showAirdate,
-      showData.showImg
-    ]
+Favorite.findByUser = userId => {
+  return db.any(`
+    SELECT *
+    FROM user_favorites
+    WHERE user_id = $1`,
+    [userId]
+  )
+}
+
+Favorite.add = showId => {
+  db.one(`
+    INSERT INTO user_favorites (show_id)
+    VALUES ($1)`,
+    [showId]
   );
 };
 
 Favorite.remove = showId => {
-  db.result(
-    `
-    DELETE FROM favorites
+  db.result(`
+    DELETE FROM user_favorites
     WHERE id = $1`,
     [showId]
   );

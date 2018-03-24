@@ -33,11 +33,11 @@ const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
 
 
-// // '/signup' that renders a signup form
-// app.get('/signup', (response, request) => {
-//   // const message = '';
-//   response.render('signup');
-// })
+// '/signup' that renders a signup form
+app.get('/signup', (request, response) => {
+  const message = '';
+  response.render('signup', { message });
+})
 
 // app.post('/signup', urlencodedParser, (response, request) => {
 //   // // Get username and password from database
@@ -52,11 +52,11 @@ const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 // })
 
 
-// // '/login' that renders a login form and logs the user in if their username and password are correct
-// app.get('/login', (response, request) => {
-//   const message = '';
-//   response.render('login', { message });
-// })
+// '/login' that renders a login form and logs the user in if their username and password are correct
+app.get('/login', (request, response) => {
+  const message = '';
+  response.render('login', { message });
+})
 
 
 // '/' that displays the user's watchlist (if logged in), trending, popular, and airing today
@@ -108,9 +108,6 @@ app.get('/shows', (request, response) => {
       response.render('shows', { currentData: currentData })
     })
 })
-
-
-
 
 
 // Make a function that takes the user's search, converts it to the right format, and returns the show's id

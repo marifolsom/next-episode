@@ -1,41 +1,41 @@
 <% include ../partials/header %>
   <body>
-    <!-- Display title -->
+    <!-- Show title -->
     <h1><%= showData.name %></h1>
     <!-- If there's a show poster, display poster -->
     <% if (showData.poster_path) { %>
       <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
     <% } %>
-    <!-- Display show description -->
+    <!-- Show description -->
     <h3><%= showData.overview %></h3>
     <!-- Fix format of date, and display show airdate -->
     <% dates = showData.first_air_date.split('-') %>
     <p>First aired: <%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
-    <!-- Display show genres -->
+    <!-- Show genres -->
     <% for (let i = 0; i < showData.genres.length; i++) { %>
       <p><%= showData.genres[i].name %></p>
     <% } %>
-    <!-- Display number of seasons -->
+    <!-- Number of seasons -->
     <p>Seasons: <%= showData.number_of_seasons %></p>
-    <!-- Display number of episodes -->
+    <!-- Number of episodes -->
     <p>Episodes: <%= showData.number_of_episodes %></p>
-    <!-- Display show rating -->
+    <!-- Show rating -->
     <p>Rating: <%= showData.vote_average %></p>
-    <!-- Display show popularity -->
+    <!-- Show popularity -->
     <p>Popularity: <%= showData.popularity %></p>
-    <!-- Display show status -->
+    <!-- Show status -->
     <p>Status: <%= showData.status %></p>
-    <!-- Display show website link -->
+    <!-- Show website link -->
     <a href="<%= showData.homepage %>">Website</a>
 
-    <!-- Display show's season breakdown -->
+    <!-- Season breakdown -->
     <h1>Seasons:</h1>
     <!-- For each season, display data -->
     <% for (let i = 0; i < showData.seasons.length; i++) { %>
       <!-- store show id and seasons number -->
       <% showId = showData.id %>
       <% seasonNumber = showData.seasons[i].season_number %>
-      <!-- Display season name -->
+      <!-- Season name -->
       <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
         <h3><%= showData.seasons[i].name %></h3>
       </a>
@@ -48,13 +48,12 @@
         <% dates = showData.seasons[i].air_date.split('-') %>
         <p>Premiered: <%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
       <% } %>
-      <!-- Display number of episodes -->
+      <!-- Number of episodes -->
       <p>Total episodes: <%= episodeCount = showData.seasons[i].episode_count %></p>
-      <!-- Display link to seasons's API -->
-      <a href="<%= seasonLink = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US` %>">Season API Link</a>
     <% } %>
 
-    <!-- Display similar show recommendations -->
+    <!-- Show recommendations -->
     <h1>Similar shows:<h1>
+
   </body>
 </html>

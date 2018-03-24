@@ -2,7 +2,7 @@
   <body>
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
-      <!-- Display title -->
+      <!-- Show title -->
       <a href="/show/<%= currentData.results[i].id %>">
         <h2><%= currentData.results[i].name %></h2>
       </a>
@@ -10,13 +10,12 @@
       <% if (currentData.results[i].poster_path) { %>
         <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
       <% } %>
-      <!-- Display show description -->
+      <!-- Show description -->
       <p><%= currentData.results[i].overview %></p>
-      <!-- Display show rating -->
+      <!-- Show rating -->
       <p>Rating: <%= currentData.results[i].vote_average %></p>
-      <!-- Display show popularity -->
+      <!-- Show popularity -->
       <p>Popularity: <%= currentData.results[i].popularity %></p>
-      <!-- Display link to show's API -->
 
       <form action="/show/<%= currentData.results[i].id %>" method="POST">
         <button>Add to Favorites</button>

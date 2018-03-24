@@ -1,14 +1,14 @@
 console.log('main.js is connected!');
 
-// Make a variable to store the user's input
-let searchQuery = '';
-
-// Make a variable to store the show id
-let showId = 1100;
-// let episodeId = 1;
-
-// Just hard coding a show name for now! One with lots of spaces to make sure the format is converted correctly
-const userInput = 'How I Met Your Mother';
+// // Make a variable to store the user's input
+// let searchQuery = '';
+//
+// // Make a variable to store the show id
+// let showId = 1100;
+// // let episodeId = 1;
+//
+// // Just hard coding a show name for now! One with lots of spaces to make sure the format is converted correctly
+// const userInput = 'How I Met Your Mother';
 
 
 // // Make a function that grabs the user's input, corrects the format, and stores it in the searchQuery variable
@@ -22,8 +22,8 @@ const userInput = 'How I Met Your Mother';
 // getSearchQuery();
 
 
-// Make a function that creates an API request and returns a response in JSON
-const getJSON = url => fetch(url).then(response => response.json());
+// // Make a function that creates an API request and returns a response in JSON
+// const getJSON = url => fetch(url).then(response => response.json());
 
 
 // // TMDB API
@@ -93,30 +93,30 @@ const getJSON = url => fetch(url).then(response => response.json());
 // getShowInfo(showId);
 
 
-// Get all episodes from a season with show id and season number
-const getSeason = (showId, seasonNumber) => {
-  // Make an API request with the show id and season number
-  getJSON(
-    `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
-  ).then(seasonData => {
-    // Make a variable for all the episodes (get access to episode airdate, episode number, episode title, episode description, season number)
-    for (let i = 0; i < seasonData.episodes.length; i++) {
-      const episodeTitle = seasonData.episodes[i].name;
-      const episodeDesc = seasonData.episodes[i].overview;
-      const dates = seasonData.episodes[i].air_date.split('-');
-      const episodeAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
-      const seasonNumber = seasonData.episodes[i].season_number;
-      const episodeNumber = seasonData.episodes[i].episode_number;
-      console.log('episode title:', episodeTitle);
-      console.log('episode desc:', episodeDesc);
-      console.log('episode aired:', episodeAirdate);
-      console.log('season:', seasonNumber);
-      console.log('episode:', episodeNumber);
-      console.log('-------------------------------');
-    }
-  });
-};
-getSeason(showId, 3);
+// // Get all episodes from a season with show id and season number
+// const getSeason = (showId, seasonNumber) => {
+//   // Make an API request with the show id and season number
+//   getJSON(
+//     `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
+//   ).then(seasonData => {
+//     // Make a variable for all the episodes (get access to episode airdate, episode number, episode title, episode description, season number)
+//     for (let i = 0; i < seasonData.episodes.length; i++) {
+//       const episodeTitle = seasonData.episodes[i].name;
+//       const episodeDesc = seasonData.episodes[i].overview;
+//       const dates = seasonData.episodes[i].air_date.split('-');
+//       const episodeAirdate = `${dates[1]}/${dates[2]}/${dates[0]}`;
+//       const seasonNumber = seasonData.episodes[i].season_number;
+//       const episodeNumber = seasonData.episodes[i].episode_number;
+//       console.log('episode title:', episodeTitle);
+//       console.log('episode desc:', episodeDesc);
+//       console.log('episode aired:', episodeAirdate);
+//       console.log('season:', seasonNumber);
+//       console.log('episode:', episodeNumber);
+//       console.log('-------------------------------');
+//     }
+//   });
+// };
+// getSeason(showId, 3);
 
 
 // Get show recommendations by ID

@@ -1,9 +1,14 @@
 <% include ../partials/header %>
   <body>
+    <!-- Season name -->
     <h1><%= seasonData.name %><h1>
+    <!-- For each episode dsiplay data -->
     <% for (let i = 0; i < seasonData.episodes.length; i++) { %>
+      <!-- Episode number and title -->
       <h2>Episode <%= seasonData.episodes[i].episode_number %>: <%= seasonData.episodes[i].name %></h2>
+      <!-- Episode descriptoion -->
       <p><%= seasonData.episodes[i].overview %></p>
+      <!-- Episode airdate -->
       <% dates = seasonData.episodes[i].air_date.split('-') %>
       <p>Aired: <%= `${dates[1]}/${dates[2]}/${dates[0]}` %></p>
     <% } %>
