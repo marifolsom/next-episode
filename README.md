@@ -1,7 +1,7 @@
 # Project 2: TV Tracker App
 
-## Project Description:
-- The project's name and description
+#### Project Description:
+Next Episode (still playing around with the name!) is an app that allows users to browse, track, and favorite TV shows all in one place. Using TMDb's (The Movie Database) API, users can stay up to date on all the latest information about the shows that they love, read up on episode summaries, and discover new shows.
 
 ## Wireframes:
 <img src="img/wireframes/home.png" width="400"> <img src="img/wireframes/show.png" width="400"> <img src="img/wireframes/favorites.png" width="400"> <img src="img/wireframes/watchlist.png" width="400"> <img src="img/wireframes/watchlist-show.png" width="400">
@@ -30,7 +30,7 @@
 - "As an indecisive user, I want to have shows suggested to me that match my interests, so I don't have to spend so much time trying to choose what to watch."
 - "As a crowd-follower, I want to see what the trending/most popular shows are, so I can know what show everyone else is talking about."
 
-### Auth related:
+#### Auth related:
 - "As a returning user, I want to log in and favorite the shows that I watch, so I can easily come back and see information about them."
 - "As a serial binge-watcher, I want to keep track of what episode/season I'm on, so when I start watching I know exactly which episode to start next."
 
