@@ -59,7 +59,6 @@ app.post('/signup', (request, response) => {
   const newPassword = request.body.password;
   // Salt and hash password using bcrypt
   const hashedPassword = bcrypt.hashSync(newPassword, salt);
-  console.log(newUsername, newPassword, hashedPassword);
   // Insert new user info into database
   User.create(newUsername, hashedPassword)
     .then(userId => {
@@ -83,7 +82,6 @@ app.post('/login', (request, response) => {
   const enteredUsername = request.body.username;
   const enteredPassword = request.body.password;
   const hashedPassword = bcrypt.hashSync(enteredPassword, salt);
-  console.log(enteredUsername, enteredPassword, hashedPassword);
   // Find user's info with the entered username
   User.find(enteredUsername)
     .then(userInfo => {
@@ -98,12 +96,14 @@ app.post('/login', (request, response) => {
         response.render('favorites/favorites', { message });
         // Store the user's id for the session
         request.session.userId = Number(userInfo.id);
-        // call save() to save any changes to the session object
+        // Call save() to save any changes to the session object
         request.session.save();
-        return;
-      }
+      // If the username/password don't match, render an error
+      } else {
+        // Getting an unhandled promise rejection warning here for some reason now?
         message = 'Invalid login.';
         response.render('home', { message });
+      }
     })
 });
 
@@ -197,18 +197,19 @@ app.post('/shows', (request, response) => {
   // Get the clicked button's value attribute containing the show's id and store it in a variable
   const addedShowId = Number(request.body.showId);
   // Take the addedShowId and insert into database
+  // If the show is already in the user's favorites, don't insert (in Favorites.js added WHERE NOT EXISTS, but not sure if that's the best way)
   Favorite.add(userId, addedShowId)
     .then(() => {
       // For some reason it doesn't like having a message...
       // message = `You just added show ${addedShowId} to your favorites!`;
       // response.redirect('/shows', { message });
-      // Once inserted, redirect user to that specific show's spot on the shows page
+      // Once inserted, redirect user to that specific show's spot on the shows page so they can pick up where they left off
       response.redirect(`/shows#${addedShowId}`);
     })
   console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
-// From show's detail page, take added show and insert into the user's user_favorites table
+// From a show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', (request, response) => {
   // let message = '';
   // Get the user's id that's stored in the session
@@ -247,7 +248,7 @@ app.delete('/shows', (request, response) => {
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
-// From show's detail page, remove show and delete from the user's user_favorites table
+// From a show's detail page, remove show and delete from the user's user_favorites table
 app.delete('/show/:id', (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;

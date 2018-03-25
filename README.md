@@ -49,7 +49,7 @@ Next Episode (still playing around with the name!) is an app that allows users t
 - A code snippet of a part of the app you're particularly proud of
 
 ## Future Additions:
-- Any things you plan to fix or features you plan to add
+- Instead of having both add and remove buttons, have one button that changes depending on whether the show is in the user's favorites or not.
 
 ## Instructions for Downloading/Running:
 - Instructions for downloading the code and running it on localhost
