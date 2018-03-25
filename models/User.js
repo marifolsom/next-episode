@@ -3,12 +3,12 @@ const db = require('../database/connection');
 const User = {};
 
 
-User.create = newUser => {
+User.create = (newUsername, hashedPassword) => {
   return db.one(`
     INSERT INTO user_info (username, password)
     VALUES ($1, $2)
     RETURNING id`,
-    [newUser.username, newUser.password]
+    [newUsername, hashedPassword]
   )
 }
 

@@ -53,18 +53,17 @@ app.get('/signup', (request, response) => {
 
 app.post('/signup', (request, response) => {
   let message = '';
-  // Get user's entered info
-  const newUser = request.body;
+  // Get user's entered username and password
+  const newUsername = request.body.username;
+  const newPassword = request.body.password;
+  // Salt and hash password using bcrypt
+  // Still haven't figured out how to hash...
+  // hashedPassword is an empty promise?
+  const hashedPassword = bcrypt.hash(newPassword, salt);
+  // console.log(newUsername, newPassword, hashedPassword);
   // Insert new user info into database
-  User.create(newUser)
+  User.create(newUsername, hashedPassword)
     .then(userId => {
-      // Get user's entered username and password
-      const newUsername = newUser.username;
-      const newPassword = newUser.password;
-      // Salt and hash password using bcrypt
-      const hashedPassword = bcrypt.hash(newPassword, salt);
-      // Still haven't figured out how to hash...
-      // console.log(newUsername, newPassword, hashedPassword);
       message = 'You\'ve created a new account!';
       response.render('favorites/favorites', { message });
     })
@@ -89,18 +88,17 @@ app.post('/login', (request, response) => {
       // Username and password are a match if they are the same as the ones in the user_info table
       const usernameMatch = enteredUsername === userInfo.username;
       const passwordMatch = enteredPassword === userInfo.password;
-      // const passwordMatch = bcrypt.compareSync(enteredPassword, validUserInfo.password);
+      // const passwordMatch = bcrypt.compareSync(hashedPassword, userInfo.password);
       // If both match, log the user in
       if (usernameMatch && passwordMatch) {
         // Set the session data
         message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
         request.session.authenticated = true;
         response.render('favorites/favorites', { message });
-        // // Store the user's id for the session
-        // // Not sure how to do this?
-        // sessionStorage.setItems(userInfo.id);
+        // Store the user's id for the session
         request.session.userId = Number(userInfo.id);
-        console.log('user', request.session.userId, 'is the current user stored in session');
+        // call save() to save any changes to the session object
+        request.session.save();
         return;
       }
         message = 'Invalid login.';
@@ -154,21 +152,24 @@ app.get('/shows', (request, response) => {
     .then(apiResponse => apiResponse.json())
     .then(currentData => {
       // response.json(currentData);
-      response.render('shows', { currentData })
+      response.render('shows', { currentData, message: '' })
     })
 })
 
 // Take added show and insert into the user's user_favorites table
 app.post('/shows', (request, response) => {
+  let message = '';
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
   console.log('user', userId, 'is the current user stored in session');
   // Get the clicked button's value attribute which is the show's id
   const addedShowId = Number(request.body.showId);
-  console.log('you just added show', addedShowId);
+  console.log('you just added show', addedShowId, 'to your favorites!');
   // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId)
     .then(() => {
+      // message = `You just added show ${addedShowId} to your favorites!`;
+      // response.redirect('/shows', { message });
       response.redirect('/shows');
     })
 })
@@ -221,6 +222,7 @@ app.get('/show/:id', (request, response) => {
       // response.json(showData);
       response.render('show', { showData });
     })
+  // Use Promise.all() here too
   // Make an API request with the showId
   // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
   //   .then(apiResponse => {
@@ -270,8 +272,14 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 // Display show's poster and title, sorted by start date
 // Clicking on a show in favorites would take the user to '/show/:id'
 app.get('/favorites', requireLogin, (request, response) => {
-
-  response.render('favorites/favorites', { message: '' });
+  // Get the user's id that's stored in the session
+  const userId = request.session.userId;
+  console.log('user', userId, 'is the current user stored in session');
+  Favorite.find(userId)
+    .then(showIds => {
+      console.log('show ids:', showIds);
+      response.render('favorites/favorites', { showIds, message: '' });
+    })
 })
 
 

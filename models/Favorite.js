@@ -2,7 +2,7 @@ const db = require('../database/connection');
 
 const Favorite = {};
 
-Favorite.findByUser = userId => {
+Favorite.find = userId => {
   return db.any(`
     SELECT *
     FROM user_favorites
