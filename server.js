@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt');
 // Require es6-promise and isomorphic-fetch to allow for server side fetch
 const es6 = require('es6-promise').polyfill();
 const fetch = require('isomorphic-fetch');
-// Declare salt as a global variable
-const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
 // Import models
 const User = require('./models/User');
@@ -17,6 +15,9 @@ const Favorite = require('./models/Favorite');
 const app = express();
 const PORT = 3000;
 
+// Declare salt as a global variable to create a password salt
+const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
+
 app.set('view engine', 'ejs');
 
 app.use(methodOverride('_method'));
@@ -24,7 +25,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Set up static files
 app.use('/client', express.static('./client'));
-
 // Set up the session middleware
 app.use(
   session({
@@ -44,14 +44,13 @@ const requireLogin = (request, response, next) => {
 };
 
 
-// GET
+
+//  SIGNUP  ////////////////////////////////////////////////////////
 // '/signup' that renders a signup form
 app.get('/signup', (request, response) => {
   response.render('signup');
 })
 
-
-// POST
 // Add new user info from signup form to database
 app.post('/signup', (request, response) => {
   let message = '';
@@ -72,13 +71,13 @@ app.post('/signup', (request, response) => {
 })
 
 
-// GET
-// '/login' that renders a login form and logs the user in if their username and password are correct
+
+//  LOGIN  /////////////////////////////////////////////////////////
+// Render a login form
 app.get('/login', (request, response) => {
   response.render('login');
 })
 
-// POST
 // Log the user in if the username and password entered in login form are correct
 app.post('/login', (request, response) => {
   let message = '';
@@ -111,9 +110,10 @@ app.post('/login', (request, response) => {
 });
 
 
-// GET
-// '/' that displays the user's watchlist (if logged in), trending, popular, and airing today
-// Display show's poster, title, airdate
+
+//  HOME  //////////////////////////////////////////////////////////
+// Displays trending, popular, and airing today
+// Shows' posters, titles, airdates
 app.get('/', (request, response) => {
   // Create an array to hold all API urls for homepage
   const urls = [
@@ -150,9 +150,11 @@ app.get('/', (request, response) => {
 // <% } %>
 
 
-// GET
-// '/shows' that displays all shows currently running
-// Display show's poster, title, airdate
+
+//  SHOWS  /////////////////////////////////////////////////////////
+// Displays all shows currently running
+// Shows' posters, titles, airdates
+// Need to fix and add pages! (right now only display 1st page)
 app.get('/shows', (request, response) => {
   fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
     .then(apiResponse => apiResponse.json())
@@ -163,10 +165,11 @@ app.get('/shows', (request, response) => {
 })
 
 
-// GET
-// '/favorites' that prompts user to log in (if not logged in) and displays the user's favorited shows
-// Display show's poster and title, sorted by start date
-// Clicking on a show in favorites would take the user to '/show/:id'
+
+//  FAVORITES  /////////////////////////////////////////////////////
+// Prompts user to log in (if not logged in) and displays the user's favorited shows
+// Shows' posters, titles, airdates
+// Clicking on a show in favorites would take the user to that show's detail page -- '/show/:id'
 app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
@@ -174,7 +177,6 @@ app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's favorited show ids from the database
   Favorite.find(userId)
     .then(favoritesIds => {
-      // Returns an array of objects
       console.log('favorited show ids:', favoritesIds);
       // For each show id, fetch info from API
       for (let i = 0; i < favoritesIds.length; i++) {
@@ -186,14 +188,15 @@ app.get('/favorites', requireLogin, (request, response) => {
 })
 
 
-// POST
-// From shows page, take added show and insert into the user's user_favorites table
+
+//  ADDING TO FAVORITES  ///////////////////////////////////////////
+// From shows page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
 app.post('/shows', (request, response) => {
   // let message = '';
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's value attribute which is the show's id
+  // Get the clicked button's value attribute containing the show's id and store it in a variable
   const addedShowId = Number(request.body.showId);
   // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId)
@@ -201,20 +204,19 @@ app.post('/shows', (request, response) => {
       // For some reason it doesn't like having a message...
       // message = `You just added show ${addedShowId} to your favorites!`;
       // response.redirect('/shows', { message });
-      // Redirect to that specific show on the shows page
+      // Once inserted, redirect user to that specific show's spot on the shows page
       response.redirect(`/shows#${addedShowId}`);
     })
   console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
-// POST
-// From detail show page, take added show and insert into the user's user_favorites table
+// From show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', (request, response) => {
   // let message = '';
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the show's id from the url
+  // Get the show's id from the url and store it in a variable
   const addedShowId = Number(request.params.id);;
   // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId)
@@ -222,38 +224,39 @@ app.post('/show/:id', (request, response) => {
       // For some reason it doesn't like having a message...
       // message = `You just added show ${addedShowId} to your favorites!`;
       // response.redirect('/shows', { message });
-      // Redirect to that specific show on the shows page
+      // Once inserted, redirect the user to that specific shows detail page
       response.redirect(`/show/${addedShowId}`);
     })
   console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
 
-// DELETE
-// From shows page, delete show and remove from the user's user_favorites table
+
+//  REMOVING FROM FAVORITES  ///////////////////////////////////////
+// From shows page, remove any show removed with the "remove from favorites" button and delete from the user's user_favorites table
 app.delete('/shows', (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's value attribute which is the show's id
+  // Get the clicked button's value attribute containing the show's id and store it in a variable
   const removedShowId = Number(request.body.showId);
-  // Take the removedShowId and remove from database
+  // Take the removedShowId and delete that row from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
+      // Once deleted, redirect user to that specific show's spot on the shows page
       response.redirect(`/shows#${removedShowId}`);
     })
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
-// DELETE
-// From detail show page, delete show and remove from the user's user_favorites table
+// From show's detail page, remove show and delete from the user's user_favorites table
 app.delete('/show/:id', (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the show's id from the url
+  // Get the show's id from the url and store it in a variable
   const removedShowId = Number(request.params.id);;
-  // Take the removedShowId and remove from database
+  // Take the removedShowId and delete from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
       response.redirect(`/show/${removedShowId}`);
@@ -262,7 +265,9 @@ app.delete('/show/:id', (request, response) => {
 })
 
 
-// Make a function that takes the user's search, converts it to the right format, and returns the show's id
+
+//  SHOW DETAILS  //////////////////////////////////////////////////
+// Make a function that takes the user's input in the search bar, converts it to the right format, and returns the show's id
 const getShowId = userInput => {
   // Make a variable to store the search query
   let searchQuery = '';
@@ -282,22 +287,19 @@ const getShowId = userInput => {
     })
 }
 
-
-// GET
-// '/show/:id' that displays details of a specific show
-// Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
-// User can click on an episode to get the episode description
+// Display the details of a specific show (by id)
+// Show's poster, title, description, rating, popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
 // User can click to add to favorites or watchlist
 app.get('/show/:id', (request, response) => {
   // Make a variable to hold the show id
   let showId = 0;
   if (!request.params.id) {
-    // // On search submit take the user input to find the idea
+    // // On search submit take the user's input in the search bar to find the show's id
     // const userInput = request.body;
     // Just hard coding for now! (Something with lots of spaces to check the input is being converted properly)
     const userInput = 'How I Met Your Mother';
     console.log(userInput);
-    // Call getShowId function to find show id, and assign that value to a variable
+    // Call getShowId function to find show id, and assign that value to the showId variable
     showId = getShowId(userInput);
     console.log(showId);
   } else {
@@ -311,7 +313,7 @@ app.get('/show/:id', (request, response) => {
       // response.json(showData);
       response.render('show', { showData });
     })
-  // Use Promise.all() here too
+  // Use Promise.all() here too to get recommendations as well
   // Make an API request with the showId
   // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
   //   .then(apiResponse => {
@@ -343,9 +345,10 @@ app.get('/show/:id', (request, response) => {
 // <% } %>
 
 
-// GET
-// '/episode/:id' that displays details of a specific episode
-// Display show season poster, show title, season number, episode number, airdate, episode description
+
+//  SEASON DETAILS  ////////////////////////////////////////////////
+// Displays details of a specific seasons
+// Show's season poster, show title, season title, episode numbers and titles, airdates, episode descriptions
 app.get('/show/:showId/season/:seasonNumber', (request, response) => {
   const showId = Number(request.params.showId);
   const seasonNumber = Number(request.params.seasonNumber);
@@ -358,29 +361,27 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 })
 
 
-// GET
-// '/watchlist' that prompts user to log in (if not logged in) and displays the user's watchlist with a "to watch" and "caught up" section
-// Display the show's poster, title, and a number displaying the episodes that still need to be watched
-app.get('/watchlist', (request, response) => {
+
+//  WATCHLIST  /////////////////////////////////////////////////////
+// Prompt user to log in (if not logged in) and display the user's watchlist with a "to watch" and "caught up" section
+// Display each show's poster, title, and a number showing the episodes that still need to be watched
+app.get('/watchlist', requireLogin, (request, response) => {
 
   response.render('watchlist', { });
 })
 
-
-// GET
-// '/watchlist/show/:id' that prompts user to log in (if not logged in) and displays a specific show on the user's watchlist with the user's watch progress
+// Prompt user to log in (if not logged in) and display a specific show from the user's watchlist with the user's watch progress
 // Display breakdown of how many seasons and episodes the show has in total, and recommendations
 // User can also tick the episodes they've already watched
 // Clicking on an episode would take the user to '/episode/:id'
-app.get('/watchlist/show/:id', (request, response) => {
+app.get('/watchlist/show/:id', requireLogin, (request, response) => {
 
   response.render('watchlist/show', { });
 })
 
 
 // // Post MVP? //
-// GET
-// // '/watchlist/week' that prompts user to log in (if not logged in) and displays the shows from the user's watchlist that are currently on air in a week format
+// Prompts user to log in (if not logged in) and display the shows from the user's watchlist that are currently on air in a week format
 // app.get('/watchlist/week', (response, request) => {
 //
 //   response.render('watchlist/week');
