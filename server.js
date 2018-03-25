@@ -46,11 +46,15 @@ const requireLogin = (request, response, next) => {
 };
 
 
+// GET
 // '/signup' that renders a signup form
 app.get('/signup', (request, response) => {
   response.render('signup');
 })
 
+
+// POST
+// Add new user info from signup form to database
 app.post('/signup', (request, response) => {
   let message = '';
   // Get user's entered username and password
@@ -60,7 +64,7 @@ app.post('/signup', (request, response) => {
   // Still haven't figured out how to hash...
   // hashedPassword is an empty promise?
   const hashedPassword = bcrypt.hash(newPassword, salt);
-  // console.log(newUsername, newPassword, hashedPassword);
+  console.log(newUsername, newPassword, hashedPassword);
   // Insert new user info into database
   User.create(newUsername, hashedPassword)
     .then(userId => {
@@ -70,12 +74,14 @@ app.post('/signup', (request, response) => {
 })
 
 
+// GET
 // '/login' that renders a login form and logs the user in if their username and password are correct
 app.get('/login', (request, response) => {
   response.render('login');
 })
 
-// Log the user in if their username and password are correct
+// POST
+// Log the user in if the username and password entered in login form are correct
 app.post('/login', (request, response) => {
   let message = '';
   // Get user's entered username and password
@@ -107,7 +113,7 @@ app.post('/login', (request, response) => {
 });
 
 
-
+// GET
 // '/' that displays the user's watchlist (if logged in), trending, popular, and airing today
 // Display show's poster, title, airdate
 app.get('/', (request, response) => {
@@ -126,6 +132,7 @@ app.get('/', (request, response) => {
   Promise
     .all(promises)
     .then(responses => {
+      // Need to figure out how to access the data inside the request bodies
       // console.log(responses);
     })
     .then(homepageData => {
@@ -134,7 +141,7 @@ app.get('/', (request, response) => {
     })
 })
 
-// //// FOR HOME.EJS FILE // ////
+// Once Promise.all() from ^ works, add this into home.ejs file
 // <% for (let i = 0; i < homepageData.results.length; i++) { %>
 //   <h2><%= homepageData.results[i].name %></h2>
 //   <p><%= homepageData.results[i].overview %></p>
@@ -145,6 +152,7 @@ app.get('/', (request, response) => {
 // <% } %>
 
 
+// GET
 // '/shows' that displays all shows currently running
 // Display show's poster, title, airdate
 app.get('/shows', (request, response) => {
@@ -156,6 +164,24 @@ app.get('/shows', (request, response) => {
     })
 })
 
+
+// GET
+// '/favorites' that prompts user to log in (if not logged in) and displays the user's favorited shows
+// Display show's poster and title, sorted by start date
+// Clicking on a show in favorites would take the user to '/show/:id'
+app.get('/favorites', requireLogin, (request, response) => {
+  // Get the user's id that's stored in the session
+  const userId = request.session.userId;
+  console.log('user', userId, 'is the current user stored in session');
+  Favorite.find(userId)
+    .then(showIds => {
+      console.log('show ids:', showIds);
+      response.render('favorites/favorites', { showIds, message: '' });
+    })
+})
+
+
+// POST
 // Take added show and insert into the user's user_favorites table
 app.post('/shows', (request, response) => {
   let message = '';
@@ -168,8 +194,27 @@ app.post('/shows', (request, response) => {
   // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId)
     .then(() => {
+      // For some reason it doesn't like this...
       // message = `You just added show ${addedShowId} to your favorites!`;
       // response.redirect('/shows', { message });
+      response.redirect('/shows');
+    })
+})
+
+
+// DELETE
+// Doesn't work yet!
+// Delete show and remove from the user's user_favorites table
+app.delete('/shows', (request, response) => {
+  // Get the user's id that's stored in the session
+  const userId = request.session.userId;
+  console.log('user', userId, 'is the current user stored in session');
+  // Get the clicked button's value attribute which is the show's id
+  const removedShowId = Number(request.body.showId);
+  console.log('you just removed show', removedShowId, 'from your favorites!');
+  // Take the removedShowId and remove from database
+  Favorite.remove(userId, removedShowId)
+    .then(() => {
       response.redirect('/shows');
     })
 })
@@ -196,6 +241,7 @@ const getShowId = (userInput) => {
 }
 
 
+// GET
 // '/show/:id' that displays details of a specific show
 // Display show poster, show title, show description, show rating, show popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
 // User can click on an episode to get the episode description
@@ -234,7 +280,7 @@ app.get('/show/:id', (request, response) => {
   //   })
 })
 
-// //// FOR SHOW.EJS FILE // ////
+// Once Promise.all() from ^ works, add this into show.ejs file
 // <!-- For each show, display data -->
 // <% for (let i = 0; i < recsData.results.length; i++) { %>
 //   <!-- store recommendation id -->
@@ -254,6 +300,7 @@ app.get('/show/:id', (request, response) => {
 // <% } %>
 
 
+// GET
 // '/episode/:id' that displays details of a specific episode
 // Display show season poster, show title, season number, episode number, airdate, episode description
 app.get('/show/:showId/season/:seasonNumber', (request, response) => {
@@ -268,21 +315,7 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 })
 
 
-// '/favorites' that prompts user to log in (if not logged in) and displays the user's favorited shows
-// Display show's poster and title, sorted by start date
-// Clicking on a show in favorites would take the user to '/show/:id'
-app.get('/favorites', requireLogin, (request, response) => {
-  // Get the user's id that's stored in the session
-  const userId = request.session.userId;
-  console.log('user', userId, 'is the current user stored in session');
-  Favorite.find(userId)
-    .then(showIds => {
-      console.log('show ids:', showIds);
-      response.render('favorites/favorites', { showIds, message: '' });
-    })
-})
-
-
+// GET
 // '/watchlist' that prompts user to log in (if not logged in) and displays the user's watchlist with a "to watch" and "caught up" section
 // Display the show's poster, title, and a number displaying the episodes that still need to be watched
 app.get('/watchlist', (request, response) => {
@@ -291,6 +324,7 @@ app.get('/watchlist', (request, response) => {
 })
 
 
+// GET
 // '/watchlist/show/:id' that prompts user to log in (if not logged in) and displays a specific show on the user's watchlist with the user's watch progress
 // Display breakdown of how many seasons and episodes the show has in total, and recommendations
 // User can also tick the episodes they've already watched
@@ -302,6 +336,7 @@ app.get('/watchlist/show/:id', (request, response) => {
 
 
 // // Post MVP? //
+// GET
 // // '/watchlist/week' that prompts user to log in (if not logged in) and displays the shows from the user's watchlist that are currently on air in a week format
 // app.get('/watchlist/week', (response, request) => {
 //
