@@ -82,14 +82,14 @@ app.post('/login', (request, response) => {
   // Get user's entered username and password
   const enteredUsername = request.body.username;
   const enteredPassword = request.body.password;
-  // const hashedPassword = bcrypt.hashSync(enteredPassword, salt);
-  // console.log(enteredUsername, enteredPassword);
+  const hashedPassword = bcrypt.hashSync(enteredPassword, salt);
+  console.log(enteredUsername, enteredPassword, hashedPassword);
+  // Find user's info with the entered username
   User.find(enteredUsername)
     .then(userInfo => {
       // Username and password are a match if they are the same as the ones in the user_info table
       const usernameMatch = enteredUsername === userInfo.username;
-      const passwordMatch = enteredPassword === userInfo.password;
-      // const passwordMatch = bcrypt.compareSync(hashedPassword, userInfo.password);
+      const passwordMatch = hashedPassword === userInfo.password;
       // If both match, log the user in
       if (usernameMatch && passwordMatch) {
         // Set the session data
