@@ -51,19 +51,17 @@ app.get('/signup', (request, response) => {
   response.render('signup');
 })
 
-// Add new user info from signup form to database
+// Add new user info from signup form into database
 app.post('/signup', (request, response) => {
   let message = '';
   // Get user's entered username and password
   const newUsername = request.body.username;
   const newPassword = request.body.password;
   // Salt and hash password using bcrypt
-  // Still haven't figured out how to hash...
-  // hashedPassword is an empty promise?
-  // const hashedPassword = bcrypt.hash(newPassword, salt);
-  console.log(newUsername, newPassword);
+  const hashedPassword = bcrypt.hashSync(newPassword, salt);
+  console.log(newUsername, newPassword, hashedPassword);
   // Insert new user info into database
-  User.create(newUsername, newPassword)
+  User.create(newUsername, hashedPassword)
     .then(userId => {
       message = 'You\'ve created a new account!';
       response.render('favorites/favorites', { message });
