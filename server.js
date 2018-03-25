@@ -122,30 +122,25 @@ app.get('/', (request, response) => {
     // URL to shows airing today
     `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
   ]
-  // Create an array to hold all promises, and map over them to fetch
-  const promises = urls.map(url => fetch(url));
+  // Map over array of urls and fetch API data for each
   // Resolve all promises
-  Promise
-    .all(promises)
-    .then(responses => {
-      // Need to figure out how to access the data inside the request bodies
-      // console.log(responses);
-    })
-    .then(homepageData => {
-      // response.json(homepageData);
-      response.render('home', { homepageData, message: '' });
-    })
+  Promise.all(urls.map(url => {
+    return fetch(url)
+     .then(apiResponses => apiResponses.json())
+     .then(homepageData => {
+       // Returns 3 objects, but it's not an array of objects...
+       // Tried deconstructing into an array of objects with names
+       const [ popularData, topRatedData, airingData ] = homepageData;
+       console.log(homepageData);
+       // response.render('home', {
+       //   homepageData[0].results: popularData,
+       //   homepageData[1].results: topRatedData,
+       //   homepageData[2].results: airingData,
+       //   message: ''
+       // });
+     })
+  }))
 })
-
-// Once Promise.all() from ^ works, add this into home.ejs file
-// <% for (let i = 0; i < homepageData.results.length; i++) { %>
-//   <h2><%= homepageData.results[i].name %></h2>
-//   <p><%= homepageData.results[i].overview %></p>
-//   <p>Rating: <%= homepageData.results[i].vote_average %></p>
-//   <p>Popularity: <%= homepageData.results[i].popularity %></p>
-//   <img src="http://image.tmdb.org/t/p/w185<%= homepageData.results[i].poster_path %>">
-//   <a href="https://api.themoviedb.org/3/tv/<%=homepageData.results[i].id%>?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US"> API link </a>
-// <% } %>
 
 
 
@@ -209,6 +204,7 @@ app.post('/shows', (request, response) => {
   console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
+// This doesn't work yet
 // From a show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', (request, response) => {
   // let message = '';
@@ -248,6 +244,7 @@ app.delete('/shows', (request, response) => {
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
+// This doesn't work yet
 // From a show's detail page, remove show and delete from the user's user_favorites table
 app.delete('/show/:id', (request, response) => {
   // Get the user's id that's stored in the session
@@ -323,25 +320,6 @@ app.get('/show/:id', (request, response) => {
   //     response.render('show', { recsData: recsData });
   //   })
 })
-
-// Once Promise.all() from ^ works, add this into show.ejs file
-// <!-- For each show, display data -->
-// <% for (let i = 0; i < recsData.results.length; i++) { %>
-//   <!-- store recommendation id -->
-//   <% recId = recsData.results[i].id %>
-//   <!-- Display show title -->
-//   <h3><%= recsData.results[i].name %></h3>
-//   <!-- If there's a show poster, display poster -->
-//   <% if (recsData.results[i].poster_path) { %>
-//     <img src="http://image.tmdb.org/t/p/w185<%= recsData.results[i].poster_path %>">
-//   <% } %>
-//   <!-- Display show description -->
-//   <p><%= recsData.results[i].overview %></p>
-//   <!-- Display show rating -->
-//   <p><%= Rating: recsData.results[i].vote_average %></p>
-//   <!-- Display link to show's API -->
-//   <a href"https://api.themoviedb.org/3/tv/${recId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US">API Link</a>
-// <% } %>
 
 
 

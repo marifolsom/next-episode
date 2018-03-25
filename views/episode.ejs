@@ -11,8 +11,10 @@
     <% if (seasonData.poster_path) { %>
       <img src="http://image.tmdb.org/t/p/w185<%= seasonData.poster_path %>">
     <% } %>
+
     <!-- Season name -->
     <h1><%= seasonData.name %><h1>
+      
     <!-- For each episode dsiplay data -->
     <% for (let i = 0; i < seasonData.episodes.length; i++) { %>
       <!-- Episode number and title -->
@@ -22,7 +24,7 @@
       <!-- Episode airdate -->
       <% dates = seasonData.episodes[i].air_date.split('-') %>
       <p>Air date: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
-      
+
     <% } %>
   </body>
 </html>

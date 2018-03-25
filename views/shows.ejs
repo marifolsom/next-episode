@@ -4,19 +4,20 @@
 
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
+
       <!-- Show title -->
       <a href="/show/<%= currentData.results[i].id %>">
         <h2 id="<%= currentData.results[i].id %>"><%= currentData.results[i].name %></h2>
       </a>
+
       <!-- If there's a show poster, display poster -->
       <% if (currentData.results[i].poster_path) { %>
         <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
       <% } %>
+
       <!-- Show description -->
       <p><%= currentData.results[i].overview %></p>
-      <!-- Show rating -->
       <p>Rating: <%= currentData.results[i].vote_average %></p>
-      <!-- Show popularity -->
       <p>Popularity: <%= currentData.results[i].popularity %></p>
 
       <!-- Add to favorites button -->
