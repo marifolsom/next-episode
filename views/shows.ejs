@@ -28,9 +28,9 @@
       </form>
 
       <!-- Remove from favorites button -->
-      <form action="/show?_method=DELETE" method="POST">
+      <form action="/shows?_method=DELETE" method="POST">
         <input type= "hidden" name= "showId" value= "<%= currentData.results[i].id %>">
-        <button class="add-btn">
+        <button class="remove-btn">
           Remove from Favorites
         </button>
       </form>

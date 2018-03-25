@@ -173,10 +173,17 @@ app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
   console.log('user', userId, 'is the current user stored in session');
+  // Get the user's favorited show ids from the database
   Favorite.find(userId)
-    .then(showIds => {
-      console.log('show ids:', showIds);
-      response.render('favorites/favorites', { showIds, message: '' });
+    .then(favoritesIds => {
+      // Returns an array of objects
+      console.log('favorited show ids:', favoritesIds);
+      // For each show id, fetch info from API
+      for (let i = 0; i < favoritesIds.length; i++) {
+        // Fetch
+        // Promise.all()?
+      }
+      response.render('favorites/favorites', { message: '' });
     })
 })
 
@@ -211,12 +218,12 @@ app.delete('/shows', (request, response) => {
   console.log('user', userId, 'is the current user stored in session');
   // Get the clicked button's value attribute which is the show's id
   const removedShowId = Number(request.body.showId);
-  console.log('you just removed show', removedShowId, 'from your favorites!');
   // Take the removedShowId and remove from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
       response.redirect('/shows');
     })
+  console.log('you just removed show', removedShowId, 'from your favorites!');
 })
 
 
