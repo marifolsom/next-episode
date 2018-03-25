@@ -15,8 +15,17 @@
     <% } %>
 
     <!-- Add to favorites button -->
-    <form action="/show/<%= showData.id %>" method="POST">
-      <button>Add to Favorites</button>
+    <form action="/show/<% showData.id %>" method="POST">
+      <button class="add-btn">
+        Add to Favorites
+      </button>
+    </form>
+
+    <!-- Remove from favorites button -->
+    <form action="/show/<% showData.id %>" method="POST">
+      <button class="remove-btn">
+        Remove from Favorites
+      </button>
     </form>
 
     <!-- Show description -->

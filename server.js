@@ -6,11 +6,13 @@ const bcrypt = require('bcrypt');
 // Require es6-promise and isomorphic-fetch to allow for server side fetch
 const es6 = require('es6-promise').polyfill();
 const fetch = require('isomorphic-fetch');
+// Declare salt as a global variable
+const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 
-// Require models
+// Import models
 const User = require('./models/User');
 const Favorite = require('./models/Favorite');
-const Watchlist = require('./models/Watchlist');
+// const Watchlist = require('./models/Watchlist');
 
 const app = express();
 const PORT = 3000;
@@ -23,7 +25,7 @@ app.use(bodyParser.json());
 // Set up static files
 app.use('/client', express.static('./client'));
 
-// Set up the session middleware which will let use `request.session`
+// Set up the session middleware
 app.use(
   session({
     secret: 'keyboard cat',
@@ -31,10 +33,6 @@ app.use(
     saveUninitialized: true
   })
 );
-
-// Declare salt as a global variable
-const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
-
 
 // Middleware to check whether the user is authenticated
 const requireLogin = (request, response, next) => {
@@ -63,10 +61,10 @@ app.post('/signup', (request, response) => {
   // Salt and hash password using bcrypt
   // Still haven't figured out how to hash...
   // hashedPassword is an empty promise?
-  const hashedPassword = bcrypt.hash(newPassword, salt);
-  console.log(newUsername, newPassword, hashedPassword);
+  // const hashedPassword = bcrypt.hash(newPassword, salt);
+  console.log(newUsername, newPassword);
   // Insert new user info into database
-  User.create(newUsername, hashedPassword)
+  User.create(newUsername, newPassword)
     .then(userId => {
       message = 'You\'ve created a new account!';
       response.render('favorites/favorites', { message });
@@ -189,46 +187,83 @@ app.get('/favorites', requireLogin, (request, response) => {
 
 
 // POST
-// Take added show and insert into the user's user_favorites table
+// From shows page, take added show and insert into the user's user_favorites table
 app.post('/shows', (request, response) => {
-  let message = '';
+  // let message = '';
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
-  console.log('user', userId, 'is the current user stored in session');
+  console.log(`user ${userId} is the current user stored in session`);
   // Get the clicked button's value attribute which is the show's id
   const addedShowId = Number(request.body.showId);
-  console.log('you just added show', addedShowId, 'to your favorites!');
   // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId)
     .then(() => {
-      // For some reason it doesn't like this...
+      // For some reason it doesn't like having a message...
       // message = `You just added show ${addedShowId} to your favorites!`;
       // response.redirect('/shows', { message });
-      response.redirect('/shows');
+      // Redirect to that specific show on the shows page
+      response.redirect(`/shows#${addedShowId}`);
     })
+  console.log(`you just added show ${addedShowId} to your favorites!`);
+})
+
+// POST
+// From detail show page, take added show and insert into the user's user_favorites table
+app.post('/show/:id', (request, response) => {
+  // let message = '';
+  // Get the user's id that's stored in the session
+  const userId = request.session.userId;
+  console.log(`user ${userId} is the current user stored in session`);
+  // Get the show's id from the url
+  const addedShowId = Number(request.params.id);;
+  // Take the addedShowId and insert into database
+  Favorite.add(userId, addedShowId)
+    .then(() => {
+      // For some reason it doesn't like having a message...
+      // message = `You just added show ${addedShowId} to your favorites!`;
+      // response.redirect('/shows', { message });
+      // Redirect to that specific show on the shows page
+      response.redirect(`/show/${addedShowId}`);
+    })
+  console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
 
 // DELETE
-// Doesn't work yet!
-// Delete show and remove from the user's user_favorites table
+// From shows page, delete show and remove from the user's user_favorites table
 app.delete('/shows', (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
-  console.log('user', userId, 'is the current user stored in session');
+  console.log(`user ${userId} is the current user stored in session`);
   // Get the clicked button's value attribute which is the show's id
   const removedShowId = Number(request.body.showId);
   // Take the removedShowId and remove from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
-      response.redirect('/shows');
+      response.redirect(`/shows#${removedShowId}`);
     })
-  console.log('you just removed show', removedShowId, 'from your favorites!');
+  console.log(`you just removed show ${removedShowId} from your favorites!`);
+})
+
+// DELETE
+// From detail show page, delete show and remove from the user's user_favorites table
+app.delete('/show/:id', (request, response) => {
+  // Get the user's id that's stored in the session
+  const userId = request.session.userId;
+  console.log(`user ${userId} is the current user stored in session`);
+  // Get the show's id from the url
+  const removedShowId = Number(request.params.id);;
+  // Take the removedShowId and remove from database
+  Favorite.remove(userId, removedShowId)
+    .then(() => {
+      response.redirect(`/show/${removedShowId}`);
+    })
+  console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
 
 // Make a function that takes the user's search, converts it to the right format, and returns the show's id
-const getShowId = (userInput) => {
+const getShowId = userInput => {
   // Make a variable to store the search query
   let searchQuery = '';
   // Make a variable to store the show id
@@ -257,10 +292,11 @@ app.get('/show/:id', (request, response) => {
   // Make a variable to hold the show id
   let showId = 0;
   if (!request.params.id) {
-    // On search submit take the user input to find the idea
+    // // On search submit take the user input to find the idea
     // const userInput = request.body;
     // Just hard coding for now! (Something with lots of spaces to check the input is being converted properly)
     const userInput = 'How I Met Your Mother';
+    console.log(userInput);
     // Call getShowId function to find show id, and assign that value to a variable
     showId = getShowId(userInput);
     console.log(showId);

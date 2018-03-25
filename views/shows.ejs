@@ -6,7 +6,7 @@
     <% for (let i = 0; i < currentData.results.length; i++) { %>
       <!-- Show title -->
       <a href="/show/<%= currentData.results[i].id %>">
-        <h2><%= currentData.results[i].name %></h2>
+        <h2 id="<%= currentData.results[i].id %>"><%= currentData.results[i].name %></h2>
       </a>
       <!-- If there's a show poster, display poster -->
       <% if (currentData.results[i].poster_path) { %>
