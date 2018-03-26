@@ -11,21 +11,21 @@ Favorite.find = userId => {
   )
 }
 
-Favorite.add = (userId, addedShowId) => {
+Favorite.add = (userId, addedShowId, addedShowTitle, addedShowImg) => {
   // return db.one(`
   //   INSERT INTO user_favorites (user_id, show_id)
   //   VALUES ($1, $2)
   //   RETURNING *`,
   return db.one(`
-    INSERT INTO user_favorites (user_id, show_id)
-    SELECT $1, $2
+    INSERT INTO user_favorites (user_id, show_id, show_title, show_img)
+    SELECT $1, $2, $3, $4
     WHERE NOT EXISTS (
       SELECT *
       FROM user_favorites
       WHERE user_id = $1 AND show_id = $2
     )
     RETURNING *`,
-    [userId, addedShowId]
+    [userId, addedShowId, addedShowTitle, addedShowImg]
   );
 };
 

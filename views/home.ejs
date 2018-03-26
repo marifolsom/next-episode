@@ -8,42 +8,6 @@
 
     <div class="top-rated">
       <h1>Most Popular:</h1>
-      <!-- For each popular show, display data -->
-      <% for (let i = 0; i < popularData.results.length; i++) { %>
-        <% popularData.results[i].id %>
-
-        <!-- Show title -->
-        <h2><%= popularData.results[i].name %></h2>
-
-        <!-- If there's a show poster, display poster -->
-        <% if (popularData.results[i].poster_path) { %>
-          <img src="http://image.tmdb.org/t/p/w185<%= popularData.results[i].poster_path %>">
-        <% } %>
-
-        <!-- Show Description -->
-        <p><%= popularData.results[i].overview %></p>
-        <p><%= Rating: popularData.results[i].vote_average %></p>
-        <p><%= Popularity: popularData.results[i].popularity %></p>
-
-        <!-- Add to favorites button -->
-        <!-- Doesn't work yet -->
-        <form action="/shows" method="POST">
-          <input type= "hidden" name= "showId" value= "<%= currentData.results[i].id %>">
-          <button class="add-btn">
-            Add to Favorites
-          </button>
-        </form>
-
-        <!-- Remove from favorites button -->
-        <!-- Doesn't work yet -->
-        <form action="/shows?_method=DELETE" method="POST">
-          <input type= "hidden" name= "showId" value= "<%= currentData.results[i].id %>">
-          <button class="remove-btn">
-            Remove from Favorites
-          </button>
-        </form>
-
-      <% } %>
 
       <button class="previous-btn">Previous Page</button>
       <button class="next-btn">Next Page</button>
@@ -57,7 +21,7 @@
     </div>
 
     <div class="current">
-      <h1>Aired Today:</h1>
+      <h1>Airing Today:</h1>
 
       <button class="previous-btn">Previous Page</button>
       <button class="next-btn">Next Page</button>

@@ -22,7 +22,9 @@
 
       <!-- Add to favorites button -->
       <form action="/shows" method="POST">
-        <input type= "hidden" name= "showId" value= "<%= currentData.results[i].id %>">
+        <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
+        <input type="hidden" name="showTitle" value="<%= currentData.results[i].name %>">
+        <input type="hidden" name="showImg" value="<%= currentData.results[i].poster_path %>">
         <button class="add-btn">
           Add to Favorites
         </button>
@@ -30,7 +32,7 @@
 
       <!-- Remove from favorites button -->
       <form action="/shows?_method=DELETE" method="POST">
-        <input type= "hidden" name= "showId" value= "<%= currentData.results[i].id %>">
+        <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
         <button class="remove-btn">
           Remove from Favorites
         </button>

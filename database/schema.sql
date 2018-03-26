@@ -12,7 +12,9 @@ CREATE TABLE user_info (
 CREATE TABLE user_favorites (
   id BIGSERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES user_info(id),
-  show_id INTEGER
+  show_id INTEGER,
+  show_title VARCHAR(255),
+  show_img VARCHAR(255)
 );
 
 
