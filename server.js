@@ -1,25 +1,23 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+// Dependencies
+// -----------------------------------------------------------------------
+const express        = require('express');
+const bodyParser     = require('body-parser');
 const methodOverride = require('method-override');
-const session = require('express-session');
-const bcrypt = require('bcrypt');
-// Require es6-promise and isomorphic-fetch to allow for server side fetch
-const es6 = require('es6-promise').polyfill();
-const fetch = require('isomorphic-fetch');
-
-// Import models
-const User = require('./models/User');
-const Favorite = require('./models/Favorite');
-// const Watchlist = require('./models/Watchlist');
-
-const app = express();
-const PORT = 3000;
-
+const session        = require('express-session');
+const bcrypt         = require('bcrypt');
+const es6            = require('es6-promise').polyfill();
+const fetch          = require('isomorphic-fetch');
+// Import all models
+const User           = require('./models/User');
+const Favorite       = require('./models/Favorite');
+const Watchlist      = require('./models/Watchlist');
+// App configuration
+const app            = express();
+const PORT           = 3000;
 // Declare salt as a global variable to create a password salt
-const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
-
+const salt           = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
+// Set view engine to ejs
 app.set('view engine', 'ejs');
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -45,9 +43,9 @@ const requireLogin = (request, response, next) => {
 };
 
 
-
-//  SIGNUP  ////////////////////////////////////////////////////////
-// '/signup' that renders a signup form
+// SIGNUP
+// -----------------------------------------------------------------------
+// Render a signup form
 app.get('/signup', (request, response) => {
   response.render('signup');
 })
@@ -67,13 +65,13 @@ app.post('/signup', (request, response) => {
       response.render('favorites/favorites', { message });
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
 })
 
 
-
-//  LOGIN  /////////////////////////////////////////////////////////
+// LOGIN
+// -----------------------------------------------------------------------
 // Render a login form
 app.get('/login', (request, response) => {
   response.render('login');
@@ -102,31 +100,35 @@ app.post('/login', (request, response) => {
         request.session.userId = Number(userInfo.id);
         // Call save() to save any changes to the session object
         request.session.save();
-      // If the username/password don't match, render an error
-      } else {
-        // Getting an unhandled promise rejection warning here for some reason now?
-        message = 'Error: invalid login.';
-        response.render('home', { message });
+        return;
       }
+      // If the username/password don't match, render an error
+      // Getting an unhandled promise rejection warning here for some reason now?
+      message = 'Error: invalid login.';
+      response.render('home', { message });
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
 });
 
 
-
-//  HOME  //////////////////////////////////////////////////////////
-// Displays trending, popular, and airing today
+// HOME
+// -----------------------------------------------------------------------
+// Display trending, popular, and airing today
 // Shows' posters, titles, airdates
 app.get('/', (request, response) => {
   // Create an array to hold all API urls for homepage
+  // Need to figure out how to toggle between the pages (~15 pages)
   const urls = [
     // URL to most popular shows
+    // (~1003 pages)
     `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
     // URL to top rated shows
+    // (~43 pages)
     `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
     // URL to shows airing today
+    // (~4 pages)
     `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
   ]
   // Map over array of urls and fetch API data for each
@@ -146,19 +148,19 @@ app.get('/', (request, response) => {
          message: '' })
      })
      .catch(error => {
-       response.send(`Error: ${error.message}.`);
+       response.send(`Error: ${error.message}`);
      });
   }))
 })
 
 
-
-//  SHOWS  /////////////////////////////////////////////////////////
-// Make a variable to store the current page
+// SHOWS
+// -----------------------------------------------------------------------
 // Need to figure out how to toggle between the pages (~15 pages)
+// Make a variable to store the current page
 let currentPage = 3;
 
-// Displays all shows currently running
+// Display all shows currently running
 // Shows' posters, titles, airdates
 app.get('/shows', (request, response) => {
   console.log(currentPage);
@@ -170,16 +172,16 @@ app.get('/shows', (request, response) => {
       response.render('shows', { currentData, message: '' })
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
 })
 
 
-
-//  FAVORITES  /////////////////////////////////////////////////////
-// Prompts user to log in (if not logged in) and displays the user's favorited shows
+// FAVORITES
+// -----------------------------------------------------------------------
+// Prompt user to log in (if not logged in) and display the user's favorited shows
 // Shows' posters, titles, airdates
-// Clicking on a show in favorites would take the user to that show's detail page -- '/show/:id'
+// Clicking on a show in favorites would take the user to that show's detail page -> '/show/:id'
 app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = request.session.userId;
@@ -196,13 +198,13 @@ app.get('/favorites', requireLogin, (request, response) => {
       response.render('favorites/favorites', { message: '' });
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
 })
 
 
-
-//  ADDING TO FAVORITES  ///////////////////////////////////////////
+// ADDING TO FAVORITES
+// -----------------------------------------------------------------------
 // From shows page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
 app.post('/shows', requireLogin, (request, response) => {
   // let message = '';
@@ -217,17 +219,17 @@ app.post('/shows', requireLogin, (request, response) => {
     .then(() => {
       // For some reason it doesn't like having a message...
       // message = `You just added show ${addedShowId} to your favorites!`;
-      // response.redirect('/shows', { message });
+      // response.redirect(`/shows#${addedShowId}`, { message });
       // Once inserted, redirect user to that specific show's spot on the shows page so they can pick up where they left off
       response.redirect(`/shows#${addedShowId}`);
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
   console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
-// This doesn't work yet
+// This doesn't work yet!
 // From a show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', (request, response) => {
   // let message = '';
@@ -242,14 +244,14 @@ app.post('/show/:id', (request, response) => {
       response.redirect(`/show/${addedShowId}`);
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
   console.log(`you just added show ${addedShowId} to your favorites!`);
 })
 
 
-
-//  REMOVING FROM FAVORITES  ///////////////////////////////////////
+// REMOVING FROM FAVORITES
+// -----------------------------------------------------------------------
 // From shows page, remove any show removed with the "remove from favorites" button and delete from the user's user_favorites table
 app.delete('/shows', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
@@ -264,12 +266,12 @@ app.delete('/shows', requireLogin, (request, response) => {
       response.redirect(`/shows#${removedShowId}`);
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
-// This doesn't work yet
+// This doesn't work yet!
 // From a show's detail page, remove show and delete from the user's user_favorites table
 app.delete('/show/:id', (request, response) => {
   // Get the user's id that's stored in the session
@@ -283,14 +285,14 @@ app.delete('/show/:id', (request, response) => {
       response.redirect(`/show/${removedShowId}`);
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
 
-
-//  SHOW DETAILS  //////////////////////////////////////////////////
+// SHOW DETAILS
+// -----------------------------------------------------------------------
 // Make a function that takes the user's input in the search bar, converts it to the right format, and returns the show's id
 const getShowId = userInput => {
   // Make a variable to store the search query
@@ -310,7 +312,7 @@ const getShowId = userInput => {
       console.log('show id:', showId);
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
 }
 
@@ -341,10 +343,10 @@ app.get('/show/:id', (request, response) => {
       response.render('show', { showData });
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
-  // Use Promise.all() here too to get recommendations as well
-  // Make an API request with the showId
+  // // Use Promise.all() here too to get recommendations as well
+  // // Make an API request with the showId
   // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
   //   .then(apiResponse => {
   //     return apiResponse.json();
@@ -356,10 +358,10 @@ app.get('/show/:id', (request, response) => {
 })
 
 
-
-//  SEASON DETAILS  ////////////////////////////////////////////////
-// Displays details of a specific seasons
-// Show's season poster, show title, season title, episode numbers and titles, airdates, episode descriptions
+// SEASON DETAILS
+// -----------------------------------------------------------------------
+// Display details of a specific season
+// Show's season poster, show title, season title, episode numbers and titles, airdates, and episode descriptions
 app.get('/show/:showId/season/:seasonNumber', (request, response) => {
   const showId = Number(request.params.showId);
   const seasonNumber = Number(request.params.seasonNumber);
@@ -370,14 +372,14 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
       response.render('episode', { seasonData, showId });
     })
     .catch(error => {
-      response.send(`Error: ${error.message}.`);
+      response.send(`Error: ${error.message}`);
     });
 })
 
 
-
-//  WATCHLIST  /////////////////////////////////////////////////////
-// Prompt user to log in (if not logged in) and display the user's watchlist with a "to watch" and "caught up" section
+// WATCHLIST
+// -----------------------------------------------------------------------
+// Prompt user to log in (if not already logged in) and display the user's watchlist with a "to watch" and "caught up" section
 // Display each show's poster, title, and a number showing the episodes that still need to be watched
 app.get('/watchlist', requireLogin, (request, response) => {
 
@@ -403,6 +405,7 @@ app.get('/watchlist/show/:id', requireLogin, (request, response) => {
 
 
 // Start server
+// -----------------------------------------------------------------------
 app.listen(PORT, () => {
   console.log(`server is listening on PORT ${PORT}!`);
 });
