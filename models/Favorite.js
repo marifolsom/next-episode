@@ -12,10 +12,6 @@ Favorite.find = userId => {
 }
 
 Favorite.add = (userId, addedShowId, addedShowTitle, addedShowImg) => {
-  // return db.one(`
-  //   INSERT INTO user_favorites (user_id, show_id)
-  //   VALUES ($1, $2)
-  //   RETURNING *`,
   return db.one(`
     INSERT INTO user_favorites (user_id, show_id, show_title, show_img)
     SELECT $1, $2, $3, $4

@@ -2,6 +2,10 @@
   <body>
     <% include ../partials/nav %>
 
+    <% if (message) { %>
+      <h3><%= message %></h3>
+    <% } %>
+
     <h3>Login to your account:</h3>
     <form action="/login" method="POST">
       <input type="text" name="username" placeholder="Username">

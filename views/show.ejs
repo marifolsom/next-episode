@@ -2,19 +2,20 @@
   <body>
     <% include ../partials/nav %>
 
+    <% if (message) { %>
+      <h3><%= message %></h3>
+    <% } %>
+
     <!-- Back to shows button -->
     <form action="/shows" method="GET">
       <button>Return to Shows</button>
     </form>
-
     <!-- Show title -->
     <h2><%= showData.name %></h2>
-
     <!-- If there's a show poster, display poster -->
     <% if (showData.poster_path) { %>
       <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
     <% } %>
-
     <!-- Add to favorites button -->
     <!-- Doesn't work yet -->
     <form action="/show/<% showData.id %>" method="POST">
@@ -22,7 +23,6 @@
         Add to Favorites
       </button>
     </form>
-
     <!-- Remove from favorites button -->
     <!-- Doesn't work yet -->
     <form action="/show/<% showData.id %>" method="POST">
@@ -47,31 +47,27 @@
     <p>Status: <%= showData.status %></p>
     <!-- Show website link -->
     <a href="<%= showData.homepage %>">Website</a>
-
     <!-- Season breakdown -->
+
     <h2>Seasons:</h2>
     <!-- For each season, display data -->
     <% for (let i = 0; i < showData.seasons.length; i++) { %>
       <!-- Store show id and seasons number -->
       <% showId = showData.id %>
       <% seasonNumber = showData.seasons[i].season_number %>
-
       <!-- Season name -->
       <h3><%= showData.seasons[i].name %></h3>
-
       <!-- If there's a season poster, display poster -->
       <% if (showData.seasons[i].poster_path) { %>
         <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
           <img src="http://image.tmdb.org/t/p/w185<%= seasonImg = showData.seasons[i].poster_path %>">
         </a>
       <% } %>
-
       <!-- Fix format of date, and display show airdate -->
       <% if (showData.seasons[i].air_date) { %>
         <% dates = showData.seasons[i].air_date.split('-') %>
         <p>Premiered: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
       <% } %>
-
       <!-- Number of episodes -->
       <p>Total episodes: <%= episodeCount = showData.seasons[i].episode_count %></p>
     <% } %>

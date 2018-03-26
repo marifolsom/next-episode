@@ -2,14 +2,16 @@
   <body>
     <% include ../partials/nav %>
 
+    <% if (message) { %>
+      <h3><%= message %></h3>
+    <% } %>
+
     <!-- Back to show details button -->
     <form action="/show/<%= showId %>" method="GET">
       <button>Return to Show</button>
     </form>
-
     <!-- Season name -->
     <h2><%= seasonData.name %><h2>
-
     <!-- Season poster -->
     <% if (seasonData.poster_path) { %>
       <img src="http://image.tmdb.org/t/p/w185<%= seasonData.poster_path %>">
@@ -24,7 +26,6 @@
       <!-- Episode airdate -->
       <% dates = seasonData.episodes[i].air_date.split('-') %>
       <p>Air date: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
-
     <% } %>
   </body>
 </html>

@@ -1,22 +1,21 @@
 // Dependencies
 // -----------------------------------------------------------------------
-const express        = require('express');
-const bodyParser     = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const session        = require('express-session');
-// const FileStore      = require("session-file-store")(session);
-const bcrypt         = require('bcrypt');
-const es6            = require('es6-promise').polyfill();
-const fetch          = require('isomorphic-fetch');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+const es6 = require('es6-promise').polyfill();
+const fetch = require('isomorphic-fetch');
 // Import all models
-const User           = require('./models/User');
-const Favorite       = require('./models/Favorite');
-const Watchlist      = require('./models/Watchlist');
+const User = require('./models/User');
+const Favorite = require('./models/Favorite');
+const Watchlist = require('./models/Watchlist');
 // App configuration
-const app            = express();
-const PORT           = 3000;
+const app = express();
+const PORT = 3000;
 // Declare salt as a global variable to create a password salt
-const salt           = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
+const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 // Set view engine to ejs
 app.set('view engine', 'ejs');
 
@@ -28,7 +27,6 @@ app.use('/client', express.static('./client'));
 // Set up the session middleware
 app.use(
   session({
-    // store: new FileStore(),
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true
@@ -63,9 +61,8 @@ app.post('/signup', (request, response) => {
   // Insert new user info into database
   User.create(newUsername, hashedPassword)
     .then(userId => {
-      message = 'You\'ve created a new account!';
-      response.render('favorites/favorites', { message });
-      // response.redirect('shows');
+      message = 'You\'ve created a new account! Please log in.';
+      response.render('login', { message });
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -99,8 +96,8 @@ app.post('/login', (request, response) => {
         // Set the session data
         message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
         request.session.authenticated = true;
+        // Render user's favorites page once logged in
         response.render('favorites/favorites', { message });
-        // response.redirect('shows');
         // Store the user's id for the session
         request.session.userId = Number(userInfo.id);
         // Call save() to save any changes to the session object
@@ -123,40 +120,39 @@ app.post('/login', (request, response) => {
 // Display trending, popular, and airing today
 // Shows' posters, titles, airdates
 app.get('/', (request, response) => {
-  // Create an array to hold all API urls for homepage
-  // Need to figure out how to toggle between the pages (~15 pages)
-  const urls = [
-    // URL to most popular shows
-    // (~1003 pages)
-    `https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
-    // URL to top rated shows
-    // (~43 pages)
-    `https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`,
-    // URL to shows airing today
-    // (~4 pages)
-    `https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`
-  ]
-  // Map over array of urls and fetch API data for each
+  // Fetch most popular shows
+  // (~1003 pages)
+  const getPopular = fetch('https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
+    .then(popularData => {
+      return popularData.json();
+    })
+  // Fetch top rated shows
+  // (~43 pages)
+  const getTop = fetch('https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
+    .then(topData => {
+      return topData.json();
+    })
+  // Fetch shows airing today
+  // (~4 pages)
+  const getToday = fetch('https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
+    .then(airingData => {
+      return airingData.json();
+    })
   // Resolve all promises
-  Promise.all(urls.map(url => {
-    return fetch(url)
-     .then(apiResponses => apiResponses.json())
-     .then(homepageData => {
-       // // Returns 3 objects, but it's not an array of objects...
-       // // console.log(homepageData[0]); // returns undefined
-       // // Tried deconstructing into an array of objects with names
-       // const [ popularData, topRatedData, airingData ] = homepageData;
-       console.log(homepageData);
-       response.render('home', { homepageData,
-         // homepageData[0].results: popularData,
-         // homepageData[1].results: topRatedData,
-         // homepageData[2].results: airingData,
-        message: '' })
-     })
-     .catch(error => {
-       response.send(`Error: ${error.message}`);
-     });
-  }))
+  Promise.all([getPopular, getTop, getToday])
+    .then(homepageData => {
+      console.log(homepageData);
+      // Render data from each fetch onto the page
+      response.render('home', {
+        popularData: homepageData[0],
+        topData: homepageData[1],
+        airingData: homepageData[2],
+        message: ''
+      })
+    })
+    .catch(error => {
+      response.send(`Error: ${error.message}`);
+    })
 })
 
 
@@ -232,7 +228,7 @@ app.get('/show/:id', (request, response) => {
     .then(apiResponse => apiResponse.json())
     .then(showData => {
       // response.json(showData);
-      response.render('show', { showData });
+      response.render('show', { showData, message: '' });
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -261,7 +257,11 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
     .then(apiResponse => apiResponse.json())
     .then(seasonData => {
       // response.json(seasonData);
-      response.render('episode', { seasonData, showId });
+      response.render('episode', {
+        seasonData,
+        showId,
+        message: ''
+      });
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -282,7 +282,9 @@ app.get('/favorites', requireLogin, (request, response) => {
   Favorite.find(userId)
     .then(favoritesData => {
       console.log('favorited shows:', favoritesData[0].show_title);
-      response.render('favorites/favorites', { favoritesData, message: '' });
+      // // This says that favoritesData is undefined?
+      // response.render('favorites/favorites', { favoritesData, message: '' });
+      response.render('favorites/favorites', { message: '' });
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
