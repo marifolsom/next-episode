@@ -47,7 +47,7 @@ const requireLogin = (request, response, next) => {
 // -----------------------------------------------------------------------
 // Render a signup form
 app.get('/signup', (request, response) => {
-  response.render('signup');
+  response.render('signup', { message: '' });
 })
 
 // Add new user info from signup form into database
@@ -74,7 +74,7 @@ app.post('/signup', (request, response) => {
 // -----------------------------------------------------------------------
 // Render a login form
 app.get('/login', (request, response) => {
-  response.render('login');
+  response.render('login', { message: '' });
 })
 
 // Log the user in if the username and password entered in login form are correct
@@ -120,28 +120,20 @@ app.post('/login', (request, response) => {
 // Display trending, popular, and airing today
 // Shows' posters, titles, airdates
 app.get('/', (request, response) => {
-  // Fetch most popular shows
-  // (~1003 pages)
+  // Fetch most popular shows // (~1003 pages)
   const getPopular = fetch('https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
-    .then(popularData => {
-      return popularData.json();
-    })
-  // Fetch top rated shows
-  // (~43 pages)
+    .then(popularData => popularData.json());
+  // Fetch top rated shows // (~43 pages)
   const getTop = fetch('https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
-    .then(topData => {
-      return topData.json();
-    })
-  // Fetch shows airing today
-  // (~4 pages)
+    .then(topData => topData.json());
+  // Fetch shows airing today // (~4 pages)
   const getToday = fetch('https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
-    .then(airingData => {
-      return airingData.json();
-    })
+    .then(airingData => airingData.json());
   // Resolve all promises
   Promise.all([getPopular, getTop, getToday])
     .then(homepageData => {
       console.log(homepageData);
+      console.log(homepageData[0].results[0]);
       // Render data from each fetch onto the page
       response.render('home', {
         popularData: homepageData[0],
@@ -281,7 +273,7 @@ app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's favorited show ids from the database
   Favorite.find(userId)
     .then(favoritesData => {
-      console.log('favorited shows:', favoritesData[0].show_title);
+      console.log('favorited shows:', favoritesData);
       // // This says that favoritesData is undefined?
       // response.render('favorites/favorites', { favoritesData, message: '' });
       response.render('favorites/favorites', { message: '' });
@@ -296,7 +288,7 @@ app.get('/favorites', requireLogin, (request, response) => {
 // -----------------------------------------------------------------------
 // From shows page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
 app.post('/shows', requireLogin, (request, response) => {
-  // let message = '';
+  let message = '';
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
   console.log(`user ${userId} is the current user stored in session`);
@@ -309,36 +301,36 @@ app.post('/shows', requireLogin, (request, response) => {
   // Maybe add a message if unable to insert because already added?
   Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
-      // // For some reason it doesn't like having a message...
-      // // message = `You just added show ${addedShowId} to your favorites!`;
-      // response.redirect(`/shows#${addedShowId}`, { message });
+      message = `You just added ${addedShowTitle} to your favorites!`;
       // Once inserted, redirect user to that specific show's spot on the shows page so they can pick up where they left off
-      response.redirect(`/shows#${addedShowId}`);
+      response.render(`/shows#${addedShowId}`, { message });
+      // response.redirect(`/shows#${addedShowId}`);
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
-  console.log(`you just added show ${addedShowTitle} to your favorites!`);
+  console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
 
-// This doesn't work yet!
 // From a show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', (request, response) => {
   // let message = '';
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the show's id from the url and store it in a variable
-  const addedShowId = Number(request.params.id);
+  // Get the clicked button's hidden value attributes containing the show's info and store it in a variable
+  const addedShowId = Number(request.body.showId);
+  const addedShowTitle = request.body.showTitle;
+  const addedShowImg = request.body.showImg;
   // Take the addedShowId and insert into database
-  Favorite.add(userId, addedShowId)
+  Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
       response.redirect(`/show/${addedShowId}`);
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
-  console.log(`you just added show ${addedShowId} to your favorites!`);
+  console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
 
 
@@ -363,7 +355,6 @@ app.delete('/shows', requireLogin, (request, response) => {
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
-// This doesn't work yet!
 // From a show's detail page, remove show and delete from the user's user_favorites table
 app.delete('/show/:id', (request, response) => {
   // Get the user's id that's stored in the session
@@ -381,6 +372,8 @@ app.delete('/show/:id', (request, response) => {
     });
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
+
+// Add remove from favorites
 
 
 // WATCHLIST

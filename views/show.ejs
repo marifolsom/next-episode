@@ -17,15 +17,17 @@
       <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
     <% } %>
     <!-- Add to favorites button -->
-    <!-- Doesn't work yet -->
-    <form action="/show/<% showData.id %>" method="POST">
+    <form action="/show/<%= showData.id %>" method="POST">
+      <input type="hidden" name="showId" value="<%= showData.id %>">
+      <input type="hidden" name="showTitle" value="<%= showData.name %>">
+      <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
       <button class="add-btn">
         Add to Favorites
       </button>
     </form>
     <!-- Remove from favorites button -->
-    <!-- Doesn't work yet -->
-    <form action="/show/<% showData.id %>" method="POST">
+    <form action="/show/<%= showData.id %>?_method=DELETE" method="POST">
+      <input type="hidden" name="showId" value="<%= showData.id %>">
       <button class="remove-btn">
         Remove from Favorites
       </button>
