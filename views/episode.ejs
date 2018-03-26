@@ -6,10 +6,11 @@
       <h3><%= message %></h3>
     <% } %>
 
+    <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
     <!-- Back to show details button -->
-    <form action="/show/<%= showId %>" method="GET">
+    <!-- <form action="/show/<%= showId %>" method="GET">
       <button>Return to Show</button>
-    </form>
+    </form> -->
     <!-- Season name -->
     <h2><%= seasonData.name %><h2>
     <!-- Season poster -->
@@ -24,8 +25,11 @@
       <!-- Episode descriptoion -->
       <p><%= seasonData.episodes[i].overview %></p>
       <!-- Episode airdate -->
-      <% dates = seasonData.episodes[i].air_date.split('-') %>
-      <p>Air date: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
+      <% if (seasonData.episodes[i].air_date) { %>
+        <% dates = seasonData.episodes[i].air_date.split('-') %>
+        <p>Air date: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
+      <% } %>
     <% } %>
+
   </body>
 </html>

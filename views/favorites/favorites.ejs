@@ -6,6 +6,7 @@
       <h3><%= message %></h3>
     <% } %>
 
+    <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
     <h1>Favorites</h1>
     <!-- For each favorite, display info -->
     <% for (let i = 0; i < favoritesData[i].length; i++) { %>
@@ -13,12 +14,14 @@
       <h2><%= favoritesData[i].show_title %></h2>
       <!-- If there's a show poster, display poster -->
       <% if (favoritesData[i].show_img) { %>
-        <img src="http://image.tmdb.org/t/p/w185<%= favoritesData[i].show_img %>">
+        <a href="/show/<%= favoritesData[i].id %>">
+          <img src="http://image.tmdb.org/t/p/w185<%= favoritesData[i].show_img %>">
+        </a>
       <% } %>
       <!-- Remove from favorites button -->
       <!-- Doesn't work yet -->
       <form action="/favorites?_method=DELETE" method="POST">
-        <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
+        <input type="hidden" name="showId" value="<%= favoritesData[i].id %>">
         <button class="remove-btn">
           Remove from Favorites
         </button>

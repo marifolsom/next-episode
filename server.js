@@ -201,10 +201,8 @@ app.get('/show/:id', (request, response) => {
   // Make a variable to hold the show id
   let showId = 0;
   if (!request.params.id) {
-    // // On search submit take the user's input in the search bar to find the show's id
-    // const userInput = request.body;
-    // Just hard coding for now! (Something with lots of spaces to check the input is being converted properly)
-    const userInput = 'How I Met Your Mother';
+    // On search submit take the user's input in the search bar to find the show's id
+    const userInput = request.body.search;
     console.log(userInput);
     // Call getShowId function to find show id, and assign that value to the showId variable
     showId = getShowId(userInput);
@@ -223,6 +221,7 @@ app.get('/show/:id', (request, response) => {
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
+  // // Post MVP?
   // // Use Promise.all() here too to get recommendations as well
   // // Make an API request with the showId
   // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
@@ -272,9 +271,9 @@ app.get('/favorites', requireLogin, (request, response) => {
   Favorite.find(userId)
     .then(favoritesData => {
       console.log('favorited shows:', favoritesData);
-      // // This says that favoritesData is undefined?
-      // response.render('favorites/favorites', { favoritesData, message: '' });
-      response.render('favorites/favorites', { message: '' });
+      console.log(favoritesData[0].show_title);
+      // This says that favoritesData is undefined?
+      response.render('favorites/favorites', { favoritesData, message: '' });
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -325,7 +324,7 @@ app.post('/', requireLogin, (request, response) => {
   Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
       message = `You just added ${addedShowTitle} to your favorites!`;
-      // Once inserted, redirect user to that specific show's spot on the shows page so they can pick up where they left off
+      // Once inserted, redirect user to that specific show's spot on the home page so they can pick up where they left off
       response.redirect(`/#${addedShowId}`);
     })
     .catch(error => {
@@ -333,10 +332,9 @@ app.post('/', requireLogin, (request, response) => {
     });
   console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
-
+2
 // From a show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', requireLogin, (request, response) => {
-  // let message = '';
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
   console.log(`user ${userId} is the current user stored in session`);
@@ -425,7 +423,7 @@ app.delete('/favorites', requireLogin, (request, response) => {
   // Take the removedShowId and delete from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
-      response.redirect(`/favorites#${removedShowId}`);
+      response.redirect('/favorites');
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);

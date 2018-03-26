@@ -6,10 +6,11 @@
       <h3><%= message %></h3>
     <% } %>
 
+    <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
     <!-- For each show, display data -->
     <% for (let i = 0; i < currentData.results.length; i++) { %>
       <!-- Show title -->
-        <h2 id="<%= currentData.results[i].id %>"><%= currentData.results[i].name %></h2>
+        <h3 id="<%= currentData.results[i].id %>"><%= currentData.results[i].name %></h3>
       <!-- If there's a show poster, display poster -->
       <% if (currentData.results[i].poster_path) { %>
         <a href="/show/<%= currentData.results[i].id %>">

@@ -7,15 +7,17 @@
     <% } %>
 
     <div class="popular">
-      <p>----------------------------------------------------------------------------------------------------------------------------------------------</p>
-      <h1>Most Popular:</h1>
+      <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
+      <h2>Most Popular:</h2>
       <!-- For each popular show, display data -->
       <% for (let i = 0; i < popularData.results.length; i++) { %>
         <!-- Show title -->
-        <h2 id="<%= popularData.results[i].id %>"><%= popularData.results[i].name %></h2>
+        <h3 id="<%= popularData.results[i].id %>"><%= popularData.results[i].name %></h3>
         <!-- If there's a show poster, display poster -->
         <% if (popularData.results[i].poster_path) { %>
-          <img src="http://image.tmdb.org/t/p/w185<%= popularData.results[i].poster_path %>">
+          <a href="/show/<%= popularData.results[i].id %>">
+            <img src="http://image.tmdb.org/t/p/w185<%= popularData.results[i].poster_path %>">
+          </a>
         <% } %>
         <!-- Show Description -->
         <p><%= popularData.results[i].overview %></p>
@@ -38,12 +40,10 @@
           </button>
         </form>
       <% } %>
-      <button class="previous-btn">Previous Page</button>
-      <button class="next-btn">Next Page</button>
     </div>
 
     <div class="top-rated">
-      <p>----------------------------------------------------------------------------------------------------------------------------------------------</p>
+      <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
       <h1>Top Rated:</h1>
       <!-- For each top rated show, display data -->
       <% for (let i = 0; i < topData.results.length; i++) { %>
@@ -51,7 +51,9 @@
         <h2><%= topData.results[i].name %></h2>
         <!-- If there's a show poster, display poster -->
         <% if (topData.results[i].poster_path) { %>
-          <img src="http://image.tmdb.org/t/p/w185<%= topData.results[i].poster_path %>">
+          <a href="/show/<%= topData.results[i].id %>">
+            <img src="http://image.tmdb.org/t/p/w185<%= topData.results[i].poster_path %>">
+          </a>
         <% } %>
         <!-- Show Description -->
         <p><%= topData.results[i].overview %></p>
@@ -74,20 +76,20 @@
           </button>
         </form>
       <% } %>
-      <button class="previous-btn">Previous Page</button>
-      <button class="next-btn">Next Page</button>
     </div>
 
     <div class="current">
-      <p>----------------------------------------------------------------------------------------------------------------------------------------------</p>
-      <h1>Airing Today:</h1>
+      <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
+      <h2>Airing Today:</h2>
       <!-- For show airing today, display data -->
       <% for (let i = 0; i < airingData.results.length; i++) { %>
         <!-- Show title -->
-        <h2><%= airingData.results[i].name %></h2>
+        <h3><%= airingData.results[i].name %></h3>
         <!-- If there's a show poster, display poster -->
         <% if (airingData.results[i].poster_path) { %>
-          <img src="http://image.tmdb.org/t/p/w185<%= airingData.results[i].poster_path %>">
+          <a href="/show/<%= airingData.results[i].id %>">
+            <img src="http://image.tmdb.org/t/p/w185<%= airingData.results[i].poster_path %>">
+          </a>
         <% } %>
         <!-- Show Description -->
         <p><%= airingData.results[i].overview %></p>
@@ -110,8 +112,6 @@
           </button>
         </form>
       <% } %>
-      <button class="previous-btn">Previous Page</button>
-      <button class="next-btn">Next Page</button>
     </div>
 
   </body>

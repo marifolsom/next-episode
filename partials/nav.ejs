@@ -4,19 +4,19 @@
   <a href="/shows">SHOWS</a>
   <a href="/favorites">FAVORITES</a>
 
-  <!-- Search bar -->
-  <form method="GET" action="">
-    <input class="search-bar" type="text" placeholder="Search a show!"/>
-    <button class="submit" type="submit">Search</button>
-  </form>
-
   <!-- Login button -->
   <form method="GET" action="/login">
-    <button name="login" class="login-btn btn">Login</button>
+    <button name="login" class="login-btn">Login</button>
   </form>
 
   <!-- Signup button -->
   <form method="GET" action="/signup">
-    <button name="login" class="login-btn btn">Sign Up</button>
+    <button name="signup" class="signup-btn">Sign Up</button>
+  </form>
+
+  <!-- Search bar -->
+  <form method="GET" action="/show/<%=  %>">
+    <input name="search" class="search-bar" type="text" placeholder="Search a show!"/>
+    <button class="search-btn" type="submit" onclick="getShowId()">Search</button>
   </form>
 </nav>
