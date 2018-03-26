@@ -16,6 +16,7 @@
         <img src="http://image.tmdb.org/t/p/w185<%= favoritesData[i].show_img %>">
       <% } %>
       <!-- Remove from favorites button -->
+      <!-- Doesn't work yet -->
       <form action="/favorites?_method=DELETE" method="POST">
         <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
         <button class="remove-btn">

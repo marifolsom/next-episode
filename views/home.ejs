@@ -12,7 +12,7 @@
       <!-- For each popular show, display data -->
       <% for (let i = 0; i < popularData.results.length; i++) { %>
         <!-- Show title -->
-        <h2><%= popularData.results[i].name %></h2>
+        <h2 id="<%= popularData.results[i].id %>"><%= popularData.results[i].name %></h2>
         <!-- If there's a show poster, display poster -->
         <% if (popularData.results[i].poster_path) { %>
           <img src="http://image.tmdb.org/t/p/w185<%= popularData.results[i].poster_path %>">
@@ -22,16 +22,16 @@
         <p>Rating: <%= popularData.results[i].vote_average %></p>
         <p>Popularity: <%= popularData.results[i].popularity %></p>
         <!-- Add to favorites button -->
-        <!-- Doesn't work yet -->
-        <form action="/home" method="POST">
-          <input type= "hidden" name= "showId" value= "<%= popularData.results[i].id %>">
+        <form action="/" method="POST">
+          <input type="hidden" name="showId" value="<%= popularData.results[i].id %>">
+          <input type="hidden" name="showTitle" value="<%= popularData.results[i].name %>">
+          <input type="hidden" name="showImg" value="<%= popularData.results[i].poster_path %>">
           <button class="add-btn">
             Add to Favorites
           </button>
         </form>
         <!-- Remove from favorites button -->
-        <!-- Doesn't work yet -->
-        <form action="/home?_method=DELETE" method="POST">
+        <form action="/?_method=DELETE" method="POST">
           <input type= "hidden" name= "showId" value= "<%= popularData.results[i].id %>">
           <button class="remove-btn">
             Remove from Favorites
