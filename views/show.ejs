@@ -8,7 +8,7 @@
     </form>
 
     <!-- Show title -->
-    <h1><%= showData.name %></h1>
+    <h2><%= showData.name %></h2>
 
     <!-- If there's a show poster, display poster -->
     <% if (showData.poster_path) { %>
@@ -32,7 +32,7 @@
     </form>
 
     <!-- Show description -->
-    <h3><%= showData.overview %></h3>
+    <p><%= showData.overview %></p>
     <!-- Fix format of date, and display show airdate -->
     <% dates = showData.first_air_date.split('-') %>
     <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
@@ -49,7 +49,7 @@
     <a href="<%= showData.homepage %>">Website</a>
 
     <!-- Season breakdown -->
-    <h1>Seasons:</h1>
+    <h2>Seasons:</h2>
     <!-- For each season, display data -->
     <% for (let i = 0; i < showData.seasons.length; i++) { %>
       <!-- Store show id and seasons number -->
@@ -57,13 +57,13 @@
       <% seasonNumber = showData.seasons[i].season_number %>
 
       <!-- Season name -->
-      <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
-        <h3><%= showData.seasons[i].name %></h3>
-      </a>
+      <h3><%= showData.seasons[i].name %></h3>
 
       <!-- If there's a season poster, display poster -->
       <% if (showData.seasons[i].poster_path) { %>
-        <img src="http://image.tmdb.org/t/p/w185<%= seasonImg = showData.seasons[i].poster_path %>">
+        <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
+          <img src="http://image.tmdb.org/t/p/w185<%= seasonImg = showData.seasons[i].poster_path %>">
+        </a>
       <% } %>
 
       <!-- Fix format of date, and display show airdate -->

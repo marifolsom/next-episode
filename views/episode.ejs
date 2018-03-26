@@ -7,18 +7,18 @@
       <button>Return to Show</button>
     </form>
 
+    <!-- Season name -->
+    <h2><%= seasonData.name %><h2>
+
     <!-- Season poster -->
     <% if (seasonData.poster_path) { %>
       <img src="http://image.tmdb.org/t/p/w185<%= seasonData.poster_path %>">
     <% } %>
 
-    <!-- Season name -->
-    <h1><%= seasonData.name %><h1>
-      
     <!-- For each episode dsiplay data -->
     <% for (let i = 0; i < seasonData.episodes.length; i++) { %>
       <!-- Episode number and title -->
-      <h2>Episode <%= seasonData.episodes[i].episode_number %>: <%= seasonData.episodes[i].name %></h2>
+      <h3>Episode <%= seasonData.episodes[i].episode_number %>: <%= seasonData.episodes[i].name %></h3>
       <!-- Episode descriptoion -->
       <p><%= seasonData.episodes[i].overview %></p>
       <!-- Episode airdate -->

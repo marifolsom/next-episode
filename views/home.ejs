@@ -16,7 +16,7 @@
         <h2><%= popularData.results[i].name %></h2>
 
         <!-- If there's a show poster, display poster -->
-        <% if (opularData.results[i].poster_path) { %>
+        <% if (popularData.results[i].poster_path) { %>
           <img src="http://image.tmdb.org/t/p/w185<%= popularData.results[i].poster_path %>">
         <% } %>
 
@@ -44,14 +44,23 @@
         </form>
 
       <% } %>
+
+      <button class="previous-btn">Previous Page</button>
+      <button class="next-btn">Next Page</button>
     </div>
 
     <div class="top-rated">
       <h1>Top Rated:</h1>
+
+      <button class="previous-btn">Previous Page</button>
+      <button class="next-btn">Next Page</button>
     </div>
 
     <div class="current">
       <h1>Aired Today:</h1>
+
+      <button class="previous-btn">Previous Page</button>
+      <button class="next-btn">Next Page</button>
     </div>
 
   </body>
