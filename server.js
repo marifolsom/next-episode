@@ -288,9 +288,7 @@ app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's favorited show ids from the database
   Favorite.find(userId)
     .then(favoritesData => {
-      console.log('favorited shows:', favoritesData);
-      // console.log(favoritesData[0].show_title);
-      // This says that favoritesData is undefined?
+      // console.log('favorited shows:', favoritesData);
       response.render('favorites/favorites', { favoritesData, message: '' });
     })
     .catch(error => {

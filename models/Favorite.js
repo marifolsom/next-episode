@@ -37,7 +37,7 @@ Favorite.editNotes = (notesContent, userId, showId) => {
   return db.none(`
     UPDATE user_favorites
     SET notes = $1
-    WHERE user_id = $3 AND show_id = $3`,
+    WHERE user_id = $2 AND show_id = $3`,
     [notesContent, userId, showId]
   )
 }
