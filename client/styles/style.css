@@ -103,13 +103,14 @@ nav a {
 }
 
 .favorites h2 {
-  margin-bottom: 50px;
+  margin-bottom: 45px;
 }
 
 .popular-shows,
 .top-shows,
 .today-shows,
-.all-shows {
+.all-shows,
+.results-shows {
   margin: 0 auto;
   margin: 0 50px 50px 50px;
   display: grid;
@@ -136,7 +137,7 @@ nav a {
   margin: 0 50px 50px 50px;
   display: grid;
   grid-template-columns: 200px 200px 200px 200px;
-  grid-template-rows: 320px;
+  grid-template-rows: 350px;
   grid-gap: 50px;
   justify-content: center;
   align-items: center;
@@ -203,7 +204,7 @@ nav a {
   .top-shows,
   .today-shows,
   .all-shows,
-  .favorite-shows {
+  .results-shows {
     grid-template-columns: 200px 200px 200px;
     grid-template-rows: 420px;
     grid-gap: 25px;
@@ -212,6 +213,12 @@ nav a {
   .seasons {
     grid-template-columns: 200px 200px 200px;
     grid-template-rows: 390px;
+    grid-gap: 25px;
+  }
+
+  .favorite-shows {
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 350px;
     grid-gap: 25px;
   }
 
@@ -231,7 +238,7 @@ nav a {
   .top-shows,
   .today-shows,
   .all-shows,
-  .favorite-shows {
+  .results-shows {
     grid-template-columns: 200px 200px;
     grid-template-rows: 420px;
     grid-gap: 25px 10px;
@@ -240,6 +247,12 @@ nav a {
   .seasons {
     grid-template-columns: 200px 200px;
     grid-template-rows: 390px;
+    grid-gap: 25px 10px;
+  }
+
+  .favorite-shows {
+    grid-template-columns: 200px 200px;
+    grid-template-rows: 350px;
     grid-gap: 25px 10px;
   }
 
@@ -277,7 +290,7 @@ nav a {
   .top-shows,
   .today-shows,
   .all-shows,
-  .favorite-shows {
+  .results-shows {
     grid-template-columns: 200px;
     grid-template-rows: 420px;
     grid-gap: 25px 0px;
@@ -286,6 +299,12 @@ nav a {
   .seasons {
     grid-template-columns: 200px;
     grid-template-rows: 390px;
+    grid-gap: 25px 0px;
+  }
+
+  .favorite-shows {
+    grid-template-columns: 200px;
+    grid-template-rows: 350px;
     grid-gap: 25px 0px;
   }
 

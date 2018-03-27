@@ -197,7 +197,7 @@ const convertInput = userInput => {
 }
 
 // Display search results from the user's search bad input
-app.get('/results', (request, response) => {
+app.post('/results', (request, response) => {
   // Grab the user's input from the search bar
   const userInput = request.body.userSearch;
   // Call convertInput on the userInput
