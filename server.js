@@ -13,7 +13,7 @@ const Favorite = require('./models/Favorite');
 const Watchlist = require('./models/Watchlist');
 // App configuration
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 // Declare salt as a global variable to create a password salt
 const salt = '$2a$10$bKzWzZ9c21oHCFBYCUT4re';
 // Set view engine to ejs
