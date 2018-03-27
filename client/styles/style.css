@@ -141,6 +141,18 @@ nav a {
   width: 180px;
 }
 
+.container .no-img {
+  width: 290px;
+}
+
+.episode {
+  margin: 50px;
+}
+
+.episode-info {
+  float: right;
+}
+
 
 /* Back to top button */
 .top-button {
@@ -164,6 +176,10 @@ nav a {
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
+  body, html {
+    padding: 10px 20px;
+  }
+
   .popular-shows,
   .top-shows,
   .today-shows,
@@ -178,12 +194,39 @@ nav a {
     grid-template-columns: 200px 200px 200px;
     grid-template-rows: 390px;
     grid-gap: 25px;
+  }
+
+  .nav-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-items h2 {
+    margin: 10px 0;
+  }
+
+  nav a {
+    margin: 1px;
+  }
+
+  .favorites-nav {
+    flex-grow: 0;
+  }
+
+  .episode {
+    margin: 20px;
   }
 }
 
 
 /* Large mobile */
 @media (min-width: 425px) and (max-width: 768px) {
+  body, html {
+    padding: 10px 20px;
+  }
+
   .popular-shows,
   .top-shows,
   .today-shows,
@@ -198,11 +241,38 @@ nav a {
     grid-template-columns: 200px 200px;
     grid-template-rows: 390px;
     grid-gap: 25px 10px;
+  }
+
+  .nav-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-items h2 {
+    margin: 10px 0;
+  }
+
+  nav a {
+    margin: 1px;
+  }
+
+  .favorites-nav {
+    flex-grow: 0;
+  }
+
+  .episode {
+    margin: 20px;
   }
 }
 
 /* Mobile */
 @media (min-width: 320px) and (max-width: 425px) {
+  body, html {
+    padding: 10px 10px;
+  }
+
   .popular-shows,
   .top-shows,
   .today-shows,
@@ -217,5 +287,28 @@ nav a {
     grid-template-columns: 200px;
     grid-template-rows: 390px;
     grid-gap: 25px 0px;
+  }
+
+  .nav-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-items h2 {
+    margin: 10px 0;
+  }
+
+  nav a {
+    margin: 1px;
+  }
+
+  .favorites-nav {
+    flex-grow: 0;
+  }
+
+  .episode {
+    margin: 10px;
   }
 }

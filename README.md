@@ -1,7 +1,7 @@
 # Project 2: TV Tracker App
 
 ### Project Description:
-Next Episode (still playing around with the name!) is an app that allows users to browse, track, and favorite TV shows all in one place. Using TMDb's (The Movie Database) API, users can stay up to date on all the latest information about the shows that they love, read up on episode summaries, and discover new shows.
+TV Tracker (still playing around with the name!) is an app that allows users to browse, track, and favorite TV shows all in one place. Using TMDb's (The Movie Database) API, users can stay up to date on all the latest information about the shows that they love, read up on episode summaries, and discover new shows.
 
 ## Wireframes:
 <img src="img/wireframes/home.png" width="400"> <img src="img/wireframes/show.png" width="400"> <img src="img/wireframes/favorites.png" width="400"> <img src="img/wireframes/watchlist.png" width="400"> <img src="img/wireframes/watchlist-show.png" width="400">
@@ -36,12 +36,11 @@ Next Episode (still playing around with the name!) is an app that allows users t
 
 
 ## Technologies, APIs, Modules Used:
-- The technologies, APIs, and modules you used and a description of each
-- The Movie Database (TMDb) API - The Movie Database (TMDb) is a community built movie and TV database. TMDb has 383,412 movies, 72,667 TV shows, 1,092,166 people, 1,838,522 images, with 270,465 edits Last Week.
+- The Movie Database (TMDb) API - The Movie Database (TMDb) is a community built movie and TV database. TMDb has 383,412 movies, 72,667 TV shows, 1,092,166 people, 1,838,522 images, with 270,465 edits last week. Lots of information about TV/movies!
 - Modules:
   - body-parser - a body parsing middleware that allows you to use `request.body`. With body-parser we can grab the body of the HTTP request.
   - method-override - allows you to use HTTP methods like `PUT` and `DELETE` in places where is usually isn't supported.
-  - express-session - allows for session storage. This means that things like authentication, ids, etc. can be stored in a certain session. 
+  - express-session - allows for session storage. This means that things like authentication, ids, etc. can be stored in a certain session.
   - bcrypt - a library that hashes passwords. This allows you to store an encrypted password in your database, and not a plain text one, by salting and hashing the password entered by the user. In our case, we just generated a salt and hard coded it.
   - isomorphic-fetch - allows you to `fetch()` in node, even though `fetch()` is usually only available in the browser. isomorphic-fetch allowed me to `fetch()` from APIs on the server side and not just client side.
 

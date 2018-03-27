@@ -15,27 +15,30 @@
       </form> -->
       <!-- Season name -->
       <h2><%= seasonData.name %></h2>
+
+      <div class="episode">
       <!-- Season poster -->
       <% if (seasonData.poster_path) { %>
-        <img src="http://image.tmdb.org/t/p/w185<%= seasonData.poster_path %>">
+        <img src="http://image.tmdb.org/t/p/w300<%= seasonData.poster_path %>">
       <% } else if (!seasonData.poster_path) { %>
         <img class="no-img" src="/client/img/tv-noimg.png">
       <% } %>
 
-      <!-- For each episode dsiplay data -->
-      <% for (let i = 0; i < seasonData.episodes.length; i++) { %>
-        <div class="episode">
-          <!-- Episode number and title -->
-          <h3>Episode <%= seasonData.episodes[i].episode_number %>: <%= seasonData.episodes[i].name %></h3>
-          <!-- Episode descriptoion -->
-          <p><%= seasonData.episodes[i].overview %></p>
-          <!-- Episode airdate -->
-          <% if (seasonData.episodes[i].air_date) { %>
-            <% dates = seasonData.episodes[i].air_date.split('-') %>
-            <p>Air date: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
+        <div class="episode-info">
+          <!-- For each episode dsiplay data -->
+          <% for (let i = 0; i < seasonData.episodes.length; i++) { %>
+            <!-- Episode number and title -->
+            <h3>Episode <%= seasonData.episodes[i].episode_number %>: <%= seasonData.episodes[i].name %></h3>
+            <!-- Episode descriptoion -->
+            <p><%= seasonData.episodes[i].overview %></p>
+            <!-- Episode airdate -->
+            <% if (seasonData.episodes[i].air_date) { %>
+              <% dates = seasonData.episodes[i].air_date.split('-') %>
+              <p>Air date: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
+            <% } %>
           <% } %>
         </div>
-      <% } %>
+      </div>
     </div>
 
     <a class="top-button" href=#top-button>&#8593;</a>
