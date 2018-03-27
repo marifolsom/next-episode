@@ -120,13 +120,13 @@ app.post('/login', (request, response) => {
 // Display trending, popular, and airing today
 // Shows' posters, titles, airdates
 app.get('/', (request, response) => {
-  // Fetch most popular shows // (~1003 pages)
+  // Fetch most popular shows
   const getPopular = fetch('https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
     .then(popularData => popularData.json());
-  // Fetch top rated shows // (~43 pages)
+  // Fetch top rated shows
   const getTop = fetch('https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
     .then(topData => topData.json());
-  // Fetch shows airing today // (~4 pages)
+  // Fetch shows airing today
   const getToday = fetch('https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
     .then(airingData => airingData.json());
   // Resolve all promises
@@ -346,7 +346,7 @@ app.post('/', requireLogin, (request, response) => {
     });
   console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
-2
+
 // From a show's detail page, take added show and insert into the user's user_favorites table
 app.post('/show/:id', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session

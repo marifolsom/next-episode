@@ -37,19 +37,51 @@ Next Episode (still playing around with the name!) is an app that allows users t
 
 ## Technologies, APIs, Modules Used:
 - The technologies, APIs, and modules you used and a description of each
-- TMDb (The Movie Database) API
+- The Movie Database (TMDb) API - The Movie Database (TMDb) is a community built movie and TV database. TMDb has 383,412 movies, 72,667 TV shows, 1,092,166 people, 1,838,522 images, with 270,465 edits Last Week.
 - Modules:
-  - body-parser -
-  - method-override -
-  - express-session -
-  - bcrypt -
-  - isomorphic-fetch -
+  - body-parser - a body parsing middleware that allows you to use `request.body`. With body-parser we can grab the body of the HTTP request.
+  - method-override - allows you to use HTTP methods like `PUT` and `DELETE` in places where is usually isn't supported.
+  - express-session - allows for session storage. This means that things like authentication, ids, etc. can be stored in a certain session. 
+  - bcrypt - a library that hashes passwords. This allows you to store an encrypted password in your database, and not a plain text one, by salting and hashing the password entered by the user. In our case, we just generated a salt and hard coded it.
+  - isomorphic-fetch - allows you to `fetch()` in node, even though `fetch()` is usually only available in the browser. isomorphic-fetch allowed me to `fetch()` from APIs on the server side and not just client side.
 
 ## Code Snippet:
-- A code snippet of a part of the app you're particularly proud of
+```
+// HOME
+// -----------------------------------------------------------------------
+// Display trending, popular, and airing today
+app.get('/', (request, response) => {
+  // Fetch most popular shows
+  const getPopular = fetch('https://api.themoviedb.org/3/tv/popular?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
+    .then(popularData => popularData.json());
+  // Fetch top rated shows
+  const getTop = fetch('https://api.themoviedb.org/3/tv/top_rated?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
+    .then(topData => topData.json());
+  // Fetch shows airing today
+  const getToday = fetch('https://api.themoviedb.org/3/tv/airing_today?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US')
+    .then(airingData => airingData.json());
+  // Resolve all promises
+  Promise.all([getPopular, getTop, getToday])
+    .then(homepageData => {
+      // Render data from each fetch onto the page
+      response.render('home', {
+        popularData: homepageData[0],
+        topData: homepageData[1],
+        airingData: homepageData[2],
+        message: ''
+      })
+    })
+    .catch(error => {
+      response.send(`Error: ${error.message}`);
+    })
+})
+```
 
 ## Future Additions:
 - Instead of having both add and remove buttons, have one button that changes depending on whether the show is in the user's favorites or not.
+- I initially wanted to make a TV watch list, where the user could tick off and track their watch progress of a show, but the favorites page took a little longer to figure out and I didn't get to it.
+- I wanted to give an alert message to the user of what was just added/deleted from their favorites. Right now I can only see that in the console.
+- Adding some kind of confirm password feature when signing up.
 
 ## Instructions for Downloading/Running:
-- Instructions for downloading the code and running it on localhost
+- Run `psql -f database/schema.sql` to get the database, and from there you can go to your browser and go to `localhost:3000/signup` to create an account.
