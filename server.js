@@ -186,18 +186,25 @@ app.get('/shows/:pageNumber', (request, response) => {
 })
 
 
-// SHOW DETAILS
+// SEARCH
 // -----------------------------------------------------------------------
+// Make a variable to store the search query
+let searchQuery = '';
+
 // Make a function that takes the user's input in the search bar, converts it to the right format, and returns the show's id
-// This doesn't work yet
-const getShowId = userInput => {
-  // Make a variable to store the search query
-  let searchQuery = '';
-  // Make a variable to store the show id
-  let showId = 0;
+const convertInput = userInput => {
   // Take the user's input, correct the format, and store in searchQuery variable
   // Replace spaces with % and changes to lower case
   searchQuery = userInput.split(' ').join('%20').toLowerCase();
+  return searchQuery;
+}
+
+// Display search results from the user's search bad input
+app.get('/results', (request, response) => {
+  // Grab the user's input from the search bar
+  const userInput = request.body.search;
+  // Call convertInput on the userInput
+  convertInput(userInput);
   console.log(searchQuery);
   // Make an API request with the searchQuery
   fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${searchQuery}`)
@@ -210,25 +217,17 @@ const getShowId = userInput => {
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
-}
+})
 
+
+// SHOW DETAILS
+// -----------------------------------------------------------------------
 // Display the details of a specific show (by id)
 // Show's poster, title, description, rating, popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
 // User can click to add to favorites or watchlist
 app.get('/show/:id', (request, response) => {
-  // Make a variable to hold the show id
-  let showId = 0;
-  if (!request.params.id) {
-    // On search submit take the user's input in the search bar to find the show's id
-    const userInput = request.body.search;
-    console.log(userInput);
-    // Call getShowId function to find show id, and assign that value to the showId variable
-    showId = getShowId(userInput);
-    console.log(showId);
-  } else {
-    // Take show id from url
-    showId = Number(request.params.id);
-  }
+  // Take show id from url
+  const showId = Number(request.params.id);
   // Make an API request with the showId
   fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
     .then(apiResponse => apiResponse.json())
