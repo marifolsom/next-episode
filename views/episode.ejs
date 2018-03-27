@@ -3,11 +3,12 @@
     <a id="top-button"></a>
     <% include ../partials/nav %>
 
-    <% if (message) { %>
-      <h3><%= message %></h3>
-    <% } %>
 
-    <div class="episodes">
+    <div class="container episodes">
+      <% if (message) { %>
+        <h3><%= message %></h3>
+      <% } %>
+
       <!-- Back to show details button -->
       <!-- <form action="/show/<%= showId %>" method="GET">
         <button>Return to Show</button>
@@ -17,6 +18,8 @@
       <!-- Season poster -->
       <% if (seasonData.poster_path) { %>
         <img src="http://image.tmdb.org/t/p/w185<%= seasonData.poster_path %>">
+      <% } else if (!seasonData.poster_path) { %>
+        <img class="no-img" src="/client/img/tv-noimg.png">
       <% } %>
 
       <!-- For each episode dsiplay data -->

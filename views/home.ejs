@@ -3,11 +3,12 @@
     <a id="top-button"></a>
     <% include ../partials/nav %>
 
-    <% if (message) { %>
-      <h2><%= message %></h2>
-    <% } %>
 
-    <div class="popular">
+    <div class="container popular">
+      <% if (message) { %>
+        <h2><%= message %></h2>
+      <% } %>
+
       <h2>MOST POPULAR:</h2>
       <div class="popular-shows">
         <!-- For each popular show, display data -->
@@ -18,7 +19,11 @@
               <a href="/show/<%= popularData.results[i].id %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= popularData.results[i].poster_path %>">
               </a>
-              <% } %>
+            <% } else if (!popularData.results[i].poster_path) { %>
+              <a href="/show/<%= popularData.results[i].id %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
+            <% } %>
             <!-- Show title -->
             <h3><%= popularData.results[i].name %></h3>
             <!-- Show Description -->
@@ -48,7 +53,7 @@
       </div>
     </div>
 
-    <div class="top-rated">
+    <div class="container top-rated">
       <h2>TOP RATED:</h2>
       <div class="top-shows">
         <!-- For each top rated show, display data -->
@@ -59,7 +64,11 @@
               <a href="/show/<%= topData.results[i].id %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= topData.results[i].poster_path %>">
               </a>
-              <% } %>
+            <% } else if (!topData.results[i].poster_path) { %>
+              <a href="/show/<%= topData.results[i].id %>"
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
+            <% } %>
             <!-- Show title -->
             <h3><%= topData.results[i].name %></h3>
             <!-- Show Description -->
@@ -90,7 +99,7 @@
       </div>
     </div>
 
-    <div class="today">
+    <div class="container today">
       <h2>AIRING TODAY:</h2>
       <div class="today-shows">
         <!-- For show airing today, display data -->
@@ -101,7 +110,11 @@
               <a href="/show/<%= airingData.results[i].id %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= airingData.results[i].poster_path %>">
               </a>
-              <% } %>
+            <% } else if (!airingData.results[i].poster_path) { %>
+              <a href="/show/<%= airingData.results[i].id %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
+            <% } %>
             <!-- Show title -->
             <h3><%= airingData.results[i].name %></h3>
             <!-- Show Description -->

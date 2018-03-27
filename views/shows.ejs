@@ -3,11 +3,11 @@
     <a id="top-button"></a>
     <% include ../partials/nav %>
 
-    <% if (message) { %>
-      <h3><%= message %></h3>
-    <% } %>
+    <div class="container all">
+      <% if (message) { %>
+        <h3><%= message %></h3>
+      <% } %>
 
-    <div class="all">
       <h2>ALL SHOWS:</h2>
       <div class="all-shows">
         <!-- For each show, display data -->
@@ -18,7 +18,11 @@
               <a href="/show/<%= currentData.results[i].id %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
               </a>
-              <% } %>
+            <% } else if (!currentData.results[i].poster_path) { %>
+              <a href="/show/<%= currentData.results[i].id %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
+            <% } %>
             <!-- Show title -->
               <h3><%= currentData.results[i].name %></h3>
             <!-- Show description -->
@@ -48,7 +52,7 @@
         <% } %>
       </div>
     </div>
-    
+
     <div class="buttons page-btn">
       <form action="/shows/<%= currentPage++ %>" method="GET">
         <button class="previous-btn">&#x2190; Previous Page</button>

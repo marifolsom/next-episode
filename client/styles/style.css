@@ -38,9 +38,9 @@ button:hover{
   margin: 5px;
 }
 
-
 .page-btn {
   margin-bottom: 60px;
+  text-align: center;
 }
 
 
@@ -84,23 +84,13 @@ nav a {
 
 
 /* Show content */
-.popular,
-.top-rated,
-.today,
-.all,
-.one-show,
-.episodes,
-.favorites {
+.container {
   border-top: 2px dotted #e5e5e5;
 }
 
-.popular h2,
-.top-rated h2,
-.today h2,
-.all h2,
-.seasons-title,
-.favorites h2,
-.one-show h2 {
+.container h2,
+.container h3,
+.seasons-title {
   margin-top: 50px;
 }
 
@@ -142,6 +132,15 @@ nav a {
   transform: scale(1.1, 1.1);
   transition: .3s transform;
 }
+
+.show-desc {
+
+}
+
+.container .no-img {
+  width: 180px;
+}
+
 
 /* Back to top button */
 .top-button {

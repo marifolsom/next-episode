@@ -2,15 +2,17 @@
   <body>
     <% include ../partials/nav %>
 
-    <% if (message) { %>
-      <h3><%= message %></h3>
-    <% } %>
+    <div class="container login">
+      <% if (message) { %>
+        <h3><%= message %></h3>
+      <% } %>
 
-    <h3>Login to your account:</h3>
-    <form action="/login" method="POST">
-      <input type="text" name="username" placeholder="Username">
-      <input type="password" name="password" placeholder="Password">
-      <input type="submit" value="Login">
-    </form>
+      <h3>Login to your account:</h3>
+      <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <input type="submit" value="Login">
+      </form>
+    </div>
   </body>
 </html>

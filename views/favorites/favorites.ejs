@@ -3,11 +3,12 @@
     <a id="top-button"></a>
     <% include ../../partials/nav %>
 
-    <% if (message) { %>
-      <h3><%= message %></h3>
-    <% } %>
 
-    <div class="favorites">
+    <div class="container favorites">
+      <% if (message) { %>
+        <h3><%= message %></h3>
+      <% } %>
+
       <h2>FAVORITES:</h2>
       <div class="favorite-shows">
         <!-- For each favorite, display info -->
@@ -19,6 +20,10 @@
             <% if (favoritesData[i].show_img) { %>
               <a href="/show/<%= favoritesData[i].id %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= favoritesData[i].show_img %>">
+              </a>
+            <% } else if (!favoritesData[i].show_img) { %>
+              <a href="/show/<%= favoritesData[i].id %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
               </a>
             <% } %>
             <!-- Remove from favorites button -->

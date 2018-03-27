@@ -2,11 +2,17 @@
   <body>
     <% include ../partials/nav %>
 
-    <h3>Create a new account:</h3>
-    <form action="/signup" method="POST">
-      <input type="text" name="username" placeholder="Username">
-      <input type="password" name="password" placeholder="Password">
-      <input type="submit" value="Sign Up">
-    </form>
+    <div class="container signup">
+      <% if (message) { %>
+        <h3><%= message %></h3>
+      <% } %>
+
+      <h3>Create a new account:</h3>
+      <form action="/signup" method="POST">
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <input type="submit" value="Sign Up">
+      </form>
+    </div>
   </body>
 </html>

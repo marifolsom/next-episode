@@ -3,11 +3,11 @@
     <a id="top-button"></a>
     <% include ../partials/nav %>
 
-    <% if (message) { %>
-      <h3><%= message %></h3>
-    <% } %>
+    <div class="container one-show">
+      <% if (message) { %>
+        <h3><%= message %></h3>
+      <% } %>
 
-    <div class="one-show">
       <!-- Back to shows button -->
       <!-- <form action="/shows" method="GET">
         <button>Return to Shows</button>
@@ -16,7 +16,9 @@
       <h2><%= showData.name %></h2>
       <!-- If there's a show poster, display poster -->
       <% if (showData.poster_path) { %>
-        <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
+        <img src="http://image.tmdb.org/t/p/w300<%= showData.poster_path %>">
+      <% } else if (!showData.poster_path) { %>
+        <img class="no-img" src="/client/img/tv-noimg.png">
       <% } %>
 
       <div class="buttons">
@@ -38,26 +40,28 @@
         </form>
       </div>
 
-      <!-- Show description -->
-      <p><%= showData.overview %></p>
-      <!-- Fix format of date, and display show airdate -->
-      <% if (showData.first_air_date) { %>
-        <% dates = showData.first_air_date.split('-') %>
-        <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
-      <% } %>
-      <!-- Show genres -->
-      <% for (let i = 0; i < showData.genres.length; i++) { %>
-        <p><%= showData.genres[i].name %></p>
-      <% } %>
-      <p>Seasons: <%= showData.number_of_seasons %></p>
-      <p>Episodes: <%= showData.number_of_episodes %></p>
-      <p>Rating: <%= showData.vote_average %></p>
-      <p>Popularity: <%= showData.popularity %></p>
-      <p>Status: <%= showData.status %></p>
-      <!-- Show website link -->
-      <a href="<%= showData.homepage %>"><p>Website</p></a>
-      <!-- Season breakdown -->
+      <div class="show-desc">
+        <!-- Show description -->
+        <p><%= showData.overview %></p>
+        <!-- Fix format of date, and display show airdate -->
+        <% if (showData.first_air_date) { %>
+          <% dates = showData.first_air_date.split('-') %>
+          <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
+        <% } %>
+        <!-- Show genres -->
+        <% for (let i = 0; i < showData.genres.length; i++) { %>
+          <p><%= showData.genres[i].name %></p>
+        <% } %>
+        <p>Seasons: <%= showData.number_of_seasons %></p>
+        <p>Episodes: <%= showData.number_of_episodes %></p>
+        <p>Rating: <%= showData.vote_average %></p>
+        <p>Popularity: <%= showData.popularity %></p>
+        <p>Status: <%= showData.status %></p>
+        <!-- Show website link -->
+        <a href="<%= showData.homepage %>"><p>Website</p></a>
+      </div>
 
+      <!-- Season breakdown -->
       <h2 class="seasons-title">Seasons:</h2>
       <!-- For each season, display data -->
       <div class="seasons">
@@ -73,7 +77,12 @@
               <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= seasonImg = showData.seasons[i].poster_path %>">
               </a>
+            <% } else if (!showData.seasons[i].poster_path) { %>
+              <a href="/show/<%= showData.id %>/season/<%= showData.seasons[i].season_number %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
             <% } %>
+
             <!-- Fix format of date, and display show airdate -->
             <% if (showData.seasons[i].air_date) { %>
               <% dates = showData.seasons[i].air_date.split('-') %>
