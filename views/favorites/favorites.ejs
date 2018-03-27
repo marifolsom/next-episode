@@ -12,24 +12,25 @@
       <h2>FAVORITES:</h2>
       <div class="favorite-shows">
         <!-- For each favorite, display info -->
-        <% for (let i = 0; i < favoritesData[i].length; i++) { %>
+        <% for (let i = 0; i < favoritesData.length; i++) { %>
           <div class="show">
-            <!-- Show title -->
-            <h2><%= favoritesData[i].show_title %></h2>
             <!-- If there's a show poster, display poster -->
             <% if (favoritesData[i].show_img) { %>
-              <a href="/show/<%= favoritesData[i].id %>">
+              <a href="/show/<%= favoritesData[i].show_id %>">
                 <img src="http://image.tmdb.org/t/p/w185<%= favoritesData[i].show_img %>">
               </a>
             <% } else if (!favoritesData[i].show_img) { %>
-              <a href="/show/<%= favoritesData[i].id %>">
+              <a href="/show/<%= favoritesData[i].show_id %>">
                 <img class="no-img" src="/client/img/tv-noimg.png">
               </a>
             <% } %>
+            <!-- Show title -->
+            <h3><%= favoritesData[i].show_title %></h3>
+            <input type="text" name="notes" placeholder="Notes" width="200px">
             <!-- Remove from favorites button -->
             <!-- Doesn't work yet -->
             <form action="/favorites?_method=DELETE" method="POST">
-              <input type="hidden" name="showId" value="<%= favoritesData[i].id %>">
+              <input type="hidden" name="showId" value="<%= favoritesData[i].show_id %>">
               <button class="remove-btn">
                 Remove from Favorites
               </button>

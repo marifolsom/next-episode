@@ -109,7 +109,7 @@ app.post('/login', (request, response) => {
       // If the username/password don't match, render an error
       // Getting an unhandled promise rejection warning here for some reason now?
       message = 'Error: invalid login.';
-      // response.render('home', { message });
+      // response.render('login', { message });
       response.redirect('/');
     })
     .catch(error => {
@@ -416,8 +416,8 @@ app.delete('/show/:id', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the show's id from the url and store it in a variable
-  const removedShowId = Number(request.params.id);
+  // Get the clicked button's value attribute containing the show's id
+  const removedShowId = Number(request.body.showId);
   // Take the removedShowId and delete from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
@@ -429,7 +429,6 @@ app.delete('/show/:id', requireLogin, (request, response) => {
   console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
-// This doesn't work yet!
 // From the favorites page, remove show and delete from the user_favorites table
 app.delete('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
@@ -437,9 +436,10 @@ app.delete('/favorites', requireLogin, (request, response) => {
   console.log(`user ${userId} is the current user stored in session`);
   // Get the clicked button's value attribute containing the show's id and store it in a variable
   const removedShowId = Number(request.body.showId);
-  // Take the removedShowId and delete from database
+  // Take the removedShowId and delete that row from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
+      // Once deleted, redirect user to that specific show's spot on the shows page
       response.redirect('/favorites');
     })
     .catch(error => {

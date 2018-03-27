@@ -105,8 +105,7 @@ nav a {
 .popular-shows,
 .top-shows,
 .today-shows,
-.all-shows,
-.favorite-shows {
+.all-shows {
   margin: 0 auto;
   margin: 0 50px 50px 50px;
   display: grid;
@@ -123,6 +122,17 @@ nav a {
   display: grid;
   grid-template-columns: 200px 200px 200px 200px;
   grid-template-rows: 350px;
+  grid-gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.favorite-shows {
+  margin: 0 auto;
+  margin: 0 50px 50px 50px;
+  display: grid;
+  grid-template-columns: 200px 200px 200px 200px;
+  grid-template-rows: 320px;
   grid-gap: 50px;
   justify-content: center;
   align-items: center;
