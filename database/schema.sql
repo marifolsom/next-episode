@@ -14,17 +14,9 @@ CREATE TABLE user_favorites (
   user_id INTEGER REFERENCES user_info(id),
   show_id INTEGER,
   show_title VARCHAR(255),
-  show_img VARCHAR(255)
+  show_img VARCHAR(255),
+  notes VARCHAR(255)
 );
-
-
--- ALTER TABLE favorites
--- ADD FOREIGN KEY (user_id) REFERENCES user_info(id);
---
--- ALTER TABLE user_info
--- ADD FOREIGN KEY (favorites_id) REFERENCES favorites(id);
--- ADD FOREIGN KEY (watchlist_id) REFERENCES watchlist(id);
-
 
 -- CREATE TABLE watchlist (
 --   id BIGSERIAL PRIMARY KEY,

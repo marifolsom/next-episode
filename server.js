@@ -63,7 +63,7 @@ app.post('/signup', (request, response) => {
     .then(userId => {
       message = 'You\'ve created a new account! Please log in.';
       // response.render('login', { message });
-      response.redirect('/');
+      response.redirect('/login');
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -99,7 +99,7 @@ app.post('/login', (request, response) => {
         request.session.authenticated = true;
         // Render user's favorites page once logged in
         // response.render('favorites/favorites', { message });
-        response.redirect('/');
+        response.redirect('/favorites');
         // Store the user's id for the session
         request.session.userId = Number(userInfo.id);
         // Call save() to save any changes to the session object
@@ -189,6 +189,7 @@ app.get('/shows/:pageNumber', (request, response) => {
 // SHOW DETAILS
 // -----------------------------------------------------------------------
 // Make a function that takes the user's input in the search bar, converts it to the right format, and returns the show's id
+// This doesn't work yet
 const getShowId = userInput => {
   // Make a variable to store the search query
   let searchQuery = '';
@@ -283,7 +284,7 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
-  console.log('user', userId, 'is the current user stored in session');
+  console.log(`user ${userId} is the current user stored in session`);
   // Get the user's favorited show ids from the database
   Favorite.find(userId)
     .then(favoritesData => {
@@ -295,6 +296,23 @@ app.get('/favorites', requireLogin, (request, response) => {
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
+})
+
+// User can add/update notes on a favorite
+app.put('/favorites', requireLogin, (request, response) => {
+  // Get the user's id that's stored in the session
+  const userId = Number(request.session.userId);
+  console.log(`user ${userId} is the current user stored in session`);
+  // Get the clicked button's hidden value attributes containing the show's id and notes
+  const showId = Number(request.body.favoritesId);
+  const notesContent = request.body.notes;
+  // Take the userId and showId to locate the row in the table, and update with notesContent
+  Favorite.editNotes(notesContent, userId, showId)
+    .then(() => {
+      // Redirect user to that updated show's spot on the favorites page
+      response.redirect(`/favorites#${showId}`);
+    })
+  console.log(`you just updated ${showId}\'s notes with ${notesContent}`);
 })
 
 

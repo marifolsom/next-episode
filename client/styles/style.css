@@ -102,6 +102,10 @@ nav a {
   margin-top: 50px;
 }
 
+.favorites h2 {
+  margin-bottom: 50px;
+}
+
 .popular-shows,
 .top-shows,
 .today-shows,
@@ -157,6 +161,11 @@ nav a {
 
 .episode {
   margin: 50px;
+}
+
+.favorites input {
+  margin-bottom: 5px;
+  width: 90%;
 }
 
 

@@ -13,7 +13,7 @@
       <div class="favorite-shows">
         <!-- For each favorite, display info -->
         <% for (let i = 0; i < favoritesData.length; i++) { %>
-          <div class="show">
+          <div id="<%= favoritesData[i].show_id %>" class="show">
             <!-- If there's a show poster, display poster -->
             <% if (favoritesData[i].show_img) { %>
               <a href="/show/<%= favoritesData[i].show_id %>">
@@ -26,15 +26,23 @@
             <% } %>
             <!-- Show title -->
             <h3><%= favoritesData[i].show_title %></h3>
-            <input type="text" name="notes" placeholder="Notes" width="200px">
-            <!-- Remove from favorites button -->
-            <!-- Doesn't work yet -->
-            <form action="/favorites?_method=DELETE" method="POST">
+
+            <!-- Notes -->
+            <form action="/favorites?_method=PUT" method="POST">
               <input type="hidden" name="showId" value="<%= favoritesData[i].show_id %>">
-              <button class="remove-btn">
-                Remove from Favorites
-              </button>
-            </form>
+              <input type="text" name="notes">
+              <button>Submit</button>
+            <form>
+
+            <!-- Remove from favorites button -->
+            <div class="buttons">
+              <form action="/favorites?_method=DELETE" method="POST">
+                <input type="hidden" name="showId" value="<%= favoritesData[i].show_id %>">
+                <button class="remove-btn">
+                  Remove from Favorites
+                </button>
+              </form>
+            </div>
           </div>
         <% } %>
       </div>
