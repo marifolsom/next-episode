@@ -1,5 +1,6 @@
 <% include ../partials/header %>
   <body>
+    <a id="top-button"></a>
     <% include ../partials/nav %>
 
     <% if (message) { %>
@@ -17,22 +18,25 @@
       <% if (showData.poster_path) { %>
         <img src="http://image.tmdb.org/t/p/w185<%= showData.poster_path %>">
       <% } %>
-      <!-- Add to favorites button -->
-      <form action="/show/<%= showData.id %>" method="POST">
-        <input type="hidden" name="showId" value="<%= showData.id %>">
-        <input type="hidden" name="showTitle" value="<%= showData.name %>">
-        <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
-        <button class="add-btn">
-          Add to Favorites
-        </button>
-      </form>
-      <!-- Remove from favorites button -->
-      <form action="/show/<%= showData.id %>?_method=DELETE" method="POST">
-        <input type="hidden" name="showId" value="<%= showData.id %>">
-        <button class="remove-btn">
-          Remove from Favorites
-        </button>
-      </form>
+
+      <div class="buttons">
+        <!-- Add to favorites button -->
+        <form action="/show/<%= showData.id %>" method="POST">
+          <input type="hidden" name="showId" value="<%= showData.id %>">
+          <input type="hidden" name="showTitle" value="<%= showData.name %>">
+          <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
+          <button class="add-btn">
+            Add to Favorites
+          </button>
+        </form>
+        <!-- Remove from favorites button -->
+        <form action="/show/<%= showData.id %>?_method=DELETE" method="POST">
+          <input type="hidden" name="showId" value="<%= showData.id %>">
+          <button class="remove-btn">
+            Remove from Favorites
+          </button>
+        </form>
+      </div>
 
       <!-- Show description -->
       <p><%= showData.overview %></p>
@@ -51,7 +55,7 @@
       <p>Popularity: <%= showData.popularity %></p>
       <p>Status: <%= showData.status %></p>
       <!-- Show website link -->
-      <a href="<%= showData.homepage %>">Website</a>
+      <a href="<%= showData.homepage %>"><p>Website</p></a>
       <!-- Season breakdown -->
 
       <h2 class="seasons-title">Seasons:</h2>
@@ -87,5 +91,6 @@
       <!-- <h1>Similar shows:<h1> -->
     </div>
 
+    <a class="top-button" href=#top-button>&#8593;</a>
   </body>
 </html>

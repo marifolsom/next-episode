@@ -17,12 +17,45 @@ a:hover {
   text-decoration: underline;
 }
 
+button {
+  font-family: 'Avenir', 'Helvetica', sans-serif;
+  font-weight: 600;
+  color: #323232;
+  background-color: #e5e5e5;
+  border-radius: 7px;
+}
+
 button:hover{
   cursor: pointer;
   opacity: 0.9;
 }
 
+.buttons {
+  display: flex;
+}
+
+.buttons button {
+  margin: 5px;
+}
+
+
+.page-btn {
+  margin-bottom: 60px;
+}
+
+
 /* Nav */
+.tv-icon {
+  width: 45px;
+  display: inline;
+}
+
+h1 {
+  display: inline;
+  margin: 10px 10px 25px 10px;
+  font-size: 35px;
+}
+
 nav a {
   margin-right: 10px;
 }
@@ -38,15 +71,15 @@ nav a {
 }
 
 .nav-items h2 {
-  margin: 10px 20px 20px 0;
+  margin: 20px 20px 25px 0;
 }
 
 .nav-items button, input {
   margin-left: 5px;
 }
 
-h1 {
-  margin
+.signup-btn {
+  margin-right: 10px;
 }
 
 
@@ -66,7 +99,8 @@ h1 {
 .today h2,
 .all h2,
 .seasons-title,
-.favorites h2 {
+.favorites h2,
+.one-show h2 {
   margin-top: 50px;
 }
 
@@ -78,10 +112,10 @@ h1 {
   margin: 0 auto;
   margin: 0 50px 50px 50px;
   display: grid;
-  grid-template-columns: 190px 190px 190px 190px;
-  grid-template-rows: 420px 420px 420px;
+  grid-template-columns: 200px 200px 200px 200px;
+  grid-template-rows: 420px;
   grid-gap: 50px;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
 }
 
@@ -89,13 +123,100 @@ h1 {
   margin: 0 auto;
   margin: 0 50px 50px 50px;
   display: grid;
-  grid-template-columns: 190px 190px 190px 190px;
-  grid-template-rows: 390px 390px 390px;
+  grid-template-columns: 200px 200px 200px 200px;
+  grid-template-rows: 390px;
   grid-gap: 50px;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
 }
 
 .show h3, p {
-  margin: 5px 0;
+  margin: 5px;
+}
+
+.show img {
+  margin: 0 5px;
+}
+
+.show img:hover, .season img:hover {
+  transform: scale(1.1, 1.1);
+  transition: .3s transform;
+}
+
+/* Back to top button */
+.top-button {
+  font-family: Avenir, "Helvetica Neue", Helvetica, sans-serif;
+  position: fixed;
+	bottom: 20px;
+	right: 20px;
+  color: #323232;
+  background-color: #e5e5e5;
+  border-radius: 7px;
+  padding: 0.5rem 0.9rem 0.5rem 0.9rem;
+  margin: inherit;
+  text-decoration: none;
+}
+
+.top-button:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+  .popular-shows,
+  .top-shows,
+  .today-shows,
+  .all-shows,
+  .favorite-shows {
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 420px;
+    grid-gap: 25px;
+  }
+
+  .seasons {
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 390px;
+    grid-gap: 25px;
+  }
+}
+
+
+/* Large mobile */
+@media (min-width: 425px) and (max-width: 768px) {
+  .popular-shows,
+  .top-shows,
+  .today-shows,
+  .all-shows,
+  .favorite-shows {
+    grid-template-columns: 200px 200px;
+    grid-template-rows: 420px;
+    grid-gap: 25px 10px;
+  }
+
+  .seasons {
+    grid-template-columns: 200px 200px;
+    grid-template-rows: 390px;
+    grid-gap: 25px 10px;
+  }
+}
+
+/* Mobile */
+@media (min-width: 320px) and (max-width: 425px) {
+  .popular-shows,
+  .top-shows,
+  .today-shows,
+  .all-shows,
+  .favorite-shows {
+    grid-template-columns: 200px;
+    grid-template-rows: 420px;
+    grid-gap: 25px 0px;
+  }
+
+  .seasons {
+    grid-template-columns: 200px;
+    grid-template-rows: 390px;
+    grid-gap: 25px 0px;
+  }
 }
