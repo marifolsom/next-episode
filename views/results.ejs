@@ -9,7 +9,49 @@
         <h3><%= message %></h3>
       <% } %>
 
+      <h2>SEARCH RESULTS:</h2>
+      <div class="results">
+        <!-- For each show, display data -->
+        <% for (let i = 0; i < showData.results.length; i++) { %>
+          <div id="<%= showData.results[i].id %>" class="show">
+            <!-- If there's a show poster, display poster -->
+            <% if (showData.results[i].poster_path) { %>
+              <a href="/show/<%= showData.results[i].id %>">
+                <img src="http://image.tmdb.org/t/p/w185<%= showData.results[i].poster_path %>">
+              </a>
+            <% } else if (!showData.results[i].poster_path) { %>
+              <a href="/show/<%= showData.results[i].id %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
+            <% } %>
+            <!-- Show title -->
+              <h3><%= showData.results[i].name %></h3>
+            <!-- Show description -->
+            <!-- <p><%= showData.results[i].overview %></p> -->
+            <p>Rating: <%= showData.results[i].vote_average %></p>
+            <p>Popularity: <%= showData.results[i].popularity %></p>
 
+            <div class="buttons">
+              <!-- Add to favorites button -->
+              <form action="/shows" method="POST">
+                <input type="hidden" name="showId" value="<%= showData.results[i].id %>">
+                <input type="hidden" name="showTitle" value="<%= showData.results[i].name %>">
+                <input type="hidden" name="showImg" value="<%= showData.results[i].poster_path %>">
+                <button class="add-btn">
+                  Add to Favorites
+                </button>
+              </form>
+              <!-- Remove from favorites button -->
+              <form action="/shows?_method=DELETE" method="POST">
+                <input type="hidden" name="showId" value="<%= showData.results[i].id %>">
+                <button class="remove-btn">
+                  Remove from Favorites
+                </button>
+              </form>
+            </div>
+          </div>
+        <% } %>
+      </div>
 
     </div>
 

@@ -188,31 +188,27 @@ app.get('/shows/:pageNumber', (request, response) => {
 
 // SEARCH
 // -----------------------------------------------------------------------
-// Make a variable to store the search query
-let searchQuery = '';
-
-// Make a function that takes the user's input in the search bar, converts it to the right format, and returns the show's id
+// Make a function that takes the user's input and converts it to the right format to be inserted into API
+// This isn't working for some reason??
 const convertInput = userInput => {
   // Take the user's input, correct the format, and store in searchQuery variable
-  // Replace spaces with % and changes to lower case
-  searchQuery = userInput.split(' ').join('%20').toLowerCase();
-  return searchQuery;
+  // Replace spaces with %20 and changes to lower case
+  return userInput.split(' ').join('%20').toLowerCase();
 }
 
 // Display search results from the user's search bad input
 app.get('/results', (request, response) => {
   // Grab the user's input from the search bar
-  const userInput = request.body.search;
+  const userInput = request.body.userSearch;
   // Call convertInput on the userInput
-  convertInput(userInput);
-  console.log(searchQuery);
+  // const userSearch = convertInput(userInput);
+  console.log(`user input: ${userInput}`);
   // Make an API request with the searchQuery
-  fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${searchQuery}`)
+  fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${userInput}`)
     .then(apiResponse => apiResponse.json())
     .then(showData => {
-      // Assign the found show id to the showId variable
-      showId = showData.results[0].id;
-      console.log('show id:', showId);
+      console.log(showData);
+      response.render('results', { showData, message: '' });
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
