@@ -372,7 +372,7 @@ app.post('/show/:id', requireLogin, (request, response) => {
   // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
-      response.redirect(`/show/${addedShowId}`);
+      response.redirect(`/favorites`);
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
