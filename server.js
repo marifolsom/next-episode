@@ -189,7 +189,6 @@ app.get('/shows/:pageNumber', (request, response) => {
 // SEARCH
 // -----------------------------------------------------------------------
 // Make a function that takes the user's input and converts it to the right format to be inserted into API
-// This isn't working for some reason??
 const convertInput = userInput => {
   // Take the user's input, correct the format, and store in searchQuery variable
   // Replace spaces with %20 and changes to lower case
@@ -201,10 +200,10 @@ app.post('/results', (request, response) => {
   // Grab the user's input from the search bar
   const userInput = request.body.userSearch;
   // Call convertInput on the userInput
-  // const userSearch = convertInput(userInput);
-  console.log(`user input: ${userInput}`);
+  const userSearch = convertInput(userInput);
+  console.log(`user input: ${userInput}, user search: ${userSearch}`);
   // Make an API request with the searchQuery
-  fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${userInput}`)
+  fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${userSearch}`)
     .then(apiResponse => apiResponse.json())
     .then(showData => {
       console.log(showData);
