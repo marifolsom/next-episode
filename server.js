@@ -62,7 +62,8 @@ app.post('/signup', (request, response) => {
   User.create(newUsername, hashedPassword)
     .then(userId => {
       message = 'You\'ve created a new account! Please log in.';
-      response.render('login', { message });
+      // response.render('login', { message });
+      response.redirect('/');
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -97,7 +98,8 @@ app.post('/login', (request, response) => {
         message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
         request.session.authenticated = true;
         // Render user's favorites page once logged in
-        response.render('favorites/favorites', { message });
+        // response.render('favorites/favorites', { message });
+        response.redirect('/');
         // Store the user's id for the session
         request.session.userId = Number(userInfo.id);
         // Call save() to save any changes to the session object
@@ -107,7 +109,8 @@ app.post('/login', (request, response) => {
       // If the username/password don't match, render an error
       // Getting an unhandled promise rejection warning here for some reason now?
       message = 'Error: invalid login.';
-      response.render('home', { message });
+      // response.render('home', { message });
+      response.redirect('/');
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -285,7 +288,7 @@ app.get('/favorites', requireLogin, (request, response) => {
   Favorite.find(userId)
     .then(favoritesData => {
       console.log('favorited shows:', favoritesData);
-      console.log(favoritesData[0].show_title);
+      // console.log(favoritesData[0].show_title);
       // This says that favoritesData is undefined?
       response.render('favorites/favorites', { favoritesData, message: '' });
     })

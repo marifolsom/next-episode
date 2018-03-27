@@ -16,9 +16,13 @@
       <h2><%= showData.name %></h2>
       <!-- If there's a show poster, display poster -->
       <% if (showData.poster_path) { %>
-        <img src="http://image.tmdb.org/t/p/w300<%= showData.poster_path %>">
+        <a href="<%= showData.homepage %>">
+          <img src="http://image.tmdb.org/t/p/w300<%= showData.poster_path %>">
+        </a>
       <% } else if (!showData.poster_path) { %>
-        <img class="no-img" src="/client/img/tv-noimg.png">
+        <a href="<%= showData.homepage %>">
+          <img class="no-img" src="/client/img/tv-noimg.png">
+        </a>
       <% } %>
 
       <div class="buttons">
@@ -43,22 +47,21 @@
       <div class="show-desc">
         <!-- Show description -->
         <p><%= showData.overview %></p>
+        <p><b>Genres:</b>
+          <% for (let i = 0; i < showData.genres.length; i++) { %>
+            | <%= showData.genres[i].name %> |
+            <% } %>
+          </p>
         <!-- Fix format of date, and display show airdate -->
         <% if (showData.first_air_date) { %>
-          <% dates = showData.first_air_date.split('-') %>
+          <% let dates = showData.first_air_date.split('-') %>
           <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
         <% } %>
         <!-- Show genres -->
-        <% for (let i = 0; i < showData.genres.length; i++) { %>
-          <p><%= showData.genres[i].name %></p>
-        <% } %>
-        <p>Seasons: <%= showData.number_of_seasons %></p>
-        <p>Episodes: <%= showData.number_of_episodes %></p>
-        <p>Rating: <%= showData.vote_average %></p>
-        <p>Popularity: <%= showData.popularity %></p>
-        <p>Status: <%= showData.status %></p>
-        <!-- Show website link -->
-        <a href="<%= showData.homepage %>"><p>Website</p></a>
+        <p><%= showData.number_of_seasons %> seasons, <%= showData.number_of_episodes %> episodes</p>
+        <p><b>Rating:</b> <%= showData.vote_average %></p>
+        <p><b>Popularity:</b> <%= showData.popularity %></p>
+        <p><b>Status:</b> <%= showData.status %></p>
       </div>
 
       <!-- Season breakdown -->
@@ -89,7 +92,7 @@
               <p>Premiered: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
             <% } %>
             <!-- Number of episodes -->
-            <p>Total episodes: <%= episodeCount = showData.seasons[i].episode_count %></p>
+            <p><%= episodeCount = showData.seasons[i].episode_count %> episodes</p>
           </div>
         <% } %>
       </div>

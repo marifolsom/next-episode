@@ -45,6 +45,7 @@ TV Tracker (still playing around with the name!) is an app that allows users to 
   - isomorphic-fetch - allows you to `fetch()` in node, even though `fetch()` is usually only available in the browser. isomorphic-fetch allowed me to `fetch()` from APIs on the server side and not just client side.
 
 ## Code Snippet:
+Using `Promise.all()` to make multiple fetches in one request, and still return one response.
 ```
 // HOME
 // -----------------------------------------------------------------------
