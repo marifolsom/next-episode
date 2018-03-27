@@ -1,22 +1,25 @@
 <nav>
-  <h3>TV TRACKER<h3>
-  <a href="/">HOME</a>
-  <a href="/shows">SHOWS</a>
-  <a href="/favorites">FAVORITES</a>
+  <h1>TV TRACKER</h1>
 
-  <!-- Login button -->
-  <form method="GET" action="/login">
-    <button name="login" class="login-btn">Login</button>
-  </form>
+  <div class=nav-items>
+    <a href="/"><h2>HOME</h2></a>
+    <a href="/shows"><h2>SHOWS</h2></a>
+    <a class="favorites-nav" href="/favorites"><h2>FAVORITES</h2></a>
 
-  <!-- Signup button -->
-  <form method="GET" action="/signup">
-    <button name="signup" class="signup-btn">Sign Up</button>
-  </form>
+    <!-- Login button -->
+    <form method="GET" action="/login">
+      <button name="login" class="login-btn">Login</button>
+    </form>
 
-  <!-- Search bar -->
-  <form method="GET" action="/show/<%=  %>">
-    <input name="search" class="search-bar" type="text" placeholder="Search a show!"/>
-    <button class="search-btn" type="submit" onclick="getShowId()">Search</button>
-  </form>
+    <!-- Signup button -->
+    <form method="GET" action="/signup">
+      <button name="signup" class="signup-btn">Sign Up</button>
+    </form>
+
+    <!-- Search bar -->
+    <form method="GET" action="/show/<%=  %>">
+      <input name="search" class="search-bar" type="text" placeholder="Search a show!"/>
+      <button class="search-btn" type="submit" onclick="getShowId()">Search</button>
+    </form>
+  </div>
 </nav>

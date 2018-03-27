@@ -1,8 +1,10 @@
+/* General */
 body, html {
   font-family: 'Avenir', 'Helvetica', sans-serif;
   color: #e5e5e5;
   background-color: #323232;
-  padding: 10px;
+  height: 100%;
+  padding: 30px 50px;
 }
 
 a {
@@ -12,13 +14,88 @@ a {
 
 a:hover {
   opacity: 0.8;
-}
-
-nav a {
-  margin-right: 10px;
+  text-decoration: underline;
 }
 
 button:hover{
   cursor: pointer;
   opacity: 0.9;
+}
+
+/* Nav */
+nav a {
+  margin-right: 10px;
+}
+
+.nav-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.favorites-nav {
+  flex-grow: 1;
+}
+
+.nav-items h2 {
+  margin: 10px 20px 20px 0;
+}
+
+.nav-items button, input {
+  margin-left: 5px;
+}
+
+h1 {
+  margin
+}
+
+
+/* Show content */
+.popular,
+.top-rated,
+.today,
+.all,
+.one-show,
+.episodes,
+.favorites {
+  border-top: 2px dotted #e5e5e5;
+}
+
+.popular h2,
+.top-rated h2,
+.today h2,
+.all h2,
+.seasons-title,
+.favorites h2 {
+  margin-top: 50px;
+}
+
+.popular-shows,
+.top-shows,
+.today-shows,
+.all-shows,
+.favorite-shows {
+  margin: 0 auto;
+  margin: 0 50px 50px 50px;
+  display: grid;
+  grid-template-columns: 190px 190px 190px 190px;
+  grid-template-rows: 420px 420px 420px;
+  grid-gap: 50px;
+  justify-items: center;
+  align-items: center;
+}
+
+.seasons {
+  margin: 0 auto;
+  margin: 0 50px 50px 50px;
+  display: grid;
+  grid-template-columns: 190px 190px 190px 190px;
+  grid-template-rows: 390px 390px 390px;
+  grid-gap: 50px;
+  justify-items: center;
+  align-items: center;
+}
+
+.show h3, p {
+  margin: 5px 0;
 }

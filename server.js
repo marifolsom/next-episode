@@ -148,24 +148,38 @@ app.get('/', (request, response) => {
 
 // SHOWS
 // -----------------------------------------------------------------------
-// Make a variable to store the current page
-// Need to figure out how to toggle between the pages (~15 pages)
-let currentPage = 2;
-
 // Display all shows currently running
 // Shows' posters, titles, airdates
 app.get('/shows', (request, response) => {
-  // console.log(currentPage);
+  // Make a variable to store the current page
+  // Default to 1 if not specified
+  const currentPage = 1;
   // Make an API request with the current page
   fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=${currentPage}`)
     .then(apiResponse => apiResponse.json())
     .then(currentData => {
       // response.json(currentData);
-      response.render('shows', { currentData, message: '' })
+      response.render('shows', { currentData, currentPage, message: '' })
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
+})
+
+app.get('/shows/:pageNumber', (request, response) => {
+  // Make a variable to store the current page
+  const currentPage = request.params.pageNumber;
+  console.log(currentPage);
+  // Make an API request with the current page
+  fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=${currentPage}`)
+  .then(apiResponse => apiResponse.json())
+  .then(currentData => {
+    // response.json(currentData);
+    response.render('shows', { currentData, currentPage, message: '' })
+  })
+  .catch(error => {
+    response.send(`Error: ${error.message}`);
+  });
 })
 
 

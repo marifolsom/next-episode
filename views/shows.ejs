@@ -6,39 +6,50 @@
       <h3><%= message %></h3>
     <% } %>
 
-    <p>---------------------------------------------------------------------------------------------------------------------------------------</p>
-    <!-- For each show, display data -->
-    <% for (let i = 0; i < currentData.results.length; i++) { %>
-      <!-- Show title -->
-        <h3 id="<%= currentData.results[i].id %>"><%= currentData.results[i].name %></h3>
-      <!-- If there's a show poster, display poster -->
-      <% if (currentData.results[i].poster_path) { %>
-        <a href="/show/<%= currentData.results[i].id %>">
-          <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
-        </a>
-      <% } %>
-      <!-- Show description -->
-      <p><%= currentData.results[i].overview %></p>
-      <p>Rating: <%= currentData.results[i].vote_average %></p>
-      <p>Popularity: <%= currentData.results[i].popularity %></p>
-      <!-- Add to favorites button -->
-      <form action="/shows" method="POST">
-        <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
-        <input type="hidden" name="showTitle" value="<%= currentData.results[i].name %>">
-        <input type="hidden" name="showImg" value="<%= currentData.results[i].poster_path %>">
-        <button class="add-btn">
-          Add to Favorites
-        </button>
-      </form>
-      <!-- Remove from favorites button -->
-      <form action="/shows?_method=DELETE" method="POST">
-        <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
-        <button class="remove-btn">
-          Remove from Favorites
-        </button>
-      </form>
-    <% } %>
-    <button class="previous-btn">Previous Page</button>
-    <button class="next-btn">Next Page</button>
+    <div class="all">
+      <h2>ALL SHOWS:</h2>
+      <div class="all-shows">
+        <!-- For each show, display data -->
+        <% for (let i = 0; i < currentData.results.length; i++) { %>
+          <div class="show">
+            <!-- If there's a show poster, display poster -->
+            <% if (currentData.results[i].poster_path) { %>
+              <a href="/show/<%= currentData.results[i].id %>">
+                <img src="http://image.tmdb.org/t/p/w185<%= currentData.results[i].poster_path %>">
+              </a>
+              <% } %>
+            <!-- Show title -->
+              <h3 id="<%= currentData.results[i].id %>"><%= currentData.results[i].name %></h3>
+            <!-- Show description -->
+            <!-- <p><%= currentData.results[i].overview %></p> -->
+            <p>Rating: <%= currentData.results[i].vote_average %></p>
+            <p>Popularity: <%= currentData.results[i].popularity %></p>
+            <!-- Add to favorites button -->
+            <form action="/shows" method="POST">
+              <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
+              <input type="hidden" name="showTitle" value="<%= currentData.results[i].name %>">
+              <input type="hidden" name="showImg" value="<%= currentData.results[i].poster_path %>">
+              <button class="add-btn">
+                Add to Favorites
+              </button>
+            </form>
+            <!-- Remove from favorites button -->
+            <form action="/shows?_method=DELETE" method="POST">
+              <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
+              <button class="remove-btn">
+                Remove from Favorites
+              </button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <form action="/shows/<%= currentPage++ %>" method="GET">
+      <button class="previous-btn">Previous Page</button>
+    </form>
+    <form action="/shows/<%= currentPage-- %>" method="GET">
+      <button class="next-btn">Next Page</button>
+    </form>
   </body>
 </html>
