@@ -52,22 +52,30 @@ app.get('/signup', (request, response) => {
 
 // Add new user info from signup form into database
 app.post('/signup', (request, response) => {
-  // let message = '';
+  let message = '';
   // Get user's entered username and password
   const newUsername = request.body.username;
   const newPassword = request.body.password;
-  // Salt and hash password using bcrypt
-  const hashedPassword = bcrypt.hashSync(newPassword, salt);
-  // Insert new user info into database
-  User.create(newUsername, hashedPassword)
-    .then(userId => {
-      // message = 'You\'ve created a new account! Please log in.';
-      // response.render('login', { message });
-      response.redirect('/login');
-    })
-    .catch(error => {
-      response.send(`Error: ${error.message}`);
-    });
+  const checkPassword = request.body.confirmPassword;
+  // If the the two entered passwords match, create new user
+  if (newPassword === checkPassword) {
+    // Salt and hash password using bcrypt
+    const hashedPassword = bcrypt.hashSync(newPassword, salt);
+    // Insert new user info into database
+    User.create(newUsername, hashedPassword)
+      .then(userId => {
+        message = 'You\'ve created a new account! Please log in.';
+        // response.render('login', { message });
+        response.redirect('/login');
+      })
+      .catch(error => {
+        response.send(`Error: ${error.message}`);
+      });
+  } else {
+    message = 'Error: passwords don\'t match, please try again.';
+    // response.render('login', { message });
+    response.redirect('/');
+  }
 })
 
 
@@ -80,7 +88,7 @@ app.get('/login', (request, response) => {
 
 // Log the user in if the username and password entered in login form are correct
 app.post('/login', (request, response) => {
-  // let message = '';
+  let message = '';
   // Get user's entered username and password
   const enteredUsername = request.body.username;
   const enteredPassword = request.body.password;
@@ -95,7 +103,7 @@ app.post('/login', (request, response) => {
       // If both match, log the user in
       if (usernameMatch && passwordMatch) {
         // Set the session data
-        // message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
+        message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
         request.session.authenticated = true;
         // Render user's favorites page once logged in
         // response.render('favorites/favorites', { message });
