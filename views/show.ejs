@@ -10,44 +10,49 @@
 
       <!-- Show title -->
       <h2><%= showData.name %></h2>
-      <!-- If there's a show poster, display poster -->
-      <% if (showData.poster_path) { %>
-        <a href="<%= showData.homepage %>">
-          <img src="http://image.tmdb.org/t/p/w300<%= showData.poster_path %>">
-        </a>
-      <% } else if (!showData.poster_path) { %>
-        <a href="<%= showData.homepage %>">
-          <img class="no-img" src="/client/img/tv-noimg.png">
-        </a>
-      <% } %>
-      <!-- Add to favorites button -->
-      <form action="/show/<%= showData.id %>" method="POST">
-        <input type="hidden" name="showId" value="<%= showData.id %>">
-        <input type="hidden" name="showTitle" value="<%= showData.name %>">
-        <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
-        <button class="add-btn">
-          Add to Favorites
-        </button>
-      </form>
 
       <div class="show-desc">
-        <!-- Show description -->
-        <p><%= showData.overview %></p>
-        <p><b>Genres:</b>
-          <% for (let i = 0; i < showData.genres.length; i++) { %>
-            | <%= showData.genres[i].name %> |
-            <% } %>
-          </p>
-        <!-- Fix format of date, and display show airdate -->
-        <% if (showData.first_air_date) { %>
-          <% let dates = showData.first_air_date.split('-') %>
-          <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
-        <% } %>
-        <!-- Show genres -->
-        <p><%= showData.number_of_seasons %> seasons, <%= showData.number_of_episodes %> episodes</p>
-        <p><b>Rating:</b> <%= showData.vote_average %></p>
-        <p><b>Popularity:</b> <%= showData.popularity %></p>
-        <p><b>Status:</b> <%= showData.status %></p>
+        <div class="show-left">
+          <!-- If there's a show poster, display poster -->
+          <% if (showData.poster_path) { %>
+            <a href="<%= showData.homepage %>">
+              <img src="http://image.tmdb.org/t/p/w300<%= showData.poster_path %>">
+            </a>
+          <% } else if (!showData.poster_path) { %>
+            <a href="<%= showData.homepage %>">
+              <img class="no-img" src="/client/img/tv-noimg.png">
+            </a>
+          <% } %>
+        </div>
+
+        <div class="show-right">
+          <!-- Show description -->
+          <p><%= showData.overview %></p>
+          <p><b>Genres:</b>
+            <% for (let i = 0; i < showData.genres.length; i++) { %>
+              | <%= showData.genres[i].name %> |
+              <% } %>
+            </p>
+          <!-- Fix format of date, and display show airdate -->
+          <% if (showData.first_air_date) { %>
+            <% let dates = showData.first_air_date.split('-') %>
+            <p>First aired: <%= `${dates[1]}-${dates[2]}-${dates[0]}` %></p>
+          <% } %>
+          <!-- Show genres -->
+          <p><%= showData.number_of_seasons %> seasons, <%= showData.number_of_episodes %> episodes</p>
+          <p><b>Rating:</b> <%= showData.vote_average %></p>
+          <p><b>Popularity:</b> <%= showData.popularity %></p>
+          <p><b>Status:</b> <%= showData.status %></p>
+          <!-- Add to favorites button -->
+          <form action="/show/<%= showData.id %>" method="POST">
+            <input type="hidden" name="showId" value="<%= showData.id %>">
+            <input type="hidden" name="showTitle" value="<%= showData.name %>">
+            <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
+            <button class="add-btn">
+              Add to Favorites
+            </button>
+          </form>
+        </div>
       </div>
 
       <!-- Season breakdown -->

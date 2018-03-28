@@ -19,7 +19,9 @@ a:hover {
   text-decoration: underline;
 }
 
-button {
+button,
+.login-btn,
+.signup-btn {
   font-family: 'Rajdhani', 'Helvetica', sans-serif;
   font-size: 13px;
   color: #323232;
@@ -27,7 +29,9 @@ button {
   border-radius: 7px;
 }
 
-button:hover{
+button:hover,
+.login-btn:hover,
+.signup-btn:hover {
   cursor: pointer;
   opacity: 0.9;
 }
@@ -104,6 +108,41 @@ nav a {
 
 .favorites h2 {
   margin-bottom: 45px;
+}
+
+.show-desc {
+  display: flex;
+  justify-content: space-between;
+  margin: 35px 50px 50px 50px;
+}
+
+.show-desc p {
+  margin: 0 5px 10px 5px;
+}
+
+.show-right {
+  margin: 0 0 0 50px;
+}
+
+.show-desc button {
+  margin: 5px;
+}
+
+.episode {
+  margin: 35px 50px 50px 50px;
+}
+
+.episode {
+  text-align: left;
+}
+
+.episode img {
+  float: right;
+  margin: 0 20px 50px 50px;
+}
+
+.episode .no-img {
+  width: 300px;
 }
 
 .popular-shows,
