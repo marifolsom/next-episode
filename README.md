@@ -1,7 +1,7 @@
 # Project 2: TV Tracker App
 
 ### Project Description:
-TV Tracker (still playing around with the name!) is an app that allows users to browse, track, and favorite TV shows all in one place. Using TMDb's (The Movie Database) API, users can stay up to date on all the latest information about the shows that they love, read up on episode summaries, and discover new shows.
+Next Episode (still playing around with the name!) is an app that allows users to browse, track, and favorite TV shows all in one place. Using TMDb's (The Movie Database) API, users can stay up to date on all the latest information about the shows that they love, read up on episode summaries, and discover new shows.
 
 ## Wireframes:
 <img src="wireframes/home.png" width="400"> <img src="wireframes/show.png" width="400"> <img src="wireframes/favorites.png" width="400"> <img src="wireframes/watchlist.png" width="400"> <img src="wireframes/watchlist-show.png" width="400">
