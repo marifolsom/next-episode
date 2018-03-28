@@ -88,9 +88,39 @@
       </div>
     </div>
 
-    <div class="recs">
-      <!-- Show recommendations -->
-      <!-- <h1>Similar shows:<h1> -->
+    <div class="container recs">
+      <h2>If you like <%= showData.name %> you might like...</h2>
+
+      <div class="rec-shows">
+        <!-- Show recommendations -->
+        <% for (let i = 0; i < recsData.results.length; i++) { %>
+          <div id="<% recsData.results[i].id %>" class="show">
+            <!-- If there's a show poster, display poster -->
+            <% if (recsData.results[i].poster_path) { %>
+              <a href="/show/<%= recsData.results[i].id %>">
+                <img src="http://image.tmdb.org/t/p/w185<%= recsData.results[i].poster_path %>">
+              </a>
+            <% } else if (!recsData.results[i].poster_path) { %>
+              <a href="/show/<%= recsData.results[i].id %>">
+                <img class="no-img" src="/client/img/tv-noimg.png">
+              </a>
+            <% } %>
+            <!-- Show title -->
+            <h3><%=recsData.results[i].name %></h3>
+            <p>Rating: <%=recsData.results[i].vote_average %></p>
+            <!-- <p>Popularity: <%=recsData.results[i].popularity %></p> -->
+            <!-- Add to favorites button -->
+            <form action="/show/<%= recsData.results[i].id %>" method="POST">
+              <input type="hidden" name="showId" value="<%= recsData.results[i].id %>">
+              <input type="hidden" name="showTitle" value="<%= recsData.results[i].name %>">
+              <input type="hidden" name="showImg" value="<%= recsData.results[i].poster_path %>">
+              <button class="add-btn">
+                Add to Favorites
+              </button>
+            </form>
+          </div>
+        <% } %>
+      </div>
     </div>
 
     <a class="top-button" href=#top-button>&#8593;</a>

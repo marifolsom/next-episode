@@ -10,7 +10,7 @@ const fetch = require('isomorphic-fetch');
 // Import all models
 const User = require('./models/User');
 const Favorite = require('./models/Favorite');
-const Watchlist = require('./models/Watchlist');
+// const Watchlist = require('./models/Watchlist');
 // App configuration
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -63,9 +63,9 @@ app.post('/signup', (request, response) => {
     const hashedPassword = bcrypt.hashSync(newPassword, salt);
     // Insert new user info into database
     User.create(newUsername, hashedPassword)
-      .then(userId => {
+      .then(() => {
         message = 'You\'ve created a new account! Please log in.';
-        // response.render('login', { message });
+        // // response.render('login', { message });
         response.redirect('/login');
       })
       .catch(error => {
@@ -73,7 +73,7 @@ app.post('/signup', (request, response) => {
       });
   } else {
     message = 'Error: passwords don\'t match, please try again.';
-    // response.render('login', { message });
+    // // response.render('login', { message });
     response.redirect('/');
   }
 })
@@ -106,7 +106,7 @@ app.post('/login', (request, response) => {
         message = 'You have been logged in. Now you can add shows to your favorites and watchlist!';
         request.session.authenticated = true;
         // Render user's favorites page once logged in
-        // response.render('favorites/favorites', { message });
+        // // response.render('favorites/favorites', { message });
         response.redirect('/favorites');
         // Store the user's id for the session
         request.session.userId = Number(userInfo.id);
@@ -115,9 +115,8 @@ app.post('/login', (request, response) => {
         return;
       }
       // If the username/password don't match, render an error
-      // Getting an unhandled promise rejection warning here for some reason now?
       message = 'Error: invalid login.';
-      // response.render('login', { message });
+      // // response.render('login', { message });
       response.redirect('/');
     })
     .catch(error => {
@@ -169,7 +168,7 @@ app.get('/shows', (request, response) => {
   fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=${currentPage}`)
     .then(apiResponse => apiResponse.json())
     .then(currentData => {
-      // response.json(currentData);
+      // // response.json(currentData);
       response.render('shows', { currentData, currentPage, message: '' })
     })
     .catch(error => {
@@ -177,16 +176,16 @@ app.get('/shows', (request, response) => {
     });
 })
 
-// Display a certain page of current shows running
+// Display a certain page of the current shows running
 app.get('/shows/:pageNumber', (request, response) => {
   // Make a variable to store the current page
   const currentPage = request.params.pageNumber;
-  console.log(currentPage);
+  // // console.log(currentPage);
   // Make an API request with the current page
   fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&page=${currentPage}`)
   .then(apiResponse => apiResponse.json())
   .then(currentData => {
-    // response.json(currentData);
+    // // response.json(currentData);
     response.render('shows', { currentData, currentPage, message: '' })
   })
   .catch(error => {
@@ -198,11 +197,9 @@ app.get('/shows/:pageNumber', (request, response) => {
 // SEARCH
 // -----------------------------------------------------------------------
 // Make a function that takes the user's input and converts it to the right format to be inserted into API
-const convertInput = userInput => {
-  // Take the user's input, correct the format, and store in searchQuery variable
-  // Replace spaces with %20 and changes to lower case
-  return userInput.split(' ').join('%20').toLowerCase();
-}
+// Take the user's input, correct the format, and store in searchQuery variable
+// Replace spaces with %20 and changes to lower case
+const convertInput = userInput => userInput.split(' ').join('%20').toLowerCase();
 
 // Display search results from the user's search input
 app.post('/results', (request, response) => {
@@ -210,12 +207,12 @@ app.post('/results', (request, response) => {
   const userInput = request.body.userSearch;
   // Call convertInput on the userInput
   const userSearch = convertInput(userInput);
-  console.log(`user input: ${userInput}, user search: ${userSearch}`);
+  // // console.log(`user input: ${userInput}, user search: ${userSearch}`);
   // Make an API request with the searchQuery
   fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${userSearch}`)
     .then(apiResponse => apiResponse.json())
     .then(showData => {
-      // console.log(showData);
+      // // console.log(showData);
       response.render('results', { showData, message: '' });
     })
     .catch(error => {
@@ -227,32 +224,30 @@ app.post('/results', (request, response) => {
 // SHOW DETAILS
 // -----------------------------------------------------------------------
 // Display the details of a specific show (by id)
-// Show's poster, title, description, rating, popularity, start date, status, all seasons, all episodes, where it can be watched, and recommendations
+// Show's poster, title, description, rating, popularity, start date, status, all seasons, all episodes, where it can be watched, and similar show recommendations
 // User can click to add to favorites or watchlist
 app.get('/show/:id', (request, response) => {
   // Take show id from url
   const showId = Number(request.params.id);
-  // Make an API request with the showId
-  fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-    .then(apiResponse => apiResponse.json())
-    .then(showData => {
-      // response.json(showData);
-      response.render('show', { showData, message: '' });
+  // Fetch show and recommendation data
+  const getShow = fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+    .then(showData => showData.json());
+  // Fetch show recommendations
+  const getRecs = fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
+    .then(recData => recData.json());
+  // Resolve all promises
+  Promise.all([getShow, getRecs])
+    .then(showPageData => {
+      // Render data from each fetch
+      response.render('show', {
+        showData: showPageData[0],
+        recsData: showPageData[1],
+        message: ''
+      })
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
-    });
-  // // Post MVP?
-  // // Use Promise.all() here too to get recommendations as well
-  // // Make an API request with the showId
-  // fetch(`https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
-  //   .then(apiResponse => {
-  //     return apiResponse.json();
-  //   })
-  //   .then(recsData => {
-  //     // response.json(recsData);
-  //     response.render('show', { recsData: recsData });
-  //   })
+    })
 })
 
 
@@ -261,12 +256,15 @@ app.get('/show/:id', (request, response) => {
 // Display details of a specific season
 // Show's season poster, show title, season title, episode numbers and titles, airdates, and episode descriptions
 app.get('/show/:showId/season/:seasonNumber', (request, response) => {
+  // Take show id from url
   const showId = Number(request.params.showId);
+  // Take season number from url
   const seasonNumber = Number(request.params.seasonNumber);
+  // Make an API request with the showId and seasonNumber
   fetch(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US`)
     .then(apiResponse => apiResponse.json())
     .then(seasonData => {
-      // response.json(seasonData);
+      // // response.json(seasonData);
       response.render('episode', {
         seasonData,
         showId,
@@ -287,11 +285,11 @@ app.get('/show/:showId/season/:seasonNumber', (request, response) => {
 app.get('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
+  // // console.log(`user ${userId} is the current user stored in session`);
   // Get the user's favorited show ids from the database
   Favorite.find(userId)
     .then(favoritesData => {
-      // console.log('favorited shows:', favoritesData);
+      // // console.log('favorited shows:', favoritesData);
       response.render('favorites/favorites', { favoritesData, message: '' });
     })
     .catch(error => {
@@ -303,7 +301,7 @@ app.get('/favorites', requireLogin, (request, response) => {
 app.put('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
+  // // console.log(`user ${userId} is the current user stored in session`);
   // Get the clicked button's hidden value attributes containing the show's id and notes
   const showId = Number(request.body.favoritesId);
   const notesContent = request.body.notes;
@@ -313,7 +311,7 @@ app.put('/favorites', requireLogin, (request, response) => {
       // Redirect user to that updated show's spot on the favorites page
       response.redirect(`/favorites#${showId}`);
     })
-  console.log(`you just updated ${showId}\'s notes with ${notesContent}`);
+  // // console.log(`you just updated ${showId}\'s notes with ${notesContent}`);
 })
 
 
@@ -321,10 +319,10 @@ app.put('/favorites', requireLogin, (request, response) => {
 // -----------------------------------------------------------------------
 // From home page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
 app.post('/', requireLogin, (request, response) => {
-  // let message = '';
+  let message = '';
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
+  // // console.log(`user ${userId} is the current user stored in session`);
   // Get the clicked button's hidden value attributes containing the show's info and store it in a variable
   const addedShowId = Number(request.body.showId);
   const addedShowTitle = request.body.showTitle;
@@ -334,20 +332,21 @@ app.post('/', requireLogin, (request, response) => {
   // Maybe add a message if unable to insert because already added?
   Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
-      // message = `You just added ${addedShowTitle} to your favorites!`;
+      message = `You just added ${addedShowTitle} to your favorites!`;
       // Once inserted, redirect user to that specific show's spot on the home page so they can pick up where they left off
       response.redirect(`/#${addedShowId}`);
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
-  console.log(`you just added ${addedShowTitle} to your favorites!`);
+  // // console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
 
 // From shows page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
 app.post('/shows', requireLogin, (request, response) => {
+  // Same as above, but redirecting to different location
   const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
+  // // console.log(`user ${userId} is the current user stored in session`);
   const addedShowId = Number(request.body.showId);
   const addedShowTitle = request.body.showTitle;
   const addedShowImg = request.body.showImg;
@@ -359,13 +358,14 @@ app.post('/shows', requireLogin, (request, response) => {
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
-  console.log(`you just added ${addedShowTitle} to your favorites!`);
+  // // console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
 
 // From a show's detail page or from search results, take added show and insert into the user's user_favorites table
 app.post('/show/:id', requireLogin, (request, response) => {
+  // Same as above, but redirecting to different location
   const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
+  // // console.log(`user ${userId} is the current user stored in session`);
   const addedShowId = Number(request.body.showId);
   const addedShowTitle = request.body.showTitle;
   const addedShowImg = request.body.showImg;
@@ -387,7 +387,7 @@ app.post('/show/:id', requireLogin, (request, response) => {
 app.delete('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
+  // // console.log(`user ${userId} is the current user stored in session`);
   // Get the clicked button's value attribute containing the show's id and store it in a variable
   const removedShowId = Number(request.body.showId);
   // Take the removedShowId and delete that row from database
@@ -399,7 +399,7 @@ app.delete('/favorites', requireLogin, (request, response) => {
     .catch(error => {
       response.send(`Error: ${error.message}`);
     });
-  console.log(`you just removed show ${removedShowId} from your favorites!`);
+  // // console.log(`you just removed show ${removedShowId} from your favorites!`);
 })
 
 
