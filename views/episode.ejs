@@ -9,20 +9,16 @@
         <h3><%= message %></h3>
       <% } %>
 
-      <!-- Back to show details button -->
-      <!-- <form action="/show/<%= showId %>" method="GET">
-        <button>Return to Show</button>
-      </form> -->
       <!-- Season name -->
       <h2><%= seasonData.name %></h2>
 
       <div class="episode">
-      <!-- Season poster -->
-      <% if (seasonData.poster_path) { %>
-        <img src="http://image.tmdb.org/t/p/w300<%= seasonData.poster_path %>">
-      <% } else if (!seasonData.poster_path) { %>
-        <img class="no-img" src="/client/img/tv-noimg.png">
-      <% } %>
+        <!-- Season poster -->
+        <% if (seasonData.poster_path) { %>
+          <img src="http://image.tmdb.org/t/p/w300<%= seasonData.poster_path %>">
+        <% } else if (!seasonData.poster_path) { %>
+          <img class="no-img" src="/client/img/tv-noimg.png">
+        <% } %>
 
         <div class="episode-info">
           <!-- For each episode dsiplay data -->

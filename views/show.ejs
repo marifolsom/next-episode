@@ -8,10 +8,6 @@
         <h3><%= message %></h3>
       <% } %>
 
-      <!-- Back to shows button -->
-      <!-- <form action="/shows" method="GET">
-        <button>Return to Shows</button>
-      </form> -->
       <!-- Show title -->
       <h2><%= showData.name %></h2>
       <!-- If there's a show poster, display poster -->
@@ -24,25 +20,15 @@
           <img class="no-img" src="/client/img/tv-noimg.png">
         </a>
       <% } %>
-
-      <div class="buttons">
-        <!-- Add to favorites button -->
-        <form action="/show/<%= showData.id %>" method="POST">
-          <input type="hidden" name="showId" value="<%= showData.id %>">
-          <input type="hidden" name="showTitle" value="<%= showData.name %>">
-          <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
-          <button class="add-btn">
-            Add to Favorites
-          </button>
-        </form>
-        <!-- Remove from favorites button -->
-        <form action="/show/<%= showData.id %>?_method=DELETE" method="POST">
-          <input type="hidden" name="showId" value="<%= showData.id %>">
-          <button class="remove-btn">
-            Remove from Favorites
-          </button>
-        </form>
-      </div>
+      <!-- Add to favorites button -->
+      <form action="/show/<%= showData.id %>" method="POST">
+        <input type="hidden" name="showId" value="<%= showData.id %>">
+        <input type="hidden" name="showTitle" value="<%= showData.name %>">
+        <input type="hidden" name="showImg" value="<%= showData.poster_path %>">
+        <button class="add-btn">
+          Add to Favorites
+        </button>
+      </form>
 
       <div class="show-desc">
         <!-- Show description -->
@@ -85,7 +71,6 @@
                 <img class="no-img" src="/client/img/tv-noimg.png">
               </a>
             <% } %>
-
             <!-- Fix format of date, and display show airdate -->
             <% if (showData.seasons[i].air_date) { %>
               <% dates = showData.seasons[i].air_date.split('-') %>

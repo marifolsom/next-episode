@@ -6,7 +6,8 @@ Favorite.find = userId => {
   return db.any(`
     SELECT *
     FROM user_favorites
-    WHERE user_id = $1`,
+    WHERE user_id = $1
+    ORDER BY id`,
     [userId]
   )
 }

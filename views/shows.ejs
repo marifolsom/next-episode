@@ -29,31 +29,21 @@
             <!-- <p><%= currentData.results[i].overview %></p> -->
             <p>Rating: <%= currentData.results[i].vote_average %></p>
             <p>Popularity: <%= currentData.results[i].popularity %></p>
-
-            <div class="buttons">
-              <!-- Add to favorites button -->
-              <form action="/shows" method="POST">
-                <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
-                <input type="hidden" name="showTitle" value="<%= currentData.results[i].name %>">
-                <input type="hidden" name="showImg" value="<%= currentData.results[i].poster_path %>">
-                <button class="add-btn">
-                  Add to Favorites
-                </button>
-              </form>
-              <!-- Remove from favorites button -->
-              <form action="/shows?_method=DELETE" method="POST">
-                <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
-                <button class="remove-btn">
-                  Remove from Favorites
-                </button>
-              </form>
-            </div>
+            <!-- Add to favorites button -->
+            <form action="/shows" method="POST">
+              <input type="hidden" name="showId" value="<%= currentData.results[i].id %>">
+              <input type="hidden" name="showTitle" value="<%= currentData.results[i].name %>">
+              <input type="hidden" name="showImg" value="<%= currentData.results[i].poster_path %>">
+              <button class="add-btn">
+                Add to Favorites
+              </button>
+            </form>
           </div>
         <% } %>
       </div>
     </div>
 
-    <div class="buttons page-btn">
+    <div class="page-btn">
       <form action="/shows/<%= currentPage++ %>" method="GET">
         <button class="previous-btn">&#x2190; Previous Page</button>
       </form>

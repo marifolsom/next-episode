@@ -3,7 +3,6 @@
     <a id="top-button"></a>
     <% include ../../partials/nav %>
 
-
     <div class="container favorites">
       <% if (message) { %>
         <h3><%= message %></h3>
@@ -26,30 +25,24 @@
             <% } %>
             <!-- Show title -->
             <h3><%= favoritesData[i].show_title %></h3>
-
             <!-- Notes -->
             <form action="/favorites?_method=PUT" method="POST">
               <input type="hidden" name="favoritesId" value="<%= favoritesData[i].show_id %>">
-              <input type="text" name="notes" value="<%= favoritesData[i].notes %>">
-              <button class="notes-btn">Submit Notes</button>
-            <form>
-
+              <input type="text" name="notes" placeholder="Add notes" value="<%= favoritesData[i].notes %>">
+              <button class="notes-btn">Update Note</button>
+            </form>
             <!-- Remove from favorites button -->
-            <div class="buttons">
-              <form action="/favorites?_method=DELETE" method="POST">
-                <input type="hidden" name="showId" value="<%= favoritesData[i].show_id %>">
-                <button class="remove-btn">
-                  Remove from Favorites
-                </button>
-              </form>
-            </div>
-            
+            <form action="/favorites?_method=DELETE" method="POST">
+              <input type="hidden" name="showId" value="<%= favoritesData[i].show_id %>">
+              <button class="remove-btn">
+                Remove from Favorites
+              </button>
+            </form>
           </div>
         <% } %>
       </div>
     </div>
 
     <a class="top-button" href=#top-button>&#8593;</a>
-
   <body>
 </html>

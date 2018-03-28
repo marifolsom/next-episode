@@ -29,24 +29,15 @@
             <!-- <p><%= popularData.results[i].overview %></p> -->
             <p>Rating: <%= popularData.results[i].vote_average %></p>
             <p>Popularity: <%= popularData.results[i].popularity %></p>
-            <div class="buttons">
-              <!-- Add to favorites button -->
-              <form action="/" method="POST">
-                <input type="hidden" name="showId" value="<%= popularData.results[i].id %>">
-                <input type="hidden" name="showTitle" value="<%= popularData.results[i].name %>">
-                <input type="hidden" name="showImg" value="<%= popularData.results[i].poster_path %>">
-                <button class="add-btn">
-                  Add to Favorites
-                </button>
-              </form>
-              <!-- Remove from favorites button -->
-              <form action="/?_method=DELETE" method="POST">
-                <input type= "hidden" name= "showId" value= "<%= popularData.results[i].id %>">
-                <button class="remove-btn">
-                  Remove from Favorites
-                </button>
-              </form>
-            </div>
+            <!-- Add to favorites button -->
+            <form action="/" method="POST">
+              <input type="hidden" name="showId" value="<%= popularData.results[i].id %>">
+              <input type="hidden" name="showTitle" value="<%= popularData.results[i].name %>">
+              <input type="hidden" name="showImg" value="<%= popularData.results[i].poster_path %>">
+              <button class="add-btn">
+                Add to Favorites
+              </button>
+            </form>
           </div>
         <% } %>
       </div>
@@ -74,25 +65,15 @@
             <!-- <p><%= topData.results[i].overview %></p> -->
             <p>Rating: <%= topData.results[i].vote_average %></p>
             <p>Popularity: <%= topData.results[i].popularity %></p>
-
-            <div class="buttons">
-              <!-- Add to favorites button -->
-              <form action="/" method="POST">
-                <input type="hidden" name="showId" value="<%= topData.results[i].id %>">
-                <input type="hidden" name="showTitle" value="<%= topData.results[i].name %>">
-                <input type="hidden" name="showImg" value="<%= topData.results[i].poster_path %>">
-                <button class="add-btn">
-                  Add to Favorites
-                </button>
-              </form>
-              <!-- Remove from favorites button -->
-              <form action="/?_method=DELETE" method="POST">
-                <input type= "hidden" name= "showId" value= "<%= topData.results[i].id %>">
-                <button class="remove-btn">
-                  Remove from Favorites
-                </button>
-              </form>
-            </div>
+            <!-- Add to favorites button -->
+            <form action="/" method="POST">
+              <input type="hidden" name="showId" value="<%= topData.results[i].id %>">
+              <input type="hidden" name="showTitle" value="<%= topData.results[i].name %>">
+              <input type="hidden" name="showImg" value="<%= topData.results[i].poster_path %>">
+              <button class="add-btn">
+                Add to Favorites
+              </button>
+            </form>
           </div>
         <% } %>
       </div>
@@ -120,31 +101,20 @@
             <!-- <p><%= airingData.results[i].overview %></p> -->
             <p>Rating: <%= airingData.results[i].vote_average %></p>
             <p>Popularity: <%= airingData.results[i].popularity %></p>
-
-            <div class="buttons">
-              <!-- Add to favorites button -->
-              <form action="/" method="POST">
-                <input type="hidden" name="showId" value="<%= airingData.results[i].id %>">
-                <input type="hidden" name="showTitle" value="<%= airingData.results[i].name %>">
-                <input type="hidden" name="showImg" value="<%= airingData.results[i].poster_path %>">
-                <button class="add-btn">
-                  Add to Favorites
-                </button>
-              </form>
-              <!-- Remove from favorites button -->
-              <form action="/?_method=DELETE" method="POST">
-                <input type= "hidden" name= "showId" value= "<%= airingData.results[i].id %>">
-                <button class="remove-btn">
-                  Remove from Favorites
-                </button>
-              </form>
-            </div>
+            <!-- Add to favorites button -->
+            <form action="/" method="POST">
+              <input type="hidden" name="showId" value="<%= airingData.results[i].id %>">
+              <input type="hidden" name="showTitle" value="<%= airingData.results[i].name %>">
+              <input type="hidden" name="showImg" value="<%= airingData.results[i].poster_path %>">
+              <button class="add-btn">
+                Add to Favorites
+              </button>
+            </form>
           </div>
         <% } %>
       </div>
     </div>
 
-  <a class="top-button" href=#top-button>&#8593;</a>
-
+    <a class="top-button" href=#top-button>&#8593;</a>
   </body>
 </html>

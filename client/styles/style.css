@@ -32,17 +32,14 @@ button:hover{
   opacity: 0.9;
 }
 
-.buttons {
-  display: flex;
-}
-
-.buttons button {
-  margin: 5px;
-}
-
 .page-btn {
-  margin-bottom: 60px;
-  text-align: center;
+  margin: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.next-btn {
+  margin: 0 0 0 10px;
 }
 
 input {
@@ -86,14 +83,17 @@ nav a {
   margin-left: 5px;
 }
 
-.signup-btn {
-  margin-right: 10px;
-}
-
 
 /* Show content */
 .container {
   border-top: 2px dotted #e5e5e5;
+  text-align: center;
+}
+
+.container h2,
+.seasons-title,
+.show-desc {
+  text-align: left;
 }
 
 .container h2,
@@ -165,12 +165,8 @@ nav a {
 }
 
 .favorites input {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   width: 90%;
-}
-
-.notes-btn {
-  margin-left: 5px;
 }
 
 

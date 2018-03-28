@@ -169,6 +169,7 @@ app.get('/shows', (request, response) => {
     });
 })
 
+// Display a certain page of current shows running
 app.get('/shows/:pageNumber', (request, response) => {
   // Make a variable to store the current page
   const currentPage = request.params.pageNumber;
@@ -195,7 +196,7 @@ const convertInput = userInput => {
   return userInput.split(' ').join('%20').toLowerCase();
 }
 
-// Display search results from the user's search bad input
+// Display search results from the user's search input
 app.post('/results', (request, response) => {
   // Grab the user's input from the search bar
   const userInput = request.body.userSearch;
@@ -206,7 +207,7 @@ app.post('/results', (request, response) => {
   fetch(`https://api.themoviedb.org/3/search/tv?api_key=085991675705d18c9d1f19c89cae4e50&language=en-US&query=${userSearch}`)
     .then(apiResponse => apiResponse.json())
     .then(showData => {
-      console.log(showData);
+      // console.log(showData);
       response.render('results', { showData, message: '' });
     })
     .catch(error => {
@@ -310,9 +311,9 @@ app.put('/favorites', requireLogin, (request, response) => {
 
 // ADDING TO FAVORITES
 // -----------------------------------------------------------------------
-// From shows page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
-app.post('/shows', requireLogin, (request, response) => {
-  let message = '';
+// From home page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
+app.post('/', requireLogin, (request, response) => {
+  // let message = '';
   // Get the user's id that's stored in the session
   const userId = Number(request.session.userId);
   console.log(`user ${userId} is the current user stored in session`);
@@ -326,31 +327,6 @@ app.post('/shows', requireLogin, (request, response) => {
   Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
       // message = `You just added ${addedShowTitle} to your favorites!`;
-      // Once inserted, redirect user to that specific show's spot on the shows page so they can pick up where they left off
-      response.redirect(`/shows#${addedShowId}`);
-    })
-    .catch(error => {
-      response.send(`Error: ${error.message}`);
-    });
-  console.log(`you just added ${addedShowTitle} to your favorites!`);
-})
-
-// From home page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
-app.post('/', requireLogin, (request, response) => {
-  let message = '';
-  // Get the user's id that's stored in the session
-  const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's hidden value attributes containing the show's info and store it in a variable
-  const addedShowId = Number(request.body.showId);
-  const addedShowTitle = request.body.showTitle;
-  const addedShowImg = request.body.showImg;
-  // Take the new info and insert into database
-  // If the show is already in the user's favorites, don't insert (in Favorites.js added WHERE NOT EXISTS, but not sure if that's the best way)
-  // Maybe add a message if unable to insert because already added?
-  Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
-    .then(() => {
-      message = `You just added ${addedShowTitle} to your favorites!`;
       // Once inserted, redirect user to that specific show's spot on the home page so they can pick up where they left off
       response.redirect(`/#${addedShowId}`);
     })
@@ -360,19 +336,35 @@ app.post('/', requireLogin, (request, response) => {
   console.log(`you just added ${addedShowTitle} to your favorites!`);
 })
 
-// From a show's detail page, take added show and insert into the user's user_favorites table
-app.post('/show/:id', requireLogin, (request, response) => {
-  // Get the user's id that's stored in the session
+// From shows page, take any show added with the "add to favorites" button and insert into the user's user_favorites table
+app.post('/shows', requireLogin, (request, response) => {
   const userId = Number(request.session.userId);
   console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's hidden value attributes containing the show's info and store it in a variable
   const addedShowId = Number(request.body.showId);
   const addedShowTitle = request.body.showTitle;
   const addedShowImg = request.body.showImg;
-  // Take the addedShowId and insert into database
   Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
     .then(() => {
-      response.redirect(`/favorites`);
+      // Once inserted, redirect user to that specific show's spot on the shows page so they can pick up where they left off
+      response.redirect(`/shows#${addedShowId}`);
+    })
+    .catch(error => {
+      response.send(`Error: ${error.message}`);
+    });
+  console.log(`you just added ${addedShowTitle} to your favorites!`);
+})
+
+// From a show's detail page or from search results, take added show and insert into the user's user_favorites table
+app.post('/show/:id', requireLogin, (request, response) => {
+  const userId = Number(request.session.userId);
+  console.log(`user ${userId} is the current user stored in session`);
+  const addedShowId = Number(request.body.showId);
+  const addedShowTitle = request.body.showTitle;
+  const addedShowImg = request.body.showImg;
+  Favorite.add(userId, addedShowId, addedShowTitle, addedShowImg)
+    .then(() => {
+      // Redirect user to that added show on their favorites page
+      response.redirect(`/favorites#${addedShowId}`);
     })
     .catch(error => {
       response.send(`Error: ${error.message}`);
@@ -383,62 +375,6 @@ app.post('/show/:id', requireLogin, (request, response) => {
 
 // REMOVING FROM FAVORITES
 // -----------------------------------------------------------------------
-// From shows page, remove any show removed with the "remove from favorites" button and delete from the user's user_favorites table
-app.delete('/shows', requireLogin, (request, response) => {
-  // Get the user's id that's stored in the session
-  const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's value attribute containing the show's id and store it in a variable
-  const removedShowId = Number(request.body.showId);
-  // Take the removedShowId and delete that row from database
-  Favorite.remove(userId, removedShowId)
-    .then(() => {
-      // Once deleted, redirect user to that specific show's spot on the shows page
-      response.redirect(`/shows#${removedShowId}`);
-    })
-    .catch(error => {
-      response.send(`Error: ${error.message}`);
-    });
-  console.log(`you just removed show ${removedShowId} from your favorites!`);
-})
-
-// From home page, remove any show removed with the "remove from favorites" button and delete from the user's user_favorites table
-app.delete('/', requireLogin, (request, response) => {
-  // Get the user's id that's stored in the session
-  const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's value attribute containing the show's id and store it in a variable
-  const removedShowId = Number(request.body.showId);
-  // Take the removedShowId and delete that row from database
-  Favorite.remove(userId, removedShowId)
-    .then(() => {
-      // Once deleted, redirect user to that specific show's spot on the shows page
-      response.redirect(`/#${removedShowId}`);
-    })
-    .catch(error => {
-      response.send(`Error: ${error.message}`);
-    });
-  console.log(`you just removed show ${removedShowId} from your favorites!`);
-})
-
-// From a show's detail page, remove show and delete from the user's user_favorites table
-app.delete('/show/:id', requireLogin, (request, response) => {
-  // Get the user's id that's stored in the session
-  const userId = Number(request.session.userId);
-  console.log(`user ${userId} is the current user stored in session`);
-  // Get the clicked button's value attribute containing the show's id
-  const removedShowId = Number(request.body.showId);
-  // Take the removedShowId and delete from database
-  Favorite.remove(userId, removedShowId)
-    .then(() => {
-      response.redirect(`/show/${removedShowId}`);
-    })
-    .catch(error => {
-      response.send(`Error: ${error.message}`);
-    });
-  console.log(`you just removed show ${removedShowId} from your favorites!`);
-})
-
 // From the favorites page, remove show and delete from the user_favorites table
 app.delete('/favorites', requireLogin, (request, response) => {
   // Get the user's id that's stored in the session
@@ -449,7 +385,7 @@ app.delete('/favorites', requireLogin, (request, response) => {
   // Take the removedShowId and delete that row from database
   Favorite.remove(userId, removedShowId)
     .then(() => {
-      // Once deleted, redirect user to that specific show's spot on the shows page
+      // Once deleted, redirect user to their favorites page
       response.redirect('/favorites');
     })
     .catch(error => {
@@ -459,6 +395,7 @@ app.delete('/favorites', requireLogin, (request, response) => {
 })
 
 
+// Didn't get to any of this stuff -- Post MVP
 // WATCHLIST
 // -----------------------------------------------------------------------
 // Prompt user to log in (if not already logged in) and display the user's watchlist with a "to watch" and "caught up" section
@@ -477,13 +414,11 @@ app.get('/watchlist/show/:id', requireLogin, (request, response) => {
   response.render('watchlist/show', { });
 })
 
-
-// // Post MVP? //
 // Prompts user to log in (if not logged in) and display the shows from the user's watchlist that are currently on air in a week format
-// app.get('/watchlist/week', (response, request) => {
-//
-//   response.render('watchlist/week');
-// })
+app.get('/watchlist/week', requireLogin, (request, response) => {
+
+  response.render('watchlist/week');
+})
 
 
 // Start server
