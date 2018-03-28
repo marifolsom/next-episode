@@ -106,6 +106,10 @@ nav a {
   margin-top: 50px;
 }
 
+.season h3 {
+  margin-top: 15px;
+}
+
 .favorites h2 {
   margin-bottom: 45px;
 }
@@ -221,7 +225,8 @@ nav a {
   .all-shows,
   .results-shows,
   .seasons,
-  .favorite-shows {
+  .favorite-shows,
+  .rec-shows {
     grid-template-columns: 200px 200px 200px;
     grid-gap: 25px;
   }
@@ -244,7 +249,8 @@ nav a {
   .all-shows,
   .results-shows,
   .seasons,
-  .favorite-shows {
+  .favorite-shows,
+  .rec-shows {
     grid-template-columns: 200px 200px;
     grid-gap: 25px 10px;
   }
@@ -285,7 +291,8 @@ nav a {
   .all-shows,
   .results-shows,
   .seasons,
-  .favorite-shows {
+  .favorite-shows,
+  .rec-shows {
     grid-template-columns: 200px;
     grid-gap: 25px 0px;
   }
